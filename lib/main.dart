@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/screens/welcome_screen.dart';
-import 'package:capstone/screens/login_screen.dart';
-import 'package:capstone/screens/registration_screen.dart';
+import 'package:doers_app/screens/welcome_screen.dart';
+import 'package:doers_app/screens/login_screen.dart';
+import 'package:doers_app/screens/registration_screen.dart';
 
 
 void main() => runApp(FlashChat());
