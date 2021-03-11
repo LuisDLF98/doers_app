@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/home_screen.dart';
-import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/profile_screen.dart';
-import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/settings_screen.dart';
-import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/payment_screen.dart';
-import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/messaging_screen.dart';
-import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/navigation_screen.dart';
-import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Components/hex_colors.dart';
+import 'package:doers_app/Screens/home_screen.dart';
+import 'package:doers_app/Screens/profile_screen.dart';
+import 'package:doers_app/Screens/settings_screen.dart';
+import 'package:doers_app/Screens/payment_screen.dart';
+import 'package:doers_app/Screens/messaging_screen.dart';
+import 'package:doers_app/Screens/navigation_screen.dart';
+import 'package:doers_app/Components/hex_colors.dart';
 
 void main() {
   runApp(MyApp());
@@ -174,9 +174,43 @@ class DetailsScreen extends StatelessWidget {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You are now in the Details Page',
+            Padding(
+              padding: EdgeInsets.all(20.0),
+
+              child: Card(
+                child: TextField(
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.map),
+                    hintText: 'Location of job',
+                  ),
+                ),
+              ),
             ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Card(
+                child: TextField(
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.map),
+                    hintText: 'Address of this job',
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Card(
+                child: TextField(
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.map),
+                  hintText: 'What time would you like a doer to show up?',
+                ),
+               ),
+              ),
+            ),
+            //TODO:: implement a date time picker https://www.google.com/search?sxsrf=ALeKk00UXCBTKnN67smOX2XJEq-rpSDE_g%3A1615412445361&ei=3TxJYPm7FZeLtAaG4JjADA&q=date+time+picker+flutter+docs&oq=date+time+picker+flutter+docs&gs_lcp=Cgdnd3Mtd2l6EAMyBQgAEM0COgcIIxCwAxAnOgcIABCwAxBDOgcIABBHELADOgYIABAWEB46CAgAEBYQChAeOggIIRAWEB0QHjoFCCEQoAFQjkBY3EVg4kZoA3ACeACAAWeIAYEEkgEDNS4xmAEAoAEBqgEHZ3dzLXdpesgBCsABAQ&sclient=gws-wiz&ved=0ahUKEwi5nuKn2KbvAhWXBc0KHQYwBsgQ4dUDCA4&uact=5#kpvalbx=_8TxJYIW3DvKP9PwPg_O0gAU29
+            //TODO:: save this job posting onto the database
+            //TODO:: Fine Tune UI to look consistent
           ],
         ),
       ),// This trailing comma makes auto-formatting nicer for build methods.

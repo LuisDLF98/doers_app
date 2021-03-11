@@ -26,28 +26,78 @@ class _ProfileScreen extends State<ProfileScreen> {
         // the App.build method, and use it to set our appbar title.
         title: Text('Profile'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: SafeArea(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          //mainAxisSize: MainAxisSize.min,
+          //verticalDirection
+          //mainAxisAlignment: mainaxisalignment.center start .spaceEvenely , space between
           children: <Widget>[
+            CircleAvatar(
+              radius: 100.0,
+              backgroundImage: AssetImage('images/Rusty.jpeg'), //TODO:: change this to be dependent on user
+
+            ),
             Text(
-              'You are now in the Profile Page',
+              'Russell Stout',
+              style: TextStyle(
+                fontSize:40,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+
+              ),
+
+            ),
+            Text(
+              'DOER',
+              style: TextStyle(
+                fontSize:25,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+
+              ),
+            ),
+            Card(
+
+                color: Colors.white,
+                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                child:Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.phone,
+                      color: Colors.teal,
+                    ),
+
+                    title: Text('512-484-0547', //TODO:: change this to be dependent on user
+                      style: TextStyle(
+                        color: Colors.teal,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ),
+                )
+            ),
+            Card(
+                color: Colors.white,
+                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                child:Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: ListTile(
+                    leading:
+                    Icon(
+                      Icons.email,
+                      color: Colors.teal,
+                    ),
+                    title: Text('Stout.r3@gmail.com', //TODO:: change this to be dependent on user
+                      style: TextStyle(
+                        color: Colors.teal,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ),
+                )
             ),
           ],
         ),

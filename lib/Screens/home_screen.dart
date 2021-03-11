@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Components/side_bar.dart';
+import 'package:doers_app/Components/side_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
