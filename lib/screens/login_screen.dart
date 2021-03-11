@@ -1,6 +1,16 @@
+import 'package:doers_app/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  scopes: <String>[
+    'email',
+    'https://www.googleapis.com/auth/userinfo.email',
+  ],
+);
+
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
 
@@ -10,9 +20,21 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool showSpinner = false;
+  //GoogleSignInAccount _currentUser;
   //final _auth = FirebaseAuth.instance;
   String email;
   String password;
+
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  //Future<void> _handleSignOut() => _googleSignIn.disconnect();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,6 +147,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Log In',
                     ),
                   ),
+                ),
+              ),
+              MaterialButton(
+                onPressed: () {
+                  //Implement login functionality
+                    _handleSignIn();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => WelcomeScreen()));
+                },
+                minWidth: 200.0,
+                height: 42.0,
+                child: Text(
+                  'Google Login',
                 ),
               ),
             ],
