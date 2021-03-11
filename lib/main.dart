@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:doers_app/screens/welcome_screen.dart';
 import 'package:doers_app/screens/login_screen.dart';
 import 'package:doers_app/screens/registration_screen.dart';
-import 'package:doers_app/side_bar.dart';
-import 'package:doers_app/home_screen.dart';
-import 'package:doers_app/profile_screen.dart';
-import 'package:doers_app/settings_screen.dart';
-import 'package:doers_app/payment_screen.dart';
-import 'package:doers_app/messaging_screen.dart';
-import 'package:doers_app/navigation_screen.dart';
-
+import 'package:doers_app/Components/side_bar.dart';
+import 'package:doers_app/Screens/home_screen.dart';
+import 'package:doers_app/Screens/profile_screen.dart';
+import 'package:doers_app/Screens/settings_screen.dart';
+import 'package:doers_app/Screens/payment_screen.dart';
+import 'package:doers_app/Screens/messaging_screen.dart';
+import 'package:doers_app/Screens/navigation_screen.dart';
+import 'package:doers_app/Components/hex_colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

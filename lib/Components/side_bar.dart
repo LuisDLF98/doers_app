@@ -1,7 +1,7 @@
-import 'package:doers_app/settings_screen.dart';
+import 'package:doers_app/Screens/settings_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:doers_app/profile_screen.dart';
-import 'package:doers_app/payment_screen.dart';
+import 'package:doers_app/Screens/profile_screen.dart';
+import 'package:doers_app/Screens/payment_screen.dart';
 
 class NavDrawer extends StatelessWidget {
   @override

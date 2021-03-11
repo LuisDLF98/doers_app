@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:doers_app/side_bar.dart';
 
-class MessagingScreen extends StatefulWidget {
-  MessagingScreen({Key key}) : super(key: key);
-  static const String id = 'message_screen';
+class ProfileScreen extends StatefulWidget {
+  ProfileScreen({Key key}) : super(key: key);
+  static const String id = 'profile_screen';
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -15,18 +14,17 @@ class MessagingScreen extends StatefulWidget {
   // always marked "final".
 
   @override
-  _MessagingScreen createState() => _MessagingScreen();
+  _ProfileScreen createState() => _ProfileScreen();
 }
 
-class _MessagingScreen extends State<MessagingScreen> {
+class _ProfileScreen extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text('Messaging'),
+        title: Text('Profile'),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -49,7 +47,7 @@ class _MessagingScreen extends State<MessagingScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You are now in the Messaging Page',
+              'You are now in the Profile Page',
             ),
           ],
         ),
