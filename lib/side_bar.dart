@@ -1,5 +1,7 @@
+import 'package:doers_app/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/profile_screen.dart';
+import 'package:doers_app/payment_screen.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -14,14 +16,19 @@ class NavDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.verified_user),
+            leading: Icon(Icons.person),
             title: Text('Profile'),
             onTap: () => {Navigator.pushNamed(context, ProfileScreen.id)},
           ),
           ListTile(
+            leading: Icon(Icons.attach_money),
+            title: Text('Payments'),
+            onTap: () => {Navigator.pushNamed(context, PaymentsScreen.id)},
+          ),
+          ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {Navigator.pushNamed(context, SettingsScreen.id)},
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),

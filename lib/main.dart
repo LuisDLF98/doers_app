@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:doers_app/side_bar.dart';
 import 'package:doers_app/home_screen.dart';
 import 'package:doers_app/profile_screen.dart';
 import 'package:doers_app/settings_screen.dart';
+import 'package:doers_app/payment_screen.dart';
+import 'package:doers_app/messaging_screen.dart';
+import 'package:doers_app/navigation_screen.dart';
 
 // Convert hex strings into hex numbers
 Color fromHex(String hex) {
@@ -34,6 +36,9 @@ class MyApp extends StatelessWidget {
         HomeScreen.id: (context) => HomeScreen(),
         ProfileScreen.id: (context) => ProfileScreen(),
         SettingsScreen.id: (context) => SettingsScreen(),
+        MessagingScreen.id: (context) => MessagingScreen(),
+        PaymentsScreen.id: (context) => PaymentsScreen(),
+        NavigationScreen.id: (context) => NavigationScreen(),
       },
 
       title: 'Flutter Demo',
@@ -107,12 +112,12 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            label: 'Profile',
-            icon: Icon(Icons.person),
+            label: 'Messaging',
+            icon: Icon(Icons.message),
           ),
           BottomNavigationBarItem(
-            label: 'Settings',
-            icon: Icon(Icons.settings),
+            label: 'Navigation',
+            icon: Icon(Icons.location_pin),
           ),
         ],
         currentIndex: _currentTab,
@@ -139,8 +144,8 @@ class _MyHomePageState extends State<MyHomePage> {
           index: pageNum,
           children: [
             HomeScreen(),
-            ProfileScreen(),
-            SettingsScreen(),
+            MessagingScreen(),
+            NavigationScreen(),
             DetailsScreen(),
           ],
         ),

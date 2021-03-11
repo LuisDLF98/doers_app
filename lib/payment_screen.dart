@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:doers_app/side_bar.dart';
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({Key key}) : super(key: key);
-  static const String id = 'home_screen';
+class PaymentsScreen extends StatefulWidget {
+  PaymentsScreen({Key key}) : super(key: key);
+  static const String id = 'payment_screen';
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -15,18 +14,17 @@ class HomeScreen extends StatefulWidget {
   // always marked "final".
 
   @override
-  _HomeScreen createState() => _HomeScreen();
+  _PaymentsScreen createState() => _PaymentsScreen();
 }
 
-class _HomeScreen extends State<HomeScreen> {
+class _PaymentsScreen extends State<PaymentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text('Home'),
+        title: Text('Payments'),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -49,7 +47,7 @@ class _HomeScreen extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You are now in the Home Page',
+              'You are now in the Payment Page',
             ),
           ],
         ),
