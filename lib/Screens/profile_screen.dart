@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:doers_app/side_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key}) : super(key: key);

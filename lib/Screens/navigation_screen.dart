@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:doers_app/side_bar.dart';
+import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Components/side_bar.dart';
 
-class SettingsScreen extends StatefulWidget {
-  SettingsScreen({Key key}) : super(key: key);
-  static const String id = 'settings_screen';
+class NavigationScreen extends StatefulWidget {
+  NavigationScreen({Key key}) : super(key: key);
+  static const String id = 'navigation_screen';
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -15,17 +15,18 @@ class SettingsScreen extends StatefulWidget {
   // always marked "final".
 
   @override
-  _SettingsScreen createState() => _SettingsScreen();
+  _NavigationScreen createState() => _NavigationScreen();
 }
 
-class _SettingsScreen extends State<SettingsScreen> {
+class _NavigationScreen extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavDrawer(),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text('Settings'),
+        title: Text('Navigation'),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -48,7 +49,7 @@ class _SettingsScreen extends State<SettingsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You are now in the Settings Page',
+              'You are now in the Navigation Page',
             ),
           ],
         ),

@@ -1,27 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:doers_app/home_screen.dart';
-import 'package:doers_app/profile_screen.dart';
-import 'package:doers_app/settings_screen.dart';
-import 'package:doers_app/payment_screen.dart';
-import 'package:doers_app/messaging_screen.dart';
-import 'package:doers_app/navigation_screen.dart';
-
-// Convert hex strings into hex numbers
-Color fromHex(String hex) {
-  final hexCode = hex.replaceAll('#', '');
-  return Color(int.parse('FF$hexCode', radix: 16));
-}
-
-// Map of the colors chosen for this app
-Map<int, Color> color = {
-  50: fromHex('#9fffdf'), // light green
-  100: fromHex('#69efad'), // green
-  200: fromHex('#2bbc7d'), // dark green
-  300: fromHex('#ffffff'), // white
-  400: fromHex('#cfd8dc'), // light grey
-  500: fromHex('#9ea7aa'), // dark grey
-  600: fromHex('#000000'), // black
-};
+import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/home_screen.dart';
+import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/profile_screen.dart';
+import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/settings_screen.dart';
+import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/payment_screen.dart';
+import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/messaging_screen.dart';
+import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Screens/navigation_screen.dart';
+import 'file:///C:/Users/Luis/AndroidStudioProjects/doers_app/lib/Components/hex_colors.dart';
 
 void main() {
   runApp(MyApp());
