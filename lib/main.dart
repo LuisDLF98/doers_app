@@ -1,3 +1,4 @@
+import 'package:doers_app/screens/registration_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/screens/welcome_screen.dart';
 import 'package:doers_app/screens/login_screen.dart';
@@ -15,6 +16,7 @@ class FlashChat extends StatelessWidget {
         WelcomeScreen.id: (context) => WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
+        RegistrationFormScreen.id: (context) => RegistrationFormScreen(),
         //ChatScreen.id: (context) => ChatScreen(),
       },
     );

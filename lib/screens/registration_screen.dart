@@ -1,3 +1,4 @@
+import 'package:doers_app/screens/registration_form_screen.dart';
 import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -104,6 +105,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       setState(() {
                         showSpinner = true;
                       });
+
+                      Navigator.pushNamed(context, RegistrationFormScreen.id);
+
+
                       //Implement registration functionality.
                       try{
                         print(email);
