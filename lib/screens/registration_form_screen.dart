@@ -31,9 +31,8 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: ListView(
+
               children: <Widget>[
 
                 Flexible(
@@ -223,8 +222,9 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                     ),
                   ),
                 ),
+
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
                   child: ElevatedButton(
                     onPressed: () {
                       // Validate will return true if the form is valid, or false if
