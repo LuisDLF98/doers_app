@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -10,7 +11,6 @@ class RegistrationFormScreen extends StatefulWidget {
 }
 
 class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
-
   String firstName;
   String lastName;
   String streetAddress;
@@ -32,9 +32,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
             child: ListView(
-
               children: <Widget>[
-
                 Flexible(
                   child: Hero(
                     tag: 'logo',
@@ -47,7 +45,6 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                 SizedBox(
                   height: 48.0,
                 ),
-
                 TextFormField(
                   onChanged: (value) {
                     //Do something with the user input.
@@ -57,16 +54,18 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                     icon: Icon(Icons.perm_identity),
                     hintText: 'Enter your First Name',
                     contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -83,16 +82,18 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                     icon: Icon(Icons.perm_identity),
                     hintText: 'Enter your Last Name',
                     contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -107,17 +108,20 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: const InputDecoration(
                     icon: Icon(Icons.house),
-                    hintText: 'street address',contentPadding:
-                  EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    hintText: 'street address',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -132,17 +136,20 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: const InputDecoration(
                     icon: Icon(Icons.location_city),
-                    hintText: 'city',contentPadding:
-                  EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    hintText: 'city',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -157,17 +164,20 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: const InputDecoration(
                     icon: Icon(Icons.art_track),
-                    hintText: 'state',contentPadding:
-                  EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    hintText: 'state',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -182,17 +192,20 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: const InputDecoration(
                     icon: Icon(Icons.location_on),
-                    hintText: 'zip code',contentPadding:
-                  EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    hintText: 'zip code',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -207,30 +220,43 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: const InputDecoration(
                     icon: Icon(Icons.phone),
-                    hintText: 'cell phone number',contentPadding:
-                  EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    hintText: 'cell phone number',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
+                      borderSide:
+                          BorderSide(color: Colors.blueAccent, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
                 ),
-
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 50),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Validate will return true if the form is valid, or false if
-                      // the form is invalid.
+                      final firestoreInstance = FirebaseFirestore.instance;
+                      firestoreInstance.collection("Users").add({
+                        "firstName": firstName,
+                        "lastName": lastName,
+                        "streetAddress": streetAddress,
+                        "city": city,
+                        "state": state,
+                        "zipCode": zipCode,
+                        'cellPhoneNumber': cellPhoneNumber
 
-                    },
+                        // Validate will return true if the form is valid, or false if
+                        // the form is invalid.
+                      });
+                    }, // onPressed
                     child: Text('Submit'),
                   ),
                 ),
