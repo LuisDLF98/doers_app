@@ -1,11 +1,16 @@
 import 'package:doers_app/screens/registration_form_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/screens/welcome_screen.dart';
 import 'package:doers_app/screens/login_screen.dart';
 import 'package:doers_app/screens/registration_screen.dart';
 
 
-void main() => runApp(FlashChat());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(FlashChat());
+}
 
 class FlashChat extends StatelessWidget {
   @override
