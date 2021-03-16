@@ -1,4 +1,4 @@
-# doers_app
+# capstone
 
 A new Flutter application.
 
