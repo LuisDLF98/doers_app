@@ -39,7 +39,6 @@ class FlashChat extends StatelessWidget {
         backgroundColor: color[500],
         scaffoldBackgroundColor: color[500],
         cardColor: color[300],
-
           // This makes the visual density adapt to the platform that you run
           // the app on. For desktop platforms, the controls will be smaller and
           // closer together (more dense) than on mobile platforms.
