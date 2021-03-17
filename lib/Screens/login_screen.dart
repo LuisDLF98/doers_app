@@ -1,9 +1,10 @@
-import 'package:doers_app/screens/welcome_screen.dart';
+import 'package:doers_app/Screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:doers_app/Screens/home_screen.dart';
+import 'package:doers_app/Components/hex_colors.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
@@ -34,12 +35,10 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  //Future<void> _handleSignOut() => _googleSignIn.disconnect();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: color[500],
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
@@ -53,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   tag: 'logo',
                   child: Container(
                     height: 200.0,
-                    child: Image.asset('images/logo.png'),
+                    child: Image.asset('images/DoersV3.png'),
                   ),
                 ),
               ),
@@ -76,12 +75,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                        BorderSide(color: color[50], width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                        BorderSide(color: color[100], width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                 ),
@@ -104,12 +103,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                        BorderSide(color: color[50], width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                        BorderSide(color: color[100], width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                 ),
@@ -120,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Material(
-                  color: Colors.lightBlueAccent,
+                  color: color[200],
                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
                   elevation: 5.0,
                   child: MaterialButton(
