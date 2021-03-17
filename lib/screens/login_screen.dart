@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:doers_app/Screens/home_screen.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
@@ -154,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   //Implement login functionality
                     _handleSignIn();
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => WelcomeScreen()));
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
                 },
                 minWidth: 200.0,
                 height: 42.0,
