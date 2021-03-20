@@ -58,12 +58,11 @@ class _DetailsScreen extends State<DetailsScreen> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(20.0),
-
               child: Card(
                 child: TextField(
                   decoration: const InputDecoration(
                     icon: Icon(Icons.location_pin),
-                    hintText: 'Location of job',
+                    hintText: 'Address of this job',
                   ),
                 ),
               ),
@@ -73,8 +72,30 @@ class _DetailsScreen extends State<DetailsScreen> {
               child: Card(
                 child: TextField(
                   decoration: const InputDecoration(
-                    icon: Icon(Icons.streetview),
-                    hintText: 'Address of this job',
+                    icon: Icon(Icons.attach_money),
+                    hintText: 'Payment Offered',
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Card(
+                child: TextField(
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.tag),
+                    hintText: 'Job type',
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Card(
+                child: TextField(
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.description),
+                    hintText: 'Description',
                   ),
                 ),
               ),
