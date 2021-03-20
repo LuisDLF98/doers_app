@@ -15,6 +15,7 @@ class DetailsScreen extends StatefulWidget {
 
   final String title;
   DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
 
   @override
   _DetailsScreen createState() => _DetailsScreen();
@@ -46,6 +47,30 @@ class _DetailsScreen extends State<DetailsScreen> {
         setState(() {
           widget.selectedDate = picked;
         });
+    }
+
+    _selectTime(BuildContext context) async {
+      final TimeOfDay newtime = await showTimePicker(
+          context: context,
+          initialTime: widget.selectedTime,
+          builder: (context, child) {
+            return Theme(
+              data: ThemeData(
+                colorScheme: ColorScheme.highContrastLight(
+                  primary: color[100],
+                ),
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+              ),
+              child: child,
+            );
+          },
+      );
+
+      if (newtime != null) {
+        setState(() {
+          widget.selectedTime = newtime;
+        });
+      }
     }
 
     return Scaffold(
@@ -104,14 +129,24 @@ class _DetailsScreen extends State<DetailsScreen> {
               padding: EdgeInsets.all(20.0),
               child: TextButton(
                 onPressed: () => _selectDate(context),
-                child: Text("Select Date: ${widget.selectedDate.month.toString()}-${widget.selectedDate.day.toString()}-${widget.selectedDate.year.toString()}"),
+                child: Text("Select Date (MM-DD-YYYY): ${widget.selectedDate.month.toString()}-${widget.selectedDate.day.toString()}-${widget.selectedDate.year.toString()}"),
                 style: TextButton.styleFrom(
                   primary: color[300],
                   backgroundColor: color[200],
                 ),
               ),
             ),
-            //TODO:: implement a date time picker https://www.google.com/search?sxsrf=ALeKk00UXCBTKnN67smOX2XJEq-rpSDE_g%3A1615412445361&ei=3TxJYPm7FZeLtAaG4JjADA&q=date+time+picker+flutter+docs&oq=date+time+picker+flutter+docs&gs_lcp=Cgdnd3Mtd2l6EAMyBQgAEM0COgcIIxCwAxAnOgcIABCwAxBDOgcIABBHELADOgYIABAWEB46CAgAEBYQChAeOggIIRAWEB0QHjoFCCEQoAFQjkBY3EVg4kZoA3ACeACAAWeIAYEEkgEDNS4xmAEAoAEBqgEHZ3dzLXdpesgBCsABAQ&sclient=gws-wiz&ved=0ahUKEwi5nuKn2KbvAhWXBc0KHQYwBsgQ4dUDCA4&uact=5#kpvalbx=_8TxJYIW3DvKP9PwPg_O0gAU29
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: TextButton(
+                onPressed: () => _selectTime(context),
+                child: Text("Select Time: ${widget.selectedTime.format(context)}"),
+                style: TextButton.styleFrom(
+                  primary: color[300],
+                  backgroundColor: color[200],
+                ),
+              ),
+            ),
             //TODO:: save this job posting onto the database
             //TODO:: Fine Tune UI to look consistent
           ],
