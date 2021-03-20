@@ -48,18 +48,6 @@ class _DetailsScreen extends State<DetailsScreen> {
         });
     }
 
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return color[100];
-      }
-      return color[200];
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Job'),
@@ -93,12 +81,12 @@ class _DetailsScreen extends State<DetailsScreen> {
             ),
             Padding(
               padding: EdgeInsets.all(20.0),
-              child: Card(
-                child: TextField(
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.map),
-                    hintText: 'What time would you like a doer to show up?',
-                  ),
+              child: TextButton(
+                onPressed: () => _selectDate(context),
+                child: Text("Select Date: ${widget.selectedDate.month.toString()}-${widget.selectedDate.day.toString()}-${widget.selectedDate.year.toString()}"),
+                style: TextButton.styleFrom(
+                  primary: color[300],
+                  backgroundColor: color[200],
                 ),
               ),
             ),
