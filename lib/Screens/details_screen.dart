@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Components/rounded_button.dart';
 import 'package:time_range_picker/time_range_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DetailsScreen extends StatefulWidget {
   DetailsScreen({Key key, this.title}) : super(key: key);
@@ -233,10 +234,15 @@ class _DetailsScreen extends State<DetailsScreen> {
                 colour: color[200],
                 title: 'Submit',
                 onPressed: () {
-                  // TODO: Save this job posting onto the database
-                  //  - NOTE: widget.selectedDate has the date
-
-                  //final firestoreInstance = FirebaseFirestore.instance;
+                  final firestoreInstance = FirebaseFirestore.instance;
+                  firestoreInstance.collection("Task Listings").add({
+                    "address": streetAddress,
+                    "payment": payment,
+                    "jobType": jobType,
+                    "description": description,
+                    "date": widget.selectedDate,
+                    // "duration": jobDuration,
+                  });
                 },
               ),
             ),

@@ -23,6 +23,9 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // For getting the User ID argument from 'registration_screen.dart'
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+
     return Scaffold(
       backgroundColor: color[500],
       appBar: AppBar(
@@ -245,9 +248,11 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   child: RoundedButton(
                     colour: color[200],
                     title: 'Submit',
-                    onPressed: () {
+                    onPressed: () async{
                       final firestoreInstance = FirebaseFirestore.instance;
-                      firestoreInstance.collection("Users").add({
+                      CollectionReference users = firestoreInstance.collection('Users');
+                      DocumentReference reference = users.doc(arguments['UserID']);
+                      await reference.update({
                         "firstName": firstName,
                         "lastName": lastName,
                         "streetAddress": streetAddress,
@@ -255,9 +260,6 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                         "state": state,
                         "zipCode": zipCode,
                         'cellPhoneNumber': cellPhoneNumber
-
-                        // Validate will return true if the form is valid, or false if
-                        // the form is invalid.
                       });
                     }, // onPressed
                   ),
