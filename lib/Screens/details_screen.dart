@@ -1,0 +1,381 @@
+import 'package:flutter/material.dart';
+import 'package:doers_app/Components/hex_colors.dart';
+import 'package:doers_app/Components/rounded_button.dart';
+import 'package:time_range_picker/time_range_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class DetailsScreen extends StatefulWidget {
+  DetailsScreen({Key key, this.title}) : super(key: key);
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  static const String id = 'details_screen';
+  final String title;
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+
+  @override
+  _DetailsScreen createState() => _DetailsScreen();
+}
+
+class _DetailsScreen extends State<DetailsScreen> {
+  String id; // TODO: Link this to a unique user
+  String streetAddress;
+  String city; // Pull these three from the database via streetAddress
+  String state;
+  String zipCode;
+  String payment;
+  String jobType;
+  String description;
+  String email;
+  String timeRange;
+  var txt = TextEditingController();
+  var txt1 = TextEditingController();
+  Duration jobDuration = Duration(hours: 0, minutes: 0);
+
+  @override
+  Widget build(BuildContext context) {
+    _selectDate(BuildContext context) async {
+      final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: widget.selectedDate,
+        firstDate: new DateTime.now(),
+        lastDate: new DateTime.now().add(new Duration(days: 30)),
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData(
+              colorScheme: ColorScheme.highContrastLight(
+                primary: color[100],
+              ),
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            child: child,
+          );
+        },
+      );
+      if (picked != null && picked != widget.selectedDate)
+        setState(() {
+          widget.selectedDate = picked;
+        });
+    }
+
+    _selectTime(BuildContext context) async {
+      final TimeOfDay newtime = await showTimePicker(
+        context: context,
+        initialTime: widget.selectedTime,
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData(
+              colorScheme: ColorScheme.highContrastLight(
+                primary: color[100],
+              ),
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            child: child,
+          );
+        },
+      );
+
+      if (newtime != null) {
+        setState(() {
+          widget.selectedTime = newtime;
+        });
+      }
+    }
+
+    return Scaffold(
+      backgroundColor: color[500],
+      appBar: AppBar(
+        title: Text('Create Job'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: ListView(
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextFormField(
+                    onChanged: (value) {
+                      //Do something with the user input.
+                      streetAddress = value;
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: color[300],
+                      //focusColor: color[100],
+                      icon: Icon(Icons.location_pin),
+                      hintText: 'Address of this job',
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[50], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[100], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  TextFormField(
+                    onChanged: (value) {
+                      //Do something with the user input.
+                      payment = value;
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: color[300],
+                      //focusColor: color[100],
+                      icon: Icon(Icons.attach_money),
+                      hintText: 'Payment offered',
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[50], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[100], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  TextFormField(
+                    onChanged: (value) {
+                      //Do something with the user input.
+                      jobType = value;
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: color[300],
+                      //focusColor: color[100],
+                      icon: Icon(Icons.tag),
+                      hintText: 'Job type',
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[50], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[100], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  TextFormField(
+                    onChanged: (value) {
+                      //Do something with the user input.
+                      description = value;
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: color[300],
+                      //focusColor: color[100],
+                      icon: Icon(Icons.description),
+                      hintText: 'Description',
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[50], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[100], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  TextFormField(
+                    controller: txt,
+                    showCursor: true,
+                    readOnly: true,
+                    onTap: () {
+                      _selectDate(context);
+                      txt.text = "${widget.selectedDate.month.toString()}-${widget.selectedDate.day.toString()}-${widget.selectedDate.year.toString()}";
+
+                    },
+                    onChanged: (value) {
+                      //Do something with the user input.
+                       // = value;
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: color[300],
+                      //focusColor: color[100],
+                      icon: Icon(Icons.calendar_today_rounded),
+                      hintText: 'Select date',
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[50], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[100], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  TextFormField(
+                    controller: txt1,
+                    showCursor: true,
+                    readOnly: true,
+                    onTap: () async {
+
+                        TimeRange result = await showTimeRangePicker(
+                        context: context,
+                        fromText: "",
+                        toText: "",
+                        use24HourFormat: false,
+                        labelOffset: -30,
+                        strokeWidth: 6,
+                        ticks: 8,
+                        ticksColor: color[500],
+                        ticksLength: 20,
+                        ticksOffset: -3,
+                        timeTextStyle: TextStyle(
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic,
+                          //fontWeight: FontWeight.bold,
+                        ),
+                        activeTimeTextStyle: TextStyle(
+                          fontSize: 26,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        labels: [
+                          "12 pm",
+                          "3 pm",
+                          "6 pm",
+                          "9 pm",
+                          "12 am",
+                          "3 am",
+                          "6 am",
+                          "9 am",
+                        ].asMap().entries.map((e) {
+                          return ClockLabel.fromIndex(
+                              idx: e.key, length: 8, text: e.value
+                          );
+                        }).toList(),
+                      );
+                      //_selectTime(context);
+                      //widget.selectedTime.toString()
+
+                        String start = result.startTime.toString();
+                        String end = result.endTime.toString();
+
+                        
+                      txt1.text= start.substring(10,15) + '-' + end.substring(10,15);
+
+                    },
+                    onChanged: (value) {
+                      //Do something with the user input.
+                       timeRange = value;
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: color[300],
+                      //focusColor: color[100],
+                      icon: Icon(Icons.watch_later),
+                      hintText: 'Select start/end time',
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[50], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: color[100], width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                    ),
+                  ),
+                  // TODO: Verify whether or not the TimeRangePicker will be sufficient
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 25),
+                child: RoundedButton(
+                  colour: color[200],
+                  title: 'Submit',
+                  onPressed: () {
+                    final firestoreInstance = FirebaseFirestore.instance;
+                    firestoreInstance.collection("Task Listings").add({
+                      "address": streetAddress,
+                      "payment": payment,
+                      "jobType": jobType,
+                      "description": description,
+                      "date": widget.selectedDate,
+                      // "duration": jobDuration,
+                      // TODO: entry time to database
+                      // "timeRange" : timeRange,
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}

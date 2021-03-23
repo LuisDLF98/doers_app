@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:doers_app/Components/hex_colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -103,11 +104,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   elevation: 5.0,
                   child: MaterialButton(
                     onPressed: () async{
+                      final firestoreInstance = FirebaseFirestore.instance;
+                      DocumentReference docRef = await // Used to send the Users ID to next screen in the Navigator below
+                      firestoreInstance.collection("Users").add({
+                        "email": email,
+                        "password": password,
+                      });
                       setState(() {
                         showSpinner = true;
                       });
 
-                      Navigator.pushNamed(context, RegistrationFormScreen.id);
+                      Navigator.pushNamed(context, RegistrationFormScreen.id, arguments: {'UserID': docRef.id});
 
 
                       //Implement registration functionality.
