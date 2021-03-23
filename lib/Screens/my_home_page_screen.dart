@@ -83,17 +83,16 @@ class _MyHomePageState extends State<MyHomePage> {
             HomeScreen(),
             MessagingScreen(),
             NavigationScreen(),
-            DetailsScreen(),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: toDetails,
-        tooltip: 'Increment',
+        onPressed: () {
+          Navigator.pushNamed(context, DetailsScreen.id);
+        },
+        tooltip: 'Add Job',
         child: Icon(Icons.add),
       ),
     );
   }
-
-  void toDetails() { setState(() { pageNum = 3; }); }
 }
