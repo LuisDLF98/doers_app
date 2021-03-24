@@ -3,8 +3,6 @@ import 'package:doers_app/Screens/registration_form_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Screens/welcome_screen.dart';
-import 'package:doers_app/Screens/login_screen.dart';
-import 'package:doers_app/Screens/registration_screen.dart';
 import 'package:doers_app/Components/side_bar.dart';
 import 'package:doers_app/Screens/home_screen.dart';
 import 'package:doers_app/Screens/profile_screen.dart';
@@ -49,8 +47,8 @@ class FlashChat extends StatelessWidget {
         initialRoute: WelcomeScreen.id,
         routes: {
           WelcomeScreen.id: (context) => WelcomeScreen(),
-          LoginScreen.id: (context) => LoginScreen(),
-          RegistrationScreen.id: (context) => RegistrationScreen(),
+          //LoginScreen.id: (context) => LoginScreen(),
+          //RegistrationScreen.id: (context) => RegistrationScreen(),
           RegistrationFormScreen.id: (context) => RegistrationFormScreen(),
           HomeScreen.id: (context) => HomeScreen(),
           ProfileScreen.id: (context) => ProfileScreen(),

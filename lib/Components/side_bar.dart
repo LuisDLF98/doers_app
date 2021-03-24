@@ -2,6 +2,7 @@ import 'package:doers_app/Screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Screens/profile_screen.dart';
 import 'package:doers_app/Screens/payment_screen.dart';
+import 'package:doers_app/Screens/welcome_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -45,7 +46,8 @@ class NavDrawer extends StatelessWidget {
             title: Text('Logout'),
             onTap: () {
               _handleSignOut();
-              Navigator.of(context).pop();
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => WelcomeScreen()));
             },
           ),
         ],

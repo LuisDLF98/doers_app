@@ -1,10 +1,26 @@
-import 'package:doers_app/Screens/registration_screen.dart';
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-import 'registration_screen.dart';
+import 'registration_form_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:doers_app/Components/rounded_button.dart';
 import 'package:doers_app/Components/hex_colors.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'my_home_page_screen.dart';
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  scopes: <String>[
+    'email',
+    'https://www.googleapis.com/auth/userinfo.email',
+  ],
+);
+
+Future<void> _handleSignIn() async {
+  try {
+    await _googleSignIn.signIn();
+    // TODO: Check user's email against FireBase
+  } catch (error) {
+    print(error);
+  }
+}
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -13,7 +29,8 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin{
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
 
   AnimationController controller;
   Animation animation;
@@ -22,17 +39,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     // TODO: implement initState
     super.initState();
     controller = AnimationController(
-      duration: Duration(seconds: 2),
-      vsync: this,
-      upperBound: 1.0
-    );
+        duration: Duration(seconds: 2), vsync: this, upperBound: 1.0);
 
-    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white).animate(controller);
+    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
+        .animate(controller);
     controller.forward();
-    controller.addListener((){
-      setState(() {
-
-      });
+    controller.addListener(() {
+      setState(() {});
     });
   }
 
@@ -42,7 +55,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     controller.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +76,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                   ),
                 ),
                 TypewriterAnimatedTextKit(
-                  text:['Doers'],
+                  text: ['Doers'],
                   textStyle: TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
@@ -75,17 +88,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
               height: 48.0,
             ),
             RoundedButton(
-                title: 'Log In',
-                colour: color[200],
-                onPressed:(){
-                  Navigator.pushNamed(context, LoginScreen.id);
-                  },
+              title: 'Log In',
+              colour: color[200],
+              onPressed: () {
+                _handleSignIn();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                );
+              },
             ),
             RoundedButton(
               title: 'Register',
               colour: color[200],
-              onPressed:(){
-                Navigator.pushNamed(context, RegistrationScreen.id);
+              onPressed: () {
+                Navigator.pushNamed(context, RegistrationFormScreen.id);
               },
             ),
           ],
@@ -94,5 +111,3 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     );
   }
 }
-
-
