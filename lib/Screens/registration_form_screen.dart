@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doers_app/Screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -38,7 +39,8 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
           child: Form(
             child: ListView(
               children: <Widget>[
-                Flexible(
+                Padding(
+                  padding: const EdgeInsets.only(top: 15.0),
                   child: Hero(
                     tag: 'logo',
                     child: Container(
@@ -68,8 +70,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[100], width: 2.0),
+                      borderSide: BorderSide(color: color[100], width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -91,13 +92,11 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[50], width: 1.0),
+                      borderSide: BorderSide(color: color[50], width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[100], width: 2.0),
+                      borderSide: BorderSide(color: color[100], width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -119,13 +118,11 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[50], width: 1.0),
+                      borderSide: BorderSide(color: color[50], width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[100], width: 2.0),
+                      borderSide: BorderSide(color: color[100], width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -147,13 +144,11 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[50], width: 1.0),
+                      borderSide: BorderSide(color: color[50], width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[100], width: 2.0),
+                      borderSide: BorderSide(color: color[100], width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -175,13 +170,11 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[50], width: 1.0),
+                      borderSide: BorderSide(color: color[50], width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[100], width: 2.0),
+                      borderSide: BorderSide(color: color[100], width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -203,13 +196,11 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[50], width: 1.0),
+                      borderSide: BorderSide(color: color[50], width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[100], width: 2.0),
+                      borderSide: BorderSide(color: color[100], width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -231,13 +222,11 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[50], width: 1.0),
+                      borderSide: BorderSide(color: color[50], width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: color[100], width: 2.0),
+                      borderSide: BorderSide(color: color[100], width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -248,10 +237,15 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   child: RoundedButton(
                     colour: color[200],
                     title: 'Submit',
-                    onPressed: () async{
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('You have been registered!')));
                       final firestoreInstance = FirebaseFirestore.instance;
-                      CollectionReference users = firestoreInstance.collection('Users');
-                      DocumentReference reference = users.doc(arguments['UserID']);
+                      CollectionReference users =
+                          firestoreInstance.collection('Users');
+                      DocumentReference reference =
+                          users.doc(arguments['UserID']);
                       await reference.update({
                         "firstName": firstName,
                         "lastName": lastName,

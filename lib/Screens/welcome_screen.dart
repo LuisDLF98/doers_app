@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'registration_form_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -13,13 +14,18 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
   ],
 );
 
-Future<void> _handleSignIn() async {
+Future<GoogleSignInAccount> _handleSignIn() async {
   try {
     await _googleSignIn.signIn();
-    // TODO: Check user's email against FireBase
+    // TODO: Acquire F
+    // https://github.com/sbis04/flutterfire-samples/tree/google-sign-in
   } catch (error) {
     print(error);
   }
+}
+
+bool checkifExists() {
+
 }
 
 class WelcomeScreen extends StatefulWidget {
@@ -31,9 +37,9 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
-
   AnimationController controller;
   Animation animation;
+  GoogleSignInAccount _currentUser;
   @override
   void initState() {
     // TODO: implement initState
@@ -47,6 +53,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     controller.addListener(() {
       setState(() {});
     });
+
+    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+      setState(() {_currentUser = account;});
+    });
   }
 
   @override
@@ -58,6 +68,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    Future<GoogleSignInAccount> user;
     return Scaffold(
       backgroundColor: color[500],
       body: Padding(
@@ -90,12 +101,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             RoundedButton(
               title: 'Log In',
               colour: color[200],
-              onPressed: () {
-                _handleSignIn();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()),
-                );
+              onPressed: () async {
+                user = _handleSignIn();
+                if (user != null) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyHomePage(user: user)),
+                  );
+                }
               },
             ),
             RoundedButton(
