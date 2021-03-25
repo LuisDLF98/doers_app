@@ -35,10 +35,17 @@ dependencies:
   firebase_core: ^1.0.0
   modal_progress_hud: ^0.1.3
   google_sign_in: ^5.0.0
+  time_range_picker: any
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.8.0"
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/DoersV3.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

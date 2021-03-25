@@ -1,9 +1,10 @@
-import 'package:doers_app/screens/registration_screen.dart';
+import 'package:doers_app/Screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:doers_app/Components/rounded_button.dart';
+import 'package:doers_app/Components/hex_colors.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -45,7 +46,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: animation.value,
+      backgroundColor: color[500],
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -57,7 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                 Hero(
                   tag: 'logo',
                   child: Container(
-                    child: Image.asset('images/logo.png'),
+                    child: Image.asset('images/DoersV3.png'),
                     height: 60.0,
                   ),
                 ),
@@ -74,15 +75,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
               height: 48.0,
             ),
             RoundedButton(
-                title: 'log in',
-                colour: Colors.lightBlueAccent,
+                title: 'Log In',
+                colour: color[200],
                 onPressed:(){
                   Navigator.pushNamed(context, LoginScreen.id);
                   },
             ),
             RoundedButton(
               title: 'Register',
-              colour: Colors.blueAccent,
+              colour: color[200],
               onPressed:(){
                 Navigator.pushNamed(context, RegistrationScreen.id);
               },

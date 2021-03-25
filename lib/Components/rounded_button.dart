@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doers_app/Components/hex_colors.dart';
 
 class RoundedButton extends StatelessWidget {
   RoundedButton({this.title, this.colour, @required this.onPressed});
@@ -21,7 +22,8 @@ class RoundedButton extends StatelessWidget {
           child: Text(
             title,
             style: TextStyle(
-              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              color: color[300],
             ),
           ),
         ),

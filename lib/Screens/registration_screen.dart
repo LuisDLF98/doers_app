@@ -1,7 +1,9 @@
-import 'package:doers_app/screens/registration_form_screen.dart';
+import 'package:doers_app/Screens/registration_form_screen.dart';
 import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:doers_app/Components/hex_colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -19,7 +21,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: color[500],
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
@@ -33,7 +35,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   tag: 'logo',
                   child: Container(
                     height: 200.0,
-                    child: Image.asset('images/logo.png'),
+                    child: Image.asset('images/DoersV3.png'),
                   ),
                 ),
               ),
@@ -49,18 +51,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 },
                 decoration: InputDecoration(
                   hintText: 'Enter your email',
-                  labelStyle: TextStyle(color: Colors.black),
+                  labelStyle: TextStyle(color: color[600]),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
+                    borderSide: BorderSide(color: color[50], width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
+                    borderSide: BorderSide(color: color[100], width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                 ),
@@ -82,11 +84,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
+                    borderSide: BorderSide(color: color[50], width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
+                    borderSide: BorderSide(color: color[100], width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                 ),
@@ -97,16 +99,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Material(
-                  color: Colors.blueAccent,
+                  color: color[200],
                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
                   elevation: 5.0,
                   child: MaterialButton(
                     onPressed: () async{
+                      final firestoreInstance = FirebaseFirestore.instance;
+                      DocumentReference docRef = await // Used to send the Users ID to next screen in the Navigator below
+                      firestoreInstance.collection("Users").add({
+                        "email": email,
+                        "password": password,
+                      });
                       setState(() {
                         showSpinner = true;
                       });
 
-                      Navigator.pushNamed(context, RegistrationFormScreen.id);
+                      Navigator.pushNamed(context, RegistrationFormScreen.id, arguments: {'UserID': docRef.id});
 
 
                       //Implement registration functionality.
@@ -130,7 +138,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 42.0,
                     child: Text(
                       'Register',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: color[300]),
                     ),
                   ),
                 ),
