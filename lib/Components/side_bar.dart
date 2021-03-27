@@ -3,16 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:doers_app/Screens/profile_screen.dart';
 import 'package:doers_app/Screens/payment_screen.dart';
 import 'package:doers_app/Screens/welcome_screen.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-GoogleSignIn _googleSignIn = GoogleSignIn(
-  scopes: <String>[
-    'email',
-    'https://www.googleapis.com/auth/userinfo.email',
-  ],
-);
-
-Future<void> _handleSignOut() => _googleSignIn.disconnect();
+import 'package:doers_app/Components/Authentication.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -44,8 +35,8 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () {
-              _handleSignOut();
+            onTap: () async {
+              await signOutGoogle();
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => WelcomeScreen()));
             },

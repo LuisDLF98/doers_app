@@ -5,28 +5,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:doers_app/Components/rounded_button.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:doers_app/Components/Authentication.dart';
 import 'my_home_page_screen.dart';
-
-GoogleSignIn _googleSignIn = GoogleSignIn(
-  scopes: <String>[
-    'email',
-    'https://www.googleapis.com/auth/userinfo.email',
-  ],
-);
-
-Future<GoogleSignInAccount> _handleSignIn() async {
-  try {
-    await _googleSignIn.signIn();
-    // TODO: Acquire F
-    // https://github.com/sbis04/flutterfire-samples/tree/google-sign-in
-  } catch (error) {
-    print(error);
-  }
-}
-
-bool checkifExists() {
-
-}
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -39,7 +19,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation animation;
-  GoogleSignInAccount _currentUser;
   @override
   void initState() {
     // TODO: implement initState
@@ -53,10 +32,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     controller.addListener(() {
       setState(() {});
     });
-
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-      setState(() {_currentUser = account;});
-    });
   }
 
   @override
@@ -68,7 +43,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    Future<GoogleSignInAccount> user;
     return Scaffold(
       backgroundColor: color[500],
       body: Padding(
@@ -102,12 +76,23 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               title: 'Log In',
               colour: color[200],
               onPressed: () async {
-                user = _handleSignIn();
-                if (user != null) {
+                List<String> signIn = await signInWithGoogle();
+
+                if (signIn != null && signIn.length == 4) {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => MyHomePage(user: user)),
+                    MaterialPageRoute(builder: (context) => MyHomePage(userData: signIn)),
                   );
+                }
+                else if (signIn == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please select an account!')));
+                } else if (signIn.first == "Not Registered!") {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please register first to access the app!')));
+                }
+                else {
+                  print('Something seriously bad happened');
                 }
               },
             ),
