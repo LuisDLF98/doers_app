@@ -33,6 +33,23 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+
+
+
+  Widget _getFAB() {
+    if (pageNum == 1) {
+      return Container();
+    } else {
+      return FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, DetailsScreen.id);
+        },
+        tooltip: 'Add Job',
+        child: Icon(Icons.add),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -86,13 +103,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, DetailsScreen.id);
-        },
-        tooltip: 'Add Job',
-        child: Icon(Icons.add),
-      ),
+
+      floatingActionButton: _getFAB(),
     );
   }
 }
