@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doers_app/Components/barchart_simple.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key}) : super(key: key);
@@ -36,72 +37,73 @@ class _ProfileScreen extends State<ProfileScreen> {
           children: <Widget>[
             CircleAvatar(
               radius: 100.0,
-              backgroundImage: AssetImage('images/Rusty.jpeg'), //TODO:: change this to be dependent on user
-
+              backgroundImage: AssetImage(
+                  'images/Rusty.jpeg'), //TODO:: change this to be dependent on user
             ),
             Text(
               'Russell Stout',
               style: TextStyle(
-                fontSize:40,
+                fontSize: 40,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-
               ),
-
             ),
             Text(
               'DOER',
               style: TextStyle(
-                fontSize:25,
+                fontSize: 25,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-
               ),
             ),
             Card(
-
                 color: Colors.white,
                 margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-                child:Padding(
+                child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: ListTile(
                     leading: Icon(
                       Icons.phone,
                       color: Colors.teal,
                     ),
-
-                    title: Text('512-484-0547', //TODO:: change this to be dependent on user
+                    title: Text(
+                      '512-484-0547', //TODO:: change this to be dependent on user
                       style: TextStyle(
                         color: Colors.teal,
                         fontSize: 20.0,
                       ),
                     ),
                   ),
-                )
-            ),
+                )),
             Card(
                 color: Colors.white,
                 margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-                child:Padding(
+                child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: ListTile(
-                    leading:
-                    Icon(
+                    leading: Icon(
                       Icons.email,
                       color: Colors.teal,
                     ),
-                    title: Text('Stout.r3@gmail.com', //TODO:: change this to be dependent on user
+                    title: Text(
+                      'Stout.r3@gmail.com', //TODO:: change this to be dependent on user
                       style: TextStyle(
                         color: Colors.teal,
                         fontSize: 20.0,
                       ),
                     ),
                   ),
-                )
+                )),
+
+            Expanded(
+              child: Card(
+
+                child: SimpleBarChart.withSampleData(),
+              ),
             ),
           ],
         ),
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
