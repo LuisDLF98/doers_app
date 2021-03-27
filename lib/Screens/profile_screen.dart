@@ -1,5 +1,8 @@
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/barchart_simple.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key}) : super(key: key);
@@ -95,7 +98,39 @@ class _ProfileScreen extends State<ProfileScreen> {
                   ),
                 )),
 
+
+            Card(
+              color: Colors.white,
+              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: ListTile(
+                  leading: Icon(
+                    Icons.star,
+                    color: Colors.teal,
+                  ),
+                  title: Text(
+                    'Rating:',
+                    style: TextStyle(
+                      color: Colors.teal,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  trailing: Text(
+                    '5.0',
+                    style: TextStyle(
+                      color: Colors.teal,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+              ),
+            ),
+
             Expanded(
+
               child: Card(
 
                 child: SimpleBarChart.withSampleData(),
