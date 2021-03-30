@@ -358,6 +358,12 @@ class _DetailsScreen extends State<DetailsScreen> {
                   colour: color[200],
                   title: 'Submit',
                   onPressed: () {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Job created!')
+                      )
+                    );
                     final firestoreInstance = FirebaseFirestore.instance;
                     firestoreInstance.collection("Task Listings").add({
                       "address": streetAddress,
@@ -367,7 +373,7 @@ class _DetailsScreen extends State<DetailsScreen> {
                       "date": widget.selectedDate,
                       // "duration": jobDuration,
                       // TODO: entry time to database
-                      // "timeRange" : timeRange,
+                       //"timeRange" : timeRange,
                     });
                   },
                 ),

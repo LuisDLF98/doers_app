@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doers_app/Components/hex_colors.dart';
+import 'package:doers_app/screens/job_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -19,6 +22,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,32 +33,178 @@ class _HomeScreen extends State<HomeScreen> {
         // the App.build method, and use it to set our appbar title.
         title: Text('Home'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You are now in the Home Page',
-            ),
-          ],
-        ),
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('Task Listings').snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+            if(!snapshot.hasData){
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return new ListView(
+             children: snapshot.data.docs.map<Widget>((document) {
+                 return Card(
+                   child: ListTile(
+                     leading: Icon(
+                       Icons.map,
+                       color: color[100],
+                     ),
+                     title: new Text(document['jobType']),
+                     subtitle: new Text(document['description']),
+                    // trailing: new Text(document['date']),
+                       onTap: (){
+                         Navigator.pushNamed(context, JobDetailScreen.id, arguments: {'JobID': document.id});
+                       }
+                   )
+                 );
+             }).toList(),
+            );
+          }
+      ),
     );
+
   }
 }
+
+
+
+
+
+/* child:ListView(
+            children: <Widget> [
+              Card(
+                child: ListTile(
+                    leading: Icon(
+                      Icons.map,
+                      color: Colors.green,
+                    ),
+                    title: Text("Mowing a Lawn"),
+                    subtitle: Text("Must have own equipment"),
+                    trailing: Text("Time: 6pm"),
+                   *//* onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => JobDetailScreen()));
+                    }*//*
+
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.map,
+                    color: Colors.green,
+                  ),
+                  title: Text("Mowing a Lawn"),
+                  subtitle: Text("Must have own equipment"),
+                  trailing: Text("Time: 6pm"),
+
+
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.work,
+                    color: Colors.green,
+                  ),
+                  title: Text("Move my luggage"),
+                  subtitle: Text("Must be strong"),
+                  trailing: Text("Time: 10pm"),
+
+
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.whatshot,
+                    color: Colors.green,
+                  ),
+                  title: Text("Put out the fire in my house"),
+                  subtitle: Text("Must bring water"),
+                  trailing: Text("Time: 10pm"),
+
+
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.weekend_sharp,
+                    color: Colors.green,
+                  ),
+                  title: Text("Moving couches around"),
+                  subtitle: Text("Be prepared to carry heavy sofas"),
+                  trailing: Text("Time: 1pm"),
+
+
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.work,
+                    color: Colors.green,
+                  ),
+                  title: Text("Move my luggage"),
+                  subtitle: Text("Must be strong"),
+                  trailing: Text("Time: 10pm"),
+
+
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.whatshot,
+                    color: Colors.green,
+                  ),
+                  title: Text("Put out the fire in my house"),
+                  subtitle: Text("Must bring water"),
+                  trailing: Text("Time: 10pm"),
+
+
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.weekend_sharp,
+                    color: Colors.green,
+                  ),
+                  title: Text("Moving couches around"),
+                  subtitle: Text("Be prepared to carry heavy sofas"),
+                  trailing: Text("Time: 1pm"),
+
+
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.weekend_sharp,
+                    color: Colors.green,
+                  ),
+                  title: Text("Moving couches around"),
+                  subtitle: Text("Be prepared to carry heavy sofas"),
+                  trailing: Text("Time: 1pm"),
+
+
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.whatshot,
+                    color: Colors.green,
+                  ),
+                  title: Text("Put out the fire in my house"),
+                  subtitle: Text("Must bring water"),
+                  trailing: Text("Time: 10pm"),
+
+
+                ),
+              )
+
+            ]
+        ),*/
