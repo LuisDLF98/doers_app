@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 class NavigationScreen extends StatefulWidget {
   NavigationScreen({Key key}) : super(key: key);
@@ -19,6 +23,33 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreen extends State<NavigationScreen> {
+  Completer<GoogleMapController> _controllerGoogleMap = Completer();
+  GoogleMapController newGoogleMapController;
+
+  Position currentPosition;
+  static LatLng initialPosition;
+
+//  void initState() async{
+//    super.initState();
+//
+//    getUserLocation();
+//  }
+
+  void getUserLocation() async {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    currentPosition = position;
+
+    LatLng latlangposition = LatLng(position.latitude,position.longitude);
+    print(latlangposition.longitude);
+    initialPosition = latlangposition;
+    //ameraPosition cameraPosition = new CameraPosition(target:latlangposition,zoom: 14);
+    //newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    //return latlangposition;
+  }
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target:LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,31 +59,34 @@ class _NavigationScreen extends State<NavigationScreen> {
         // the App.build method, and use it to set our appbar title.
         title: Text('Navigation'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You are now in the Navigation Page',
-            ),
-          ],
-        ),
+      body: Stack(
+        children: [
+          GoogleMap(
+            mapType: MapType.normal,
+            myLocationButtonEnabled: true,
+            myLocationEnabled: true,
+            zoomControlsEnabled: true,
+            zoomGesturesEnabled: true,
+
+//            initialCameraPosition: CameraPosition(
+//              target: _kGooglePlex,
+//              zoom: 14,
+//            ),
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller)
+            {
+
+              _controllerGoogleMap.complete(controller);
+              newGoogleMapController = controller;
+              setState(() {
+
+              });
+
+            },
+          ),
+        ],
+
+
       ),// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
