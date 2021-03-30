@@ -13,6 +13,7 @@ import 'package:doers_app/Screens/conversation_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
+import 'package:doers_app/Screens/contacts_screen.dart';
 
 
 void main() async {
@@ -46,7 +47,7 @@ class FlashChat extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: WelcomeScreen.id,
+        initialRoute: ContactsScreen.id,
         routes: {
           WelcomeScreen.id: (context) => WelcomeScreen(),
           //LoginScreen.id: (context) => LoginScreen(),
@@ -61,6 +62,7 @@ class FlashChat extends StatelessWidget {
           JobDetailScreen.id: (context) => JobDetailScreen(),
           MyJobsScreen.id: (context) => MyJobsScreen(),
           ConversationDetailPage.id: (context) => ConversationDetailPage(),
+          ContactsScreen.id: (context) => ContactsScreen(),
           //ChatScreen.id: (context) => ChatScreen(),
         }
     );
