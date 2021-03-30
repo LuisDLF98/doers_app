@@ -1,4 +1,5 @@
 import 'package:doers_app/Screens/details_screen.dart';
+import 'package:doers_app/Screens/my_jobs_screen.dart';
 import 'package:doers_app/Screens/registration_form_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:doers_app/Screens/messaging_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +60,7 @@ class FlashChat extends StatelessWidget {
           NavigationScreen.id: (context) => NavigationScreen(),
           DetailsScreen.id: (context) => DetailsScreen(),
           JobDetailScreen.id: (context) => JobDetailScreen(),
+          MyJobsScreen.id: (context) => MyJobsScreen(),
           //ChatScreen.id: (context) => ChatScreen(),
         }
     );

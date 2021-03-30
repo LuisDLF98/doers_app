@@ -55,7 +55,7 @@ class _JobDetailScreen extends State<JobDetailScreen>{
                                         children: <Widget> [
                                           OutlinedButton(
                                             style: OutlinedButton.styleFrom(
-                                              primary: color[100],
+                                              primary: color[200],
                                               backgroundColor: color[300],
                                             ),
                                             child: Text('Message'),
@@ -63,15 +63,48 @@ class _JobDetailScreen extends State<JobDetailScreen>{
                                           ),
                                           OutlinedButton(
                                             style: OutlinedButton.styleFrom(
-                                              primary: color[100],
+                                              primary: color[200],
                                               backgroundColor: color[300],
                                             ),
                                             child: Text('Accept'),
-                                            onPressed: () {  },
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context){
+                                                 return AlertDialog(
+                                                   title: Text("Are you sure you want to accept this task?"),
+                                                   actions: <Widget>[
+                                                    OutlinedButton(
+                                                      style: OutlinedButton.styleFrom(
+                                                         primary: color[200],
+                                                         backgroundColor: color[300],
+                                                    ),
+                                                      child: Text('Accept'),
+                                                      onPressed: () {
+                                                        //TODO:: if accept pressed, assign doer to this task
+                                                      },
+                                                    ),
+                                                     OutlinedButton(
+                                                       style: OutlinedButton.styleFrom(
+                                                         primary: color[200],
+                                                         backgroundColor: color[300],
+                                                       ),
+                                                       child: Text('Cancel'),
+                                                       onPressed: () {
+                                                         //TODO:: Navigate back to og page
+                                                         Navigator.of(context).pop();
+                                                       },
+                                                     ),
+
+                                                   ],
+                                                 );
+                                                }
+                                              );
+                                            },
                                           ),
                                           OutlinedButton(
                                             style: OutlinedButton.styleFrom(
-                                              primary: color[100],
+                                              primary: color[200],
                                               backgroundColor: color[300],
                                             ),
                                             child: Text('Navigate'),
