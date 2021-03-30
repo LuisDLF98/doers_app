@@ -30,7 +30,7 @@ class _JobDetailScreen extends State<JobDetailScreen>{
 
           if(snapshot.connectionState == ConnectionState.done){
             Map<String, dynamic> data = snapshot.data.data();
-            body: CustomScrollView(
+            return CustomScrollView(
               slivers: <Widget>[
                 SliverAppBar(
                   expandedHeight: 150.0,
@@ -39,7 +39,50 @@ class _JobDetailScreen extends State<JobDetailScreen>{
                    FlexibleSpaceBar(
                     title: Text("${data['jobType']}"),
                   ),
-                )
+                ),
+                SliverToBoxAdapter(
+                    child: Center(
+                        child: SizedBox(
+                            height: 80,
+                            child: Column(
+                                children: <Widget>[
+                                  ButtonBar(
+                                      alignment: MainAxisAlignment.center,
+
+                                      children: <Widget> [
+                                        OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            primary: color[100],
+                                            backgroundColor: color[300],
+                                          ),
+                                          child: Text('Message'),
+                                          onPressed: () {  },
+                                        ),
+                                        OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            primary: color[100],
+                                            backgroundColor: color[300],
+                                          ),
+                                          child: Text('Accept'),
+                                          onPressed: () {  },
+                                        ),
+                                        OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            primary: color[100],
+                                            backgroundColor: color[300],
+                                          ),
+                                          child: Text('Navigate'),
+                                          onPressed: () {  },
+                                        ),
+                                      ]
+                                  ),
+                                ]
+                            )
+                        )
+                    )
+
+                ),
+
               ]
             );
            // return Text("Job Type, Then descrpition: ${data['jobType']} ${data['description']}");
