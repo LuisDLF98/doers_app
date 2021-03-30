@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doers_app/Screens/conversation_detail_page.dart';
 
 class ConversationList extends StatefulWidget{
   String name;
@@ -16,7 +17,11 @@ class _ConversationListState extends State<ConversationList> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return ConversationDetailPage();
+        }));
       },
+
       child: Container(
         color: Colors.white,
         padding: EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
