@@ -30,60 +30,120 @@ class _JobDetailScreen extends State<JobDetailScreen>{
 
           if(snapshot.connectionState == ConnectionState.done){
             Map<String, dynamic> data = snapshot.data.data();
-            return CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  expandedHeight: 150.0,
-                  backgroundColor: color[500],
-                  flexibleSpace:
-                   FlexibleSpaceBar(
-                    title: Text("${data['jobType']}"),
+
+            return Container(
+              color: color[300],
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    expandedHeight: 150.0,
+                    backgroundColor: color[500],
+                    flexibleSpace:
+                     FlexibleSpaceBar(
+                      title: Text("${data['jobType']}"),
+                    ),
                   ),
-                ),
-                SliverToBoxAdapter(
+                  SliverToBoxAdapter(
+                      child: Center(
+                          child: SizedBox(
+                              height: 80,
+                              child: Column(
+                                  children: <Widget>[
+                                    ButtonBar(
+                                        alignment: MainAxisAlignment.center,
+
+                                        children: <Widget> [
+                                          OutlinedButton(
+                                            style: OutlinedButton.styleFrom(
+                                              primary: color[100],
+                                              backgroundColor: color[300],
+                                            ),
+                                            child: Text('Message'),
+                                            onPressed: () {  },
+                                          ),
+                                          OutlinedButton(
+                                            style: OutlinedButton.styleFrom(
+                                              primary: color[100],
+                                              backgroundColor: color[300],
+                                            ),
+                                            child: Text('Accept'),
+                                            onPressed: () {  },
+                                          ),
+                                          OutlinedButton(
+                                            style: OutlinedButton.styleFrom(
+                                              primary: color[100],
+                                              backgroundColor: color[300],
+                                            ),
+                                            child: Text('Navigate'),
+                                            onPressed: () {  },
+                                          ),
+                                        ]
+                                    ),
+                                  ]
+                              )
+                          )
+                      )
+
+                  ),
+                  SliverToBoxAdapter(
                     child: Center(
-                        child: SizedBox(
-                            height: 80,
-                            child: Column(
-                                children: <Widget>[
-                                  ButtonBar(
-                                      alignment: MainAxisAlignment.center,
 
-                                      children: <Widget> [
-                                        OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            primary: color[100],
-                                            backgroundColor: color[300],
-                                          ),
-                                          child: Text('Message'),
-                                          onPressed: () {  },
-                                        ),
-                                        OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            primary: color[100],
-                                            backgroundColor: color[300],
-                                          ),
-                                          child: Text('Accept'),
-                                          onPressed: () {  },
-                                        ),
-                                        OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            primary: color[100],
-                                            backgroundColor: color[300],
-                                          ),
-                                          child: Text('Navigate'),
-                                          onPressed: () {  },
-                                        ),
-                                      ]
-                                  ),
-                                ]
-                            )
+                      child: Card(
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.work_off_outlined,
+                            color: color[100],
+                          ),
+                          title: Text("${data['description']}"),
                         )
+                      )
                     )
+                  ),
+                  SliverToBoxAdapter(
+                      child: Center(
 
-                ),
+                          child: Card(
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.work_off_outlined,
+                                  color: color[100],
+                                ),
+                                title: Text("${data['address']}"),
+                              )
+                          )
+                      )
+                  ),
+                  SliverToBoxAdapter(
+                      child: Center(
 
-              ]
+                          child: Card(
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.work_off_outlined,
+                                  color: color[100],
+                                ),
+                                title: Text("${data['payment']}"),
+                              )
+                          )
+                      )
+                  ),
+                  SliverToBoxAdapter(
+                      child: Center(
+
+                          child: Card(
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.work_off_outlined,
+                                  color: color[100],
+                                ),
+                                title: Text("${data['date']}"),
+                              )
+                          )
+                      )
+                  )
+
+                ]
+              ),
             );
            // return Text("Job Type, Then descrpition: ${data['jobType']} ${data['description']}");
           }
