@@ -5,8 +5,9 @@ import 'package:doers_app/models/chat_users.dart';
 import 'package:doers_app/Components/hex_colors.dart' as appColor;
 
 class MessagingScreen extends StatefulWidget {
-  MessagingScreen({Key key}) : super(key: key);
+  MessagingScreen({Key key, this.userData}) : super(key: key);
   static const String id = 'message_screen';
+  final List<String> userData;
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -18,7 +19,7 @@ class MessagingScreen extends StatefulWidget {
   // always marked "final".
 
   @override
-  _MessagingScreen createState() => _MessagingScreen();
+  _MessagingScreen createState() => _MessagingScreen(userData);
 }
 
 class _MessagingScreen extends State<MessagingScreen> {
@@ -37,12 +38,15 @@ class _MessagingScreen extends State<MessagingScreen> {
     ChatUsers(name: "John Wick", messageText: "How are you?", imageURL: "images/Rusty.jpeg", time: "18 Feb"),
   ];
 
+  List<String> loginInfo;
+  _MessagingScreen(this.loginInfo);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
       backgroundColor: Colors.white,
-      drawer: NavDrawer(),
+      drawer: NavDrawer(userData: loginInfo),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.

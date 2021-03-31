@@ -272,7 +272,8 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('You have been registered!')));
                       final firestoreInstance = FirebaseFirestore.instance;
-                      DocumentReference docRef = await firestoreInstance.collection('Users').add({"email": email,
+                      DocumentReference docRef = await firestoreInstance.collection('Users').add({
+                        "email": email,
                         "firstName": firstName,
                         "lastName": lastName,
                         "streetAddress": streetAddress,

@@ -5,8 +5,9 @@ import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key key}) : super(key: key);
+  HomeScreen({Key key, this.userData}) : super(key: key);
   static const String id = 'home_screen';
+  final List<String> userData;
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -18,16 +19,17 @@ class HomeScreen extends StatefulWidget {
   // always marked "final".
 
   @override
-  _HomeScreen createState() => _HomeScreen();
+  _HomeScreen createState() => _HomeScreen(userData);
 }
 
 class _HomeScreen extends State<HomeScreen> {
-
+  List<String> loginInfo;
+  _HomeScreen(this.loginInfo);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
+      drawer: NavDrawer(userData: loginInfo),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.

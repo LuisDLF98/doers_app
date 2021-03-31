@@ -9,6 +9,8 @@ import 'package:doers_app/Screens/my_jobs_screen.dart';
 
 
 class NavDrawer extends StatelessWidget {
+  NavDrawer({Key key, this.userData}) : super(key: key);
+  final List<String> userData;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -23,7 +25,7 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Profile'),
-            onTap: () => {Navigator.pushNamed(context, ProfileScreen.id)},
+            onTap: () => {Navigator.pushNamed(context, ProfileScreen.id, arguments: {'userInfo': userData})},
           ),
           ListTile(
             leading: Icon(Icons.attach_money),

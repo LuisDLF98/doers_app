@@ -6,8 +6,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 class NavigationScreen extends StatefulWidget {
-  NavigationScreen({Key key}) : super(key: key);
+  NavigationScreen({Key key, this.userData}) : super(key: key);
   static const String id = 'navigation_screen';
+  final List<String> userData;
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -19,10 +20,13 @@ class NavigationScreen extends StatefulWidget {
   // always marked "final".
 
   @override
-  _NavigationScreen createState() => _NavigationScreen();
+  _NavigationScreen createState() => _NavigationScreen(userData);
 }
 
 class _NavigationScreen extends State<NavigationScreen> {
+  List<String> loginInfo;
+  _NavigationScreen(this.loginInfo);
+
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   GoogleMapController newGoogleMapController;
 
@@ -53,7 +57,7 @@ class _NavigationScreen extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
+      drawer: NavDrawer(userData: loginInfo),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
