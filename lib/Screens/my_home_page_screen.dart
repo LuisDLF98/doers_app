@@ -3,9 +3,10 @@ import 'package:doers_app/Screens/home_screen.dart';
 import 'package:doers_app/Screens/messaging_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Screens/details_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title, this.userData}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -17,14 +18,18 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final List<String> userData;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(userData);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentTab = 0;
   int pageNum = 0;
+  List<String> loginInfo;
+
+  _MyHomePageState(this.loginInfo);
 
   void _selectTab(int tab) {
     setState(() {
