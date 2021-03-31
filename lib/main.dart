@@ -11,7 +11,7 @@ import 'package:doers_app/Screens/payment_screen.dart';
 import 'package:doers_app/Screens/messaging_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Components/hex_colors.dart';
-import 'package:doers_app/screens/job_details_screen.dart';
+import 'package:doers_app/Screens/job_details_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
