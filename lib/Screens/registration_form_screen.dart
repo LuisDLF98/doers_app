@@ -16,6 +16,7 @@ class RegistrationFormScreen extends StatefulWidget {
 class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
   String firstName;
   String lastName;
+  String email;
   String streetAddress;
   String city;
   String state;
@@ -97,6 +98,36 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: color[100], width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 12.0,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  textAlign: TextAlign.center,
+                  onChanged: (value) {
+                    //Do something with the user input.
+                    email= value;
+                  },
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.email),
+                    hintText: 'Enter your email',
+                    contentPadding:
+                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(color: color[50], width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(color: color[100], width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -238,23 +269,20 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                     colour: color[200],
                     title: 'Submit',
                     onPressed: () async {
-                      Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('You have been registered!')));
                       final firestoreInstance = FirebaseFirestore.instance;
-                      CollectionReference users =
-                          firestoreInstance.collection('Users');
-                      DocumentReference reference =
-                          users.doc(arguments['UserID']);
-                      await reference.update({
+                      DocumentReference docRef = await firestoreInstance.collection('Users').add({"email": email,
                         "firstName": firstName,
                         "lastName": lastName,
                         "streetAddress": streetAddress,
                         "city": city,
                         "state": state,
-                        "zipCode": zipCode,
-                        'cellPhoneNumber': cellPhoneNumber
-                      });
+                        "zipCode": zipCode});
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                      );
                     }, // onPressed
                   ),
                 ),

@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'dart:async';
 
-GoogleSignIn _googleSignIn = GoogleSignIn(
+GoogleSignIn googleSignIn = GoogleSignIn(
   scopes: <String>[
     'email',
     'https://www.googleapis.com/auth/userinfo.email',
@@ -11,15 +13,26 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
 
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final GoogleSignIn googleSignIn = GoogleSignIn();
 
 String name;
 String email;
 String imageUrl;
+String id;
 
 Future<bool> checkIfRegistered(String email) async {
-  // TODO: Query Firebase with provided email and make sure user is registered before allowing them to access the app
-  return true;
+  bool b = false;
+  final firestoreInstance = FirebaseFirestore.instance;
+  CollectionReference ref = firestoreInstance.collection('Users');
+  QuerySnapshot qShot = await ref.get();
+  qShot.docs.forEach((doc) {
+    String s = doc.data()['email'];
+    if(email == s) {
+      id = doc.reference.id;
+      b = true;
+    }
+  });
+
+  return Future.value(b);
 }
 
 Future<List<String>> signInWithGoogle() async {
@@ -73,7 +86,9 @@ Future<List<String>> signInWithGoogle() async {
     assert(user.uid == currentUser.uid);
 
     print('signInWithGoogle succeeded: $user');
+    print('id: $id');
 
+    result.add(id);
     result.add(name);
     result.add(email);
     result.add(imageUrl);

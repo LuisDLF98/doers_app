@@ -76,9 +76,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               title: 'Log In',
               colour: color[200],
               onPressed: () async {
+                signOutGoogle(); // Ensure user is signed out before attempting to sign in
                 List<String> signIn = await signInWithGoogle();
-
-                if (signIn != null && signIn.length == 4) {
+                if (signIn != null && signIn.length == 5) {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => MyHomePage(userData: signIn)),
