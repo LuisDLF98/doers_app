@@ -27,7 +27,9 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
   Widget build(BuildContext context) {
     // For getting the User ID argument from 'registration_screen.dart'
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    final formKey = GlobalKey<FormState>();
 
+    // TODO: Add input checking through regex (particularly for email address)
     return Scaffold(
       backgroundColor: color[500],
       appBar: AppBar(
@@ -38,6 +40,8 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
+            key: formKey,
+            autovalidateMode: AutovalidateMode.disabled,
             child: ListView(
               children: <Widget>[
                 Padding(
@@ -60,7 +64,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: InputDecoration(
                     icon: Icon(Icons.perm_identity),
-                    hintText: 'Enter your First Name',
+                    hintText: 'First name',
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -75,6 +79,12 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "First name needed!";
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: 12.0,
@@ -86,7 +96,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: InputDecoration(
                     icon: Icon(Icons.perm_identity),
-                    hintText: 'Enter your Last Name',
+                    hintText: 'Last name',
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -101,20 +111,25 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Last name needed!";
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: 12.0,
                 ),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.center,
                   onChanged: (value) {
                     //Do something with the user input.
                     email= value;
                   },
                   decoration: InputDecoration(
                     icon: Icon(Icons.email),
-                    hintText: 'Enter your email',
+                    hintText: 'Email',
                     contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -131,6 +146,12 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Email needed!";
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: 12.0,
@@ -142,7 +163,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: InputDecoration(
                     icon: Icon(Icons.house),
-                    hintText: 'street address',
+                    hintText: 'Street address',
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -157,6 +178,12 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Street address needed!";
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: 12.0,
@@ -168,7 +195,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: InputDecoration(
                     icon: Icon(Icons.location_city),
-                    hintText: 'city',
+                    hintText: 'City',
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -183,6 +210,12 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "City needed!";
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: 12.0,
@@ -194,7 +227,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: InputDecoration(
                     icon: Icon(Icons.art_track),
-                    hintText: 'state',
+                    hintText: 'State',
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -209,6 +242,12 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "State needed!";
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: 12.0,
@@ -220,7 +259,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   },
                   decoration: InputDecoration(
                     icon: Icon(Icons.location_on),
-                    hintText: 'zip code',
+                    hintText: 'Zip code',
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -235,6 +274,12 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Zip code needed!";
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: 12.0,
@@ -246,23 +291,31 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                     colour: color[200],
                     title: 'Submit',
                     onPressed: () async {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('You have been registered!')));
-                      final firestoreInstance = FirebaseFirestore.instance;
-                      DocumentReference docRef = await firestoreInstance.collection('Users').add({
-                        "email": email,
-                        "firstName": firstName,
-                        "lastName": lastName,
-                        "streetAddress": streetAddress,
-                        "city": city,
-                        "state": state,
-                        "zipCode": zipCode,
-                        "profileImage": null,
-                      });
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => WelcomeScreen()),
-                      );
+                      if(formKey.currentState.validate()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(
+                                'You have been registered!')));
+                        final firestoreInstance = FirebaseFirestore.instance;
+                        DocumentReference docRef = await firestoreInstance
+                            .collection('Users').add({
+                          "email": email.toLowerCase(),
+                          "firstName": firstName,
+                          "lastName": lastName,
+                          "streetAddress": streetAddress,
+                          "city": city,
+                          "state": state,
+                          "zipCode": zipCode});
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              WelcomeScreen()),
+                        );
+                      }
+                      else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(
+                              'Information still needed!')));
+                      }
                     }, // onPressed
                   ),
                 ),
