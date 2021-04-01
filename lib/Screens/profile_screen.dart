@@ -68,25 +68,6 @@ class _ProfileScreen extends State<ProfileScreen> {
                   padding: EdgeInsets.all(15.0),
                   child: ListTile(
                     leading: Icon(
-                      Icons.phone,
-                      color: Colors.teal,
-                    ),
-                    title: Text(
-                      '123-456-7890', //TODO:: change this to be dependent on user
-                      style: TextStyle(
-                        color: Colors.teal,
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ),
-                )),
-            Card(
-                color: Colors.white,
-                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-                child: Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: ListTile(
-                    leading: Icon(
                       Icons.email,
                       color: Colors.teal,
                     ),
