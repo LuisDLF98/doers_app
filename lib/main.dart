@@ -9,11 +9,11 @@ import 'package:doers_app/Screens/home_screen.dart';
 import 'package:doers_app/Screens/profile_screen.dart';
 import 'package:doers_app/Screens/settings_screen.dart';
 import 'package:doers_app/Screens/payment_screen.dart';
-import 'package:doers_app/Screens/messaging_screen.dart';
+import 'package:doers_app/Screens/conversations_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
-import 'package:doers_app/Screens/contacts_screen.dart';
+import 'file:///C:/Users/aleja/AndroidStudioProjects/doers_app/lib/_Unused/contacts_screen.dart';
 
 
 void main() async {
@@ -47,7 +47,7 @@ class FlashChat extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: ContactsScreen.id,
+        initialRoute: WelcomeScreen.id,
         routes: {
           WelcomeScreen.id: (context) => WelcomeScreen(),
           //LoginScreen.id: (context) => LoginScreen(),

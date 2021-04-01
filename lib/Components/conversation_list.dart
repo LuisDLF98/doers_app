@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:doers_app/Screens/conversation_detail_page.dart';
+import 'package:doers_app/Screens/conversation_screen.dart';
 
 class ConversationList extends StatefulWidget{
   String name;

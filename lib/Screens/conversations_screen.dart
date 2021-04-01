@@ -3,6 +3,7 @@ import 'package:doers_app/Components/side_bar.dart';
 import 'package:doers_app/Components/conversation_list.dart';
 import 'package:doers_app/models/chat_users.dart';
 import 'package:doers_app/Components/hex_colors.dart' as appColor;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessagingScreen extends StatefulWidget {
   MessagingScreen({Key key, this.userData}) : super(key: key);
@@ -43,6 +44,9 @@ class _MessagingScreen extends State<MessagingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final firestoreInstance = FirebaseFirestore.instance;
+    CollectionReference conversations = firestoreInstance.collection('Conversations');
+
     return Scaffold(
 
       backgroundColor: Colors.white,
