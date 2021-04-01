@@ -4,6 +4,9 @@ import 'package:doers_app/Screens/profile_screen.dart';
 import 'package:doers_app/Screens/payment_screen.dart';
 import 'package:doers_app/Screens/welcome_screen.dart';
 import 'package:doers_app/Components/Authentication.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:doers_app/Screens/my_jobs_screen.dart';
+
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -31,6 +34,11 @@ class NavDrawer extends StatelessWidget {
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () => {Navigator.pushNamed(context, SettingsScreen.id)},
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('My Jobs'),
+            onTap: () => {Navigator.pushNamed(context, MyJobsScreen.id)},
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
