@@ -102,9 +102,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           index: pageNum,
           children: [
-            HomeScreen(),
-            MessagingScreen(),
-            NavigationScreen(),
+            HomeScreen(userData: loginInfo),
+            MessagingScreen(userData: loginInfo),
+            NavigationScreen(userData: loginInfo),
           ],
         ),
       ),

@@ -24,6 +24,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreen extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -40,11 +42,11 @@ class _ProfileScreen extends State<ProfileScreen> {
           children: <Widget>[
             CircleAvatar(
               radius: 100.0,
-              backgroundImage: AssetImage(
-                  'images/Rusty.jpeg'), //TODO:: change this to be dependent on user
+              backgroundImage: NetworkImage(
+                  arguments['userInfo'][3]),
             ),
             Text(
-              'Russell Stout',
+              arguments['userInfo'][1],
               style: TextStyle(
                 fontSize: 40,
                 color: Colors.white,
@@ -66,30 +68,11 @@ class _ProfileScreen extends State<ProfileScreen> {
                   padding: EdgeInsets.all(15.0),
                   child: ListTile(
                     leading: Icon(
-                      Icons.phone,
-                      color: Colors.teal,
-                    ),
-                    title: Text(
-                      '512-484-0547', //TODO:: change this to be dependent on user
-                      style: TextStyle(
-                        color: Colors.teal,
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ),
-                )),
-            Card(
-                color: Colors.white,
-                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-                child: Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: ListTile(
-                    leading: Icon(
                       Icons.email,
                       color: Colors.teal,
                     ),
                     title: Text(
-                      'Stout.r3@gmail.com', //TODO:: change this to be dependent on user
+                      arguments['userInfo'][2],
                       style: TextStyle(
                         color: Colors.teal,
                         fontSize: 20.0,
