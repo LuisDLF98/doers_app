@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
-import 'package:doers_app/screens/job_details_screen.dart';
+import 'package:doers_app/Screens/job_details_screen.dart';
 
 class MyJobsScreen extends StatefulWidget {
   MyJobsScreen({Key key}) : super(key: key);
