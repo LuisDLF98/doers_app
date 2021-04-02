@@ -91,6 +91,9 @@ class _DetailsScreen extends State<DetailsScreen> {
 
 
   Widget build(BuildContext context) {
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    id = arguments[0];
+
     _selectDate(BuildContext context) async {
       final DateTime picked = await showDatePicker(
         context: context,
@@ -452,8 +455,11 @@ class _DetailsScreen extends State<DetailsScreen> {
                       "description": description,
                       "date": widget.selectedDate,
                       // "duration": jobDuration,
+                      "timeRange" : timeRange,
                       // TODO: entry time to database
-                       //"timeRange" : timeRange,
+                      "ownedBy": id,
+                      "isCompleted": false,
+                      "doerAssigned": null,
                     });
                   },
                 ),
