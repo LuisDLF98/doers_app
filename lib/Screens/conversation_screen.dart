@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:doers_app/Components/hex_colors.dart' as appColor;
 
 class ConversationDetailPage extends StatefulWidget{
+  ConversationDetailPage({Key key, this.convoID}) : super(key: key);
+  static const String id = 'conversation_screen';
+  final String convoID;
+
   @override
   _ConversationDetailPageState createState() => _ConversationDetailPageState();
 }

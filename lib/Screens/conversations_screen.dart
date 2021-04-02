@@ -1,13 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
 import 'package:doers_app/Components/conversation_list.dart';
 import 'package:doers_app/models/chat_users.dart';
 import 'package:doers_app/Components/hex_colors.dart' as appColor;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:doers_app/Components/hex_colors.dart';
+import 'package:doers_app/Screens/conversation_screen.dart';
+import 'package:doers_app/Components/user_row.dart';
+import 'package:doers_app/Components/user.dart';
+
 
 class MessagingScreen extends StatefulWidget {
   MessagingScreen({Key key, this.userData}) : super(key: key);
-  static const String id = 'message_screen';
+  static const String id = 'conversations_screen';
   final List<String> userData;
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -44,8 +52,20 @@ class _MessagingScreen extends State<MessagingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final firestoreInstance = FirebaseFirestore.instance;
-    CollectionReference conversations = firestoreInstance.collection('Conversations');
+    User user = FirebaseAuth.instance.currentUser;
+    final List<OurUser> userDirectory = <OurUser>[];
+    final fireInstance = FirebaseFirestore.instance;
+    CollectionReference conversations = fireInstance.collection('Conversations');
+
+    List<Widget> getListViewItems(List<OurUser> userDirectory, User user) {
+      final List<Widget> list = <Widget>[];
+      for (OurUser contact in userDirectory) {
+        if (contact.uid != user.uid) {
+          list.add(UserRow(user.uid, contact));
+        }
+      }
+      return list;
+    }
 
     return Scaffold(
 
@@ -54,76 +74,12 @@ class _MessagingScreen extends State<MessagingScreen> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text('Messaging'),
+        title: Text('Conversations'),
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SafeArea(
-              child: Padding(
-                padding: EdgeInsets.only(left: 16,right: 16,top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("Conversations",style: TextStyle(fontSize: 32,fontWeight: FontWeight.bold, color: Colors.black),),
-                    Container(
-                      padding: EdgeInsets.only(left: 8,right: 8,top: 2,bottom: 2),
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: appColor.fromHex('#69efad'),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.add,color: Colors.black,size: 20,),
-                          SizedBox(width: 2,),
-                          Text("Add New",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold, color: Colors.black),),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 16,left: 16,right: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Search...",
-                  hintStyle: TextStyle(color: Colors.grey.shade600),
-                  prefixIcon: Icon(Icons.search,color: Colors.grey.shade600, size: 20,),
-                  filled: true,
-                  fillColor: Colors.grey.shade100,
-                  contentPadding: EdgeInsets.all(8),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(
-                          color: Colors.grey.shade100
-                      )
-                  ),
-                ),
-              ),
-            ),
-            ListView.builder(
-              itemCount: chatUsers.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 16),
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index){
-                return ConversationList(
-                  name: chatUsers[index].name,
-                  messageText: chatUsers[index].messageText,
-                  imageUrl: chatUsers[index].imageURL,
-                  time: chatUsers[index].time,
-                  isMessageRead: (index == 0 || index == 3)?true:false,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      body: userDirectory != null
+        ? ListView(
+        shrinkWrap: true, children: getListViewItems(userDirectory, user)
+      ) : Container(),
     );
   }
 }

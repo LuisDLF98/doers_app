@@ -13,7 +13,6 @@ import 'package:doers_app/Screens/conversations_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
-import 'file:///C:/Users/aleja/AndroidStudioProjects/doers_app/lib/_Unused/contacts_screen.dart';
 
 
 void main() async {
@@ -62,7 +61,6 @@ class FlashChat extends StatelessWidget {
           DetailsScreen.id: (context) => DetailsScreen(),
           JobDetailScreen.id: (context) => JobDetailScreen(),
           MyJobsScreen.id: (context) => MyJobsScreen(),
-          ContactsScreen.id: (context) => ContactsScreen(),
           //ChatScreen.id: (context) => ChatScreen(),
         }
     );
