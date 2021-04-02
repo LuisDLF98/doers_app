@@ -55,6 +55,19 @@ class _MessagingScreen extends State<MessagingScreen> {
               );
             }
 
+            Widget getName(String id) {
+              return new StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return new Text("Loading");
+                    }
+                    var document = snapshot.data;
+                    return new Text('${document["firstName"]} ${document["lastName"]}');
+                  }
+              );
+            }
+
             return new ListView(
               children: snapshot.data.docs.map<Widget>((document) {
                 List<dynamic> users = document['users'];
@@ -65,7 +78,9 @@ class _MessagingScreen extends State<MessagingScreen> {
                             Icons.person,
                             color: color[100],
                           ),
-                          title: new Text('${loginInfo[0] != document['lastMessage']['idFrom'] ? document['lastMessage']['idFrom'] : document['lastMessage']['idTo']}'),
+                          title: loginInfo[0] != document['lastMessage']['idFrom'] ?
+                              getName(document['lastMessage']['idFrom']) :
+                              getName(document['lastMessage']['idTo']),
                           subtitle: new Text(document['lastMessage']['content']),
                           // trailing: new Text(document['date']),
                           onTap: () {
