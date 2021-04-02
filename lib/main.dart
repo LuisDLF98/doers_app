@@ -10,6 +10,7 @@ import 'package:doers_app/Screens/profile_screen.dart';
 import 'package:doers_app/Screens/settings_screen.dart';
 import 'package:doers_app/Screens/payment_screen.dart';
 import 'package:doers_app/Screens/conversations_screen.dart';
+import 'package:doers_app/Screens/conversation_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
@@ -61,6 +62,7 @@ class FlashChat extends StatelessWidget {
           DetailsScreen.id: (context) => DetailsScreen(),
           JobDetailScreen.id: (context) => JobDetailScreen(),
           MyJobsScreen.id: (context) => MyJobsScreen(),
+          ConversationDetailPage.id: (context) => ConversationDetailPage(),
           //ChatScreen.id: (context) => ChatScreen(),
         }
     );
