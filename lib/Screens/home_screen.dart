@@ -56,7 +56,7 @@ class _HomeScreen extends State<HomeScreen> {
                      subtitle: new Text(document['description']),
                     // trailing: new Text(document['date']),
                        onTap: (){
-                         Navigator.pushNamed(context, JobDetailScreen.id, arguments: {'JobID': document.id , 'userInfo': loginInfo});
+                         Navigator.pushNamed(context, JobDetailScreen.id, arguments: {'JobID': document.id, 'userInfo': loginInfo});
                        }
                    )
                  );

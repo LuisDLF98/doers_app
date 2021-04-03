@@ -172,7 +172,19 @@ class _JobDetailScreen extends State<JobDetailScreen>{
                                                       child: Text('Accept'),
                                                       onPressed: () {
                                                         //TODO:: if accept pressed, assign doer to this task
-                                                      },
+                                                        final firestoreInstance = FirebaseFirestore.instance;
+                                                        firestoreInstance.collection('Task Listings').doc(arguments['JobID']).set({
+                                                          "doerAssigned": arguments['userInfo'][0]},
+                                                            SetOptions(merge : true)
+                                                        );
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                            SnackBar(
+                                                                content: Text('Task Accepted!')
+                                                            )
+                                                        );
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                      }, // onPressed()
                                                     ),
                                                      OutlinedButton(
                                                        style: OutlinedButton.styleFrom(
