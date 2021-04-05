@@ -30,7 +30,7 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreen extends State<DetailsScreen> {
-  String id; // TODO: Link this to a unique user
+  String id;
   String streetAddress;
   String city; // Pull these three from the database via streetAddress
   String state;
@@ -92,7 +92,7 @@ class _DetailsScreen extends State<DetailsScreen> {
 
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    id = arguments[0];
+    id = arguments['userInfo'][0];
 
     _selectDate(BuildContext context) async {
       final DateTime picked = await showDatePicker(
@@ -456,7 +456,6 @@ class _DetailsScreen extends State<DetailsScreen> {
                       "date": widget.selectedDate,
                       // "duration": jobDuration,
                       "timeRange" : timeRange,
-                      // TODO: entry time to database
                       "ownedBy": id,
                       "isCompleted": false,
                       "doerAssigned": null,

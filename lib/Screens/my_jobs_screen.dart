@@ -53,24 +53,26 @@ class _MyJobsScreen extends State<MyJobsScreen> {
     // Figure out what list to add jobs to based on 'ownedBy', 'doerAssigned', and 'isCompleted' fields
     Stream<QuerySnapshot> tasks = FirebaseFirestore.instance.collection('Task Listings').snapshots();
     tasks.forEach((snapshot) {
-      snapshot.docs.map((document) {
+      // TODO: Program currently throws error b/c 'field does not exist'
+      // Probably b/c of async issues...
+      snapshot.docs.forEach((document) {
         print(document.toString());
-        if(document['ownedBy'] == arguments[0] && document['isCompleted'] == false) {
+        if(document['ownedBy'] == arguments['userInfo'][0] && document['isCompleted'] == false) {
           requestedJobs.add(
               populateJob(document['jobType'], document['description'], document.id, context)
           );
         }
-        else if(document['ownedBy'] == arguments[0] && document['isCompleted'] == true) {
+        else if(document['ownedBy'] == arguments['userInfo'][0] && document['isCompleted'] == true) {
           doneJobs.add(
               populateJob(document['jobType'], document['description'], document.id, context)
           );
         }
-        else if(document['doerAssigned'] == arguments[0] && document['isCompleted'] == false) {
+        else if(document['doerAssigned'] == arguments['userInfo'][0] && document['isCompleted'] == false) {
           inProgressJobs.add(
               populateJob(document['jobType'], document['description'], document.id, context)
           );
         }
-        else if (document['doerAssigned'] == arguments[0] && document['isCompleted'] == true) {
+        else if (document['doerAssigned'] == arguments['userInfo'][0] && document['isCompleted'] == true) {
           completedJobs.add(
               populateJob(document['jobType'], document['description'], document.id, context)
           );
@@ -103,60 +105,90 @@ class _MyJobsScreen extends State<MyJobsScreen> {
 
                 children: [
                   new SizedBox(
-                      height: 60,
+                      height: 120,
                       child: Column(
                           children: <Widget>[
                             ButtonBar(
                                 alignment: MainAxisAlignment.center,
 
                                 children: <Widget>[
-                                  OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      primary: color[100],
-                                      backgroundColor: color[300],
-                                    ),
-                                    child: Text('Jobs Requested'),
-                                    onPressed: () {
-                                      setState(() {
-                                        currentList = requestedJobs;
-                                      });
-                                    },
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        child: OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            primary: color[100],
+                                            backgroundColor: color[300],
+                                          ),
+                                          child: Text('Requested'),
+                                          onPressed: () {
+                                            setState(() {
+                                              print('requested');
+                                              currentList = requestedJobs;
+                                              print(currentList);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        child: OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            primary: color[100],
+                                            backgroundColor: color[300],
+                                          ),
+                                          child: Text('Done'),
+                                          onPressed: () {
+                                            setState(() {
+                                              print('done');
+                                              currentList = doneJobs;
+                                              print(currentList);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ]
                                   ),
-                                  OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      primary: color[100],
-                                      backgroundColor: color[300],
-                                    ),
-                                    child: Text('Jobs Done'),
-                                    onPressed: () {
-                                      setState(() {
-                                        currentList = doneJobs;
-                                      });
-                                    },
-                                  ),
-                                  OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      primary: color[100],
-                                      backgroundColor: color[300],
-                                    ),
-                                    child: Text('Jobs In Progress'),
-                                    onPressed: () {
-                                      setState(() {
-                                        currentList = inProgressJobs;
-                                      });
-                                    },
-                                  ),
-                                  OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      primary: color[100],
-                                      backgroundColor: color[300],
-                                    ),
-                                    child: Text('Jobs Completed'),
-                                    onPressed: () {
-                                      setState(() {
-                                        currentList = completedJobs;
-                                      });
-                                    },
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        child: OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            primary: color[100],
+                                            backgroundColor: color[300],
+                                          ),
+                                          child: Text('In Progress'),
+                                          onPressed: () {
+                                            setState(() {
+                                              print('in progress');
+                                              currentList = inProgressJobs;
+                                              print(currentList);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        child: OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            primary: color[100],
+                                            backgroundColor: color[300],
+                                          ),
+                                          child: Text('Completed'),
+                                          onPressed: () {
+                                            setState(() {
+                                              print('completed');
+                                              currentList = completedJobs;
+                                              print(currentList);
+                                            });
+                                          },
+                                        ),
+                                      )
+                                    ]
                                   ),
                                 ]
                             ),
@@ -169,11 +201,11 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                     child: Expanded(
 
                       // TODO: Change this to use one of the four lists created earlier - below code might work
-                      /*child: ListView(
-                        children: currentList,
-                      ),*/
-
                       child: ListView(
+                        children: currentList,
+                      ),
+
+                      /*child: ListView(
                         children: snapshot.data.docs.map<Widget>((document) {
                           return Card(
                               child: ListTile(
@@ -191,7 +223,7 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                               )
                           );
                         }).toList(),
-                      ),
+                      ),*/
                     ),
                   )
 

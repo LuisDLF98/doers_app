@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       return FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, DetailsScreen.id, arguments: {'userData': loginInfo});
+          Navigator.pushNamed(context, DetailsScreen.id, arguments: {'userInfo': loginInfo});
         },
         tooltip: 'Add Job',
         child: Icon(Icons.add),

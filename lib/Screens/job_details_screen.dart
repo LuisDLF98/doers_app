@@ -171,7 +171,6 @@ class _JobDetailScreen extends State<JobDetailScreen>{
                                                     ),
                                                       child: Text('Accept'),
                                                       onPressed: () {
-                                                        //TODO:: if accept pressed, assign doer to this task
                                                         final firestoreInstance = FirebaseFirestore.instance;
                                                         firestoreInstance.collection('Task Listings').doc(arguments['JobID']).set({
                                                           "doerAssigned": arguments['userInfo'][0]},
@@ -193,7 +192,6 @@ class _JobDetailScreen extends State<JobDetailScreen>{
                                                        ),
                                                        child: Text('Cancel'),
                                                        onPressed: () {
-                                                         //TODO:: Navigate back to og page
                                                          Navigator.of(context).pop();
                                                        },
                                                      ),
