@@ -14,6 +14,7 @@ class ConversationDetailPage extends StatefulWidget{
 class _ConversationDetailPageState extends State<ConversationDetailPage> {
   List<String> info;
   _ConversationDetailPageState(this.info);
+  String message;
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +32,15 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
     }
 
     void addMessage(String message) {
-      FirebaseFirestore.instance.collection('Conversations').doc(info[2]) .collection('Messages').add({
-        "content": message,
-        "idFrom": info[0],
-        "idTo": info[1],
-        "read": false,
-        "timestamp": DateTime.now().microsecondsSinceEpoch,
-      });
+      if (message != null) {
+        FirebaseFirestore.instance.collection('Conversations').doc(info[2]).collection('Messages').add({
+          "content": message,
+          "idFrom": info[0],
+          "idTo": info[1],
+          "read": false,
+          "timestamp": DateTime.now().microsecondsSinceEpoch,
+        });
+      }
     }
 
     return Scaffold(
@@ -82,7 +85,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
       body: Stack(
         children: <Widget>[
           StreamBuilder(
-              stream: FirebaseFirestore.instance.collection('Conversations').doc(info[2]).collection('Messages').snapshots(),
+              stream: FirebaseFirestore.instance.collection('Conversations').doc(info[2]).collection('Messages').orderBy('timestamp', descending: true).snapshots(),
               builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                 if(!snapshot.hasData){
                   return Center(
@@ -165,6 +168,9 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                   SizedBox(width: 15,),
                   Expanded(
                     child: TextField(
+                      onChanged: (value) {
+                        message = value;
+                      },
                       decoration: InputDecoration(
                           hintText: "Write message...",
                           hintStyle: TextStyle(color: Colors.black54),
@@ -174,7 +180,9 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                   ),
                   SizedBox(width: 15,),
                   FloatingActionButton(
-                    onPressed: (){},
+                    onPressed: () {
+                      addMessage(message);
+                    },
                     child: Icon(Icons.send,color: Colors.white,size: 18,),
                     backgroundColor: appColor.fromHex('#69efad'),
                     elevation: 0,
