@@ -3,6 +3,10 @@ import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Components/rounded_button.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class DetailsScreen extends StatefulWidget {
   DetailsScreen({Key key, this.title}) : super(key: key);
@@ -40,7 +44,52 @@ class _DetailsScreen extends State<DetailsScreen> {
   var txt1 = TextEditingController();
   Duration jobDuration = Duration(hours: 0, minutes: 0);
 
+  var _controller = TextEditingController();
+  var uuid = new Uuid();
+  String _sessionToken;
+  List<dynamic> _placeList = [];
+  bool isVis=true;
+
   @override
+
+
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      _onChanged();
+    });
+  }
+
+  _onChanged() {
+    if (_sessionToken == null) {
+      setState(() {
+        _sessionToken = uuid.v4();
+      });
+    }
+    getSuggestion(_controller.text);
+  }
+
+  void getSuggestion(String input) async {
+    String kPLACES_API_KEY = "AIzaSyCac6e3vO4ib9gR5tMEsJcyiOiiMi1-tD0";
+    String type = '(regions)';
+    String baseURL =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+    String request =
+        '$baseURL?input=$input&key=$kPLACES_API_KEY&sessiontoken=$_sessionToken';
+    var url = Uri.parse(request);
+    var response = await http.get(url);
+    print(response);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        _placeList = json.decode(response.body)['predictions'];
+      });
+    } else {
+      throw Exception('Failed to load predictions');
+    }
+  }
+
+
   Widget build(BuildContext context) {
     _selectDate(BuildContext context) async {
       final DateTime picked = await showDatePicker(
@@ -107,7 +156,9 @@ class _DetailsScreen extends State<DetailsScreen> {
                     height: 10.0,
                   ),
                   TextFormField(
+                    controller: _controller,
                     onChanged: (value) {
+                      isVis=true;
                       //Do something with the user input.
                       streetAddress = value;
                     },
@@ -133,7 +184,30 @@ class _DetailsScreen extends State<DetailsScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(32.0)),
                       ),
                     ),
+
                   ),
+                  Visibility(
+                    visible: isVis,
+                    child:
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+
+                      itemCount: _placeList.length,
+                      //controller: _controller,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(_placeList[index]["description"]),
+                          onTap: () {
+                            print(_placeList[index]["description"]);
+                            _controller.text=_placeList[index]["description"];
+                            isVis=false;
+                          },
+                        );
+                      },
+                    ),
+                  ),
+
                   SizedBox(
                     height: 20.0,
                   ),
