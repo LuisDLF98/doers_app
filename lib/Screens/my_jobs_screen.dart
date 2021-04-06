@@ -22,66 +22,71 @@ class MyJobsScreen extends StatefulWidget {
 }
 
 // Function that automates the building of Card objects with info from the database
-Card populateJob(String jobType, String description, String jobID, BuildContext context) {
+Card populateJob(
+    String jobType, String description, String jobID, BuildContext context) {
   return Card(
     child: ListTile(
-        leading: Icon(
-            Icons.map,
-            color: color[100]
-        ),
+        leading: Icon(Icons.map, color: color[100]),
         title: new Text(jobType),
         subtitle: new Text(description),
         onTap: () {
           Navigator.pushNamed(context, JobDetailScreen.id,
               arguments: {'JobID': jobID});
-        }
-    ),
+        }),
   );
 }
 
-class _MyJobsScreen extends State<MyJobsScreen> {
+Future<List<Card>> loadJobs(int index, String id, BuildContext context) async {
+// Figure out what list to add jobs to based on 'ownedBy', 'doerAssigned', and 'isCompleted' fields
+  List<List<Card>> jobs = [[], [], [], []];
+  CollectionReference tasks =
+      FirebaseFirestore.instance.collection('Task Listings');
+  QuerySnapshot snapshot = await tasks.get();
+  // TODO: Program currently throws error b/c 'field does not exist'
+  snapshot.docs.forEach((document) {
+    print(document.toString());
+    String ownedBy = document.data()['ownedBy'];
+    String doerAssigned = document.data()['doerAssigned'];
+    bool isCompleted = document.data()['isCompleted'];
+    if (index == 0 && ownedBy == id && isCompleted == false) {
+      jobs[0].add(populateJob(
+          document['jobType'], document['description'], document.id, context));
+    } else if (index == 1 && ownedBy == id && isCompleted == true) {
+      jobs[1].add(populateJob(
+          document['jobType'], document['description'], document.id, context));
+    } else if (index == 2 && doerAssigned == id && isCompleted == false) {
+      jobs[2].add(populateJob(
+          document['jobType'], document['description'], document.id, context));
+    } else if (index == 3 && doerAssigned == id && isCompleted == true) {
+      jobs[3].add(populateJob(
+          document['jobType'], document['description'], document.id, context));
+    }
+  });
+  return jobs[index];
+}
 
+class _MyJobsScreen extends State<MyJobsScreen> {
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
 
+    // Figure out what list to add jobs to based on 'ownedBy', 'doerAssigned', and 'isCompleted' fields
     List<Card> requestedJobs = [];
     List<Card> doneJobs = [];
     List<Card> inProgressJobs = [];
     List<Card> completedJobs = [];
 
-    // Figure out what list to add jobs to based on 'ownedBy', 'doerAssigned', and 'isCompleted' fields
-    Stream<QuerySnapshot> tasks = FirebaseFirestore.instance.collection('Task Listings').snapshots();
-    tasks.forEach((snapshot) {
-      // TODO: Program currently throws error b/c 'field does not exist'
-      // Probably b/c of async issues...
-      snapshot.docs.forEach((document) {
-        print(document.toString());
-        if(document['ownedBy'] == arguments['userInfo'][0] && document['isCompleted'] == false) {
-          requestedJobs.add(
-              populateJob(document['jobType'], document['description'], document.id, context)
-          );
-        }
-        else if(document['ownedBy'] == arguments['userInfo'][0] && document['isCompleted'] == true) {
-          doneJobs.add(
-              populateJob(document['jobType'], document['description'], document.id, context)
-          );
-        }
-        else if(document['doerAssigned'] == arguments['userInfo'][0] && document['isCompleted'] == false) {
-          inProgressJobs.add(
-              populateJob(document['jobType'], document['description'], document.id, context)
-          );
-        }
-        else if (document['doerAssigned'] == arguments['userInfo'][0] && document['isCompleted'] == true) {
-          completedJobs.add(
-              populateJob(document['jobType'], document['description'], document.id, context)
-          );
-        }
-      });
-    });
-
     // This variable keeps track of what list to show the user based on the four choices presented
-    List<Card> currentList = requestedJobs;
+    List<Card> currentList = [];
+    currentList.add(Card(
+      child: ListTile(
+        leading: Icon(Icons.info, color: color[100]),
+        title: new Text(''),
+        subtitle: new Text('Click one of the buttons above to load your jobs!'),
+      ),
+    ));
+
+    Stream<QuerySnapshot> tasks = FirebaseFirestore.instance.collection('Task Listings').snapshots();
 
     return Scaffold(
       //drawer: NavDrawer(),
@@ -92,118 +97,145 @@ class _MyJobsScreen extends State<MyJobsScreen> {
       ),
       body: StreamBuilder(
           stream: tasks,
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-            if(!snapshot.hasData){
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            }
-            else {
+            } else {
               return new Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
-
                 children: [
                   new SizedBox(
                       height: 120,
-                      child: Column(
-                          children: <Widget>[
-                            ButtonBar(
-                                alignment: MainAxisAlignment.center,
+                      child: Column(children: <Widget>[
+                        ButtonBar(
+                            alignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 10),
+                                      child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          primary: color[100],
+                                          backgroundColor: color[300],
+                                        ),
+                                        child: Text('Requested'),
+                                        onPressed: () async {
+                                          requestedJobs = await loadJobs(
+                                              0, arguments['userInfo'][0],
+                                              context);
+                                          print('requested');
+                                          setState(() {
+                                            while (currentList.isNotEmpty) {
+                                              currentList.removeLast();
+                                            }
+                                            requestedJobs.forEach((card) {
+                                              currentList.add(card);
+                                            });
+                                            print(currentList);
 
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 10),
-                                        child: OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            primary: color[100],
-                                            backgroundColor: color[300],
-                                          ),
-                                          child: Text('Requested'),
-                                          onPressed: () {
-                                            setState(() {
-                                              print('requested');
-                                              currentList = requestedJobs;
-                                              print(currentList);
-                                            });
-                                          },
-                                        ),
+                                          });
+                                        },
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 10),
-                                        child: OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            primary: color[100],
-                                            backgroundColor: color[300],
-                                          ),
-                                          child: Text('Done'),
-                                          onPressed: () {
-                                            setState(() {
-                                              print('done');
-                                              currentList = doneJobs;
-                                              print(currentList);
-                                            });
-                                          },
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 10),
+                                      child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          primary: color[100],
+                                          backgroundColor: color[300],
                                         ),
+                                        child: Text('Done'),
+                                        onPressed: () async {
+                                          doneJobs = await loadJobs(
+                                              1, arguments['userInfo'][0],
+                                              context);
+                                          print('done');
+                                          setState(() {
+                                            while (currentList.isNotEmpty) {
+                                              currentList.removeLast();
+                                            }
+                                            doneJobs.forEach((card) {
+                                              currentList.add(card);
+                                            });
+                                            print(currentList);
+                                          });
+                                        },
                                       ),
-                                    ]
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 10),
-                                        child: OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            primary: color[100],
-                                            backgroundColor: color[300],
-                                          ),
-                                          child: Text('In Progress'),
-                                          onPressed: () {
-                                            setState(() {
-                                              print('in progress');
-                                              currentList = inProgressJobs;
-                                              print(currentList);
-                                            });
-                                          },
+                                    ),
+                                  ]),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 10),
+                                      child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          primary: color[100],
+                                          backgroundColor: color[300],
                                         ),
+                                        child: Text('In Progress'),
+                                        onPressed: () async{
+                                          inProgressJobs = await loadJobs(
+                                              2, arguments['userInfo'][0],
+                                              context);
+                                          print('in progress');
+                                          setState(() {
+                                            while (currentList.isNotEmpty) {
+                                              currentList.removeLast();
+                                            }
+                                            inProgressJobs.forEach((card) {
+                                              currentList.add(card);
+                                            });
+                                            print(currentList);
+                                          });
+                                        },
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 10),
-                                        child: OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            primary: color[100],
-                                            backgroundColor: color[300],
-                                          ),
-                                          child: Text('Completed'),
-                                          onPressed: () {
-                                            setState(() {
-                                              print('completed');
-                                              currentList = completedJobs;
-                                              print(currentList);
-                                            });
-                                          },
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 10),
+                                      child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          primary: color[100],
+                                          backgroundColor: color[300],
                                         ),
-                                      )
-                                    ]
-                                  ),
-                                ]
-                            ),
-                          ]
-                      )
-                  ),
-                  new Container(
-                    height: 696,
-                    alignment: AlignmentDirectional(20.0, 0.0),
-                    child: Expanded(
-
+                                        child: Text('Completed'),
+                                        onPressed: () async {
+                                          completedJobs = await loadJobs(
+                                              3, arguments['userInfo'][0],
+                                              context);
+                                          print('completed');
+                                          setState(() {
+                                            while (currentList.isNotEmpty) {
+                                              currentList.removeLast();
+                                            }
+                                            completedJobs.forEach((card) {
+                                              currentList.add(card);
+                                            });
+                                            print(currentList);
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  ]),
+                            ]),
+                      ])),
+                  new Expanded(
+                    //height: 696,
+                    //alignment: AlignmentDirectional(20.0, 0.0),
+                    child: ListView.builder(
+                      itemCount: currentList.length,
+                      itemBuilder: (BuildContext context, int idx) => currentList[idx])
+                    /*child: Expanded(
                       // TODO: Change this to use one of the four lists created earlier - below code might work
                       child: ListView(
                         children: currentList,
-                      ),
+                      ),*/
 
                       /*child: ListView(
                         children: snapshot.data.docs.map<Widget>((document) {
@@ -224,21 +256,12 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                           );
                         }).toList(),
                       ),*/
-                    ),
+                    //),
                   )
-
                 ],
               );
             }
-          }
-      ),
+          }),
     );
-
   }
-
 }
-
-
-
-
-
