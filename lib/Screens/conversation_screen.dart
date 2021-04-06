@@ -1,19 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/hex_colors.dart' as appColor;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ConversationDetailPage extends StatefulWidget{
-  ConversationDetailPage({Key key, this.convoID}) : super(key: key);
+  ConversationDetailPage({Key key, this.data}) : super(key: key);
   static const String id = 'conversation_screen';
-  final String convoID;
+  final List<String> data;
 
   @override
-  _ConversationDetailPageState createState() => _ConversationDetailPageState();
+  _ConversationDetailPageState createState() => _ConversationDetailPageState(this.data);
 }
 
 class _ConversationDetailPageState extends State<ConversationDetailPage> {
+  List<String> info;
+  _ConversationDetailPageState(this.info);
 
   @override
   Widget build(BuildContext context) {
+    Widget getName(String id) {
+      return new StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (!snapshot.hasData) {
+              return new Text("Loading", style: TextStyle( fontSize: 16 ,fontWeight: FontWeight.w600),);
+            }
+            var document = snapshot.data;
+            return new Text('${document["firstName"]} ${document["lastName"]}', style: TextStyle( fontSize: 16 ,fontWeight: FontWeight.w600),);
+          }
+      );
+    }
+
+    void addMessage(String message) {
+      FirebaseFirestore.instance.collection('Conversations').doc(info[2]) .collection('Messages').add({
+        "content": message,
+        "idFrom": info[0],
+        "idTo": info[1],
+        "read": false,
+        "timestamp": DateTime.now().microsecondsSinceEpoch,
+      });
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -42,7 +67,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text("Kriss Benwat",style: TextStyle( fontSize: 16 ,fontWeight: FontWeight.w600),),
+                        getName(info[1]),
                         SizedBox(height: 6,),
                         Text("Online",style: TextStyle(color: Colors.grey.shade600, fontSize: 13),),
                       ],
@@ -56,6 +81,45 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
         ),
       body: Stack(
         children: <Widget>[
+          StreamBuilder(
+              stream: FirebaseFirestore.instance.collection('Conversations').doc(info[2]).collection('Messages').snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+                if(!snapshot.hasData){
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                Widget getName(String id) {
+                  return new StreamBuilder(
+                      stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return new Text("Loading");
+                        }
+                        var document = snapshot.data;
+                        return new Text('${document["firstName"]} ${document["lastName"]}');
+                      }
+                  );
+                }
+
+                return new ListView(
+                  children: snapshot.data.docs.map<Widget>((document) {
+                      return Card(
+                          child: ListTile(
+                              leading: Icon(
+                                Icons.person,
+                                color: appColor.fromHex('#69efad'),
+                              ),
+                              title: getName(document['idFrom']),
+                              subtitle: new Text(document['content']),
+                              // trailing: new Text(document['date']),
+                          )
+                      );
+                  }).toList(),
+                );
+              }
+          ),
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(

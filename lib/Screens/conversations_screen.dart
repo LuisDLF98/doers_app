@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,8 @@ import 'package:doers_app/Components/conversation_list.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Screens/conversation_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class MessagingScreen extends StatefulWidget {
   MessagingScreen({Key key, this.userData}) : super(key: key);
@@ -32,12 +36,6 @@ class _MessagingScreen extends State<MessagingScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    String getConversationID(String userID, String peerID) {
-      return userID.hashCode <= peerID.hashCode
-          ? userID + '_' + peerID
-          : peerID + '_' + userID;
-    }
 
     return Scaffold(
 
@@ -71,6 +69,12 @@ class _MessagingScreen extends State<MessagingScreen> {
             return new ListView(
               children: snapshot.data.docs.map<Widget>((document) {
                 List<dynamic> users = document['users'];
+                Map<String, dynamic> lastMessage = document['lastMessage'];
+                String contact;
+                loginInfo[0] != document['lastMessage']['idFrom'] ?
+                contact = document['lastMessage']['idFrom'] :
+                contact = document['lastMessage']['idTo'];
+
                 if (users.contains('${loginInfo[0]}')) {
                   return Card(
                       child: ListTile(
@@ -78,13 +82,12 @@ class _MessagingScreen extends State<MessagingScreen> {
                             Icons.person,
                             color: color[100],
                           ),
-                          title: loginInfo[0] != document['lastMessage']['idFrom'] ?
-                              getName(document['lastMessage']['idFrom']) :
-                              getName(document['lastMessage']['idTo']),
+                          title:getName(contact),
                           subtitle: new Text(document['lastMessage']['content']),
                           // trailing: new Text(document['date']),
                           onTap: () {
-                            Navigator.pushNamed(context, ConversationDetailPage.id, arguments: {'convoID': document.id});
+                            //Navigator.pushNamed(context, ConversationDetailPage.id, arguments: {'data': {loginInfo[0], contact, document.id,}});
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ConversationDetailPage(data: {loginInfo[0], contact, document.id}.toList())),);
                           }
                       )
                   );
