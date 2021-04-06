@@ -105,17 +105,37 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
 
                 return new ListView(
                   children: snapshot.data.docs.map<Widget>((document) {
-                      return Card(
-                          child: ListTile(
+
+                    if (info[0] == document['idFrom']) {
+                      return Padding(
+                        padding: EdgeInsets.only(left: 100, right: 0,top: 0,bottom: 0),
+                        child: Card(
+                            child: ListTile(
+                              title: getName(document['idFrom']),
+                              subtitle: new Text(document['content']),
+                              trailing: Icon(
+                                Icons.person,
+                                color: appColor.fromHex('#69efad'),
+                              ),
+                            )
+                        ),
+                      );
+                    }
+                    else {
+                      return Padding(
+                          padding: EdgeInsets.only(left: 0, right: 100,top: 0,bottom: 0),
+                          child: Card(
+                            child: ListTile(
                               leading: Icon(
                                 Icons.person,
                                 color: appColor.fromHex('#69efad'),
                               ),
                               title: getName(document['idFrom']),
                               subtitle: new Text(document['content']),
-                              // trailing: new Text(document['date']),
+                            )
                           )
                       );
+                    }
                   }).toList(),
                 );
               }
