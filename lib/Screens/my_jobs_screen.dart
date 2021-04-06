@@ -236,7 +236,9 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                 child: ListView.builder(
                     itemCount: currentList.length,
                     itemBuilder: (context, idx) {
-                      print(currentList);
+                      if(idx == currentList.length-1 && currentList.length != 1) {
+                        return null;
+                      }
                       return Card(
                         key: UniqueKey(),
                         child: currentList[idx],
