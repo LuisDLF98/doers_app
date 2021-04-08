@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Screens/conversation_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:doers_app/Components/update_image.dart';
 
 class MessagingScreen extends StatefulWidget {
   MessagingScreen({Key key, this.userData}) : super(key: key);
@@ -66,6 +67,28 @@ class _MessagingScreen extends State<MessagingScreen> {
               );
             }
 
+            Widget getImage(String id) {
+              return new StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
+                  builder: (context, snapshot) {
+                    String url = snapshot.data['profileImage'];
+                    if (!snapshot.hasData ||  url.isEmpty) {
+                      return CircleAvatar(
+                        child: Icon(
+                          Icons.person,
+                          color: color[300],
+                        ),
+                        backgroundColor: color[100],
+                      );
+
+                    }
+                    return CircleAvatar(
+                      foregroundImage: NetworkImage(url),
+                    );
+                  }
+              );
+            }
+
             return new ListView(
               children: snapshot.data.docs.map<Widget>((document) {
                 List<dynamic> users = document['users'];
@@ -78,10 +101,7 @@ class _MessagingScreen extends State<MessagingScreen> {
                 if (users.contains('${loginInfo[0]}')) {
                   return Card(
                       child: ListTile(
-                          leading: Icon(
-                            Icons.person,
-                            color: color[100],
-                          ),
+                          leading: getImage(contact),
                           title: getName(contact),
                           subtitle: new Text(document['lastMessage']['content']),
                           // trailing: new Text(document['date']),
