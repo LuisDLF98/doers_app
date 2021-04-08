@@ -42,6 +42,8 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
         });
       }
     }
+    var _controller = TextEditingController();
+    var _scrollController = ScrollController();
 
     return Scaffold(
         appBar: AppBar(
@@ -84,65 +86,70 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
         ),
       body: Stack(
         children: <Widget>[
-          StreamBuilder(
-              stream: FirebaseFirestore.instance.collection('Conversations').doc(info[2]).collection('Messages').orderBy('timestamp', descending: true).snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-                if(!snapshot.hasData){
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+          Padding(
+            padding: EdgeInsets.only(left: 0, right: 0,top: 0,bottom: 65),
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance.collection('Conversations').doc(info[2]).collection('Messages').orderBy('timestamp', descending: true).snapshots(),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+                  if(!snapshot.hasData){
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
 
-                Widget getName(String id) {
-                  return new StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return new Text("Loading");
+                  Widget getName(String id) {
+                    return new StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return new Text("Loading");
+                          }
+                          var document = snapshot.data;
+                          return new Text('${document["firstName"]} ${document["lastName"]}');
                         }
-                        var document = snapshot.data;
-                        return new Text('${document["firstName"]} ${document["lastName"]}');
+                    );
+                  }
+
+                  return new ListView(
+                    reverse: true,
+                    children: snapshot.data.docs.map<Widget>((document) {
+
+                      if (info[0] == document['idFrom']) {
+                        return Padding(
+                          padding: EdgeInsets.only(left: 100, right: 0,top: 0,bottom: 0),
+                          child: Card(
+                              child: ListTile(
+                                title: getName(document['idFrom']),
+                                subtitle: new Text(document['content']),
+                                trailing: Icon(
+                                  Icons.person,
+                                  color: appColor.fromHex('#69efad'),
+                                ),
+                              )
+                          ),
+                        );
                       }
+                      else {
+                        return Padding(
+                            padding: EdgeInsets.only(left: 0, right: 100,top: 0,bottom: 0),
+                            child: Card(
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.person,
+                                    color: appColor.fromHex('#69efad'),
+                                  ),
+                                  title: getName(document['idFrom']),
+                                  subtitle: new Text(document['content']),
+                                )
+                            )
+                        );
+                      }
+                    }).toList(),
                   );
                 }
-
-                return new ListView(
-                  children: snapshot.data.docs.map<Widget>((document) {
-
-                    if (info[0] == document['idFrom']) {
-                      return Padding(
-                        padding: EdgeInsets.only(left: 100, right: 0,top: 0,bottom: 0),
-                        child: Card(
-                            child: ListTile(
-                              title: getName(document['idFrom']),
-                              subtitle: new Text(document['content']),
-                              trailing: Icon(
-                                Icons.person,
-                                color: appColor.fromHex('#69efad'),
-                              ),
-                            )
-                        ),
-                      );
-                    }
-                    else {
-                      return Padding(
-                          padding: EdgeInsets.only(left: 0, right: 100,top: 0,bottom: 0),
-                          child: Card(
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.person,
-                                color: appColor.fromHex('#69efad'),
-                              ),
-                              title: getName(document['idFrom']),
-                              subtitle: new Text(document['content']),
-                            )
-                          )
-                      );
-                    }
-                  }).toList(),
-                );
-              }
+            ),
           ),
+
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
@@ -168,6 +175,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                   SizedBox(width: 15,),
                   Expanded(
                     child: TextField(
+                      controller: _controller,
                       onChanged: (value) {
                         message = value;
                       },
@@ -181,6 +189,8 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                   SizedBox(width: 15,),
                   FloatingActionButton(
                     onPressed: () {
+                      _controller.clear();
+                      _controller.clearComposing();
                       addMessage(message);
                     },
                     child: Icon(Icons.send,color: Colors.white,size: 18,),
