@@ -15,6 +15,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
   List<String> info;
   _ConversationDetailPageState(this.info);
   String message;
+  String contactName = "";
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,19 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
       );
     }
 
+    Widget getInitial(String id) {
+      return new StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (!snapshot.hasData) {
+              return new Text("Loading", style: TextStyle( fontSize: 16 ,fontWeight: FontWeight.w600),);
+            }
+            var document = snapshot.data;
+            contactName = '${document["firstName"]} ${document["lastName"]}';
+            return new Text(contactName.substring(0, 1), style: TextStyle(color: appColor.fromHex('#000000')),);
+          }
+      );
+    }
     void addMessage(String message) {
       if (message != null) {
         FirebaseFirestore.instance.collection('Conversations').doc(info[2]).collection('Messages').add({
@@ -51,8 +65,8 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
         });
       }
     }
+
     var _controller = TextEditingController();
-    var _scrollController = ScrollController();
 
     return Scaffold(
         appBar: AppBar(
@@ -72,8 +86,8 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                   ),
                   SizedBox(width: 2,),
                   CircleAvatar(
-                    backgroundImage: AssetImage('images/Rusty.jpeg'),//NetworkImage("<https://randomuser.me/api/portraits/men/5.jpg>"),
-                    maxRadius: 20,
+                    child: getInitial(info[1]),
+                    backgroundColor: appColor.fromHex('#69efad'),
                   ),
                   SizedBox(width: 12,),
                   Expanded(
@@ -81,7 +95,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        getName(info[1]),
+                        new Text(contactName, style: TextStyle( fontSize: 16 ,fontWeight: FontWeight.w600),),
                         SizedBox(height: 6,),
                         Text("Online",style: TextStyle(color: Colors.grey.shade600, fontSize: 13),),
                       ],
@@ -106,33 +120,22 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                     );
                   }
 
-                  Widget getName(String id) {
-                    return new StreamBuilder(
-                        stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return new Text("Loading");
-                          }
-                          var document = snapshot.data;
-                          return new Text('${document["firstName"]} ${document["lastName"]}');
-                        }
-                    );
-                  }
-
                   return new ListView(
                     reverse: true,
                     children: snapshot.data.docs.map<Widget>((document) {
+                      DateTime date = DateTime.fromMicrosecondsSinceEpoch(document['timestamp']);
 
                       if (info[0] == document['idFrom']) {
                         return Padding(
                           padding: EdgeInsets.only(left: 100, right: 0,top: 0,bottom: 0),
                           child: Card(
                               child: ListTile(
-                                title: getName(document['idFrom']),
+                                //leading: new Text('${date.month}/${date.day}\n${date.hour}:${date.minute}'),
+                                title: new Text(info[3]),
                                 subtitle: new Text(document['content']),
-                                trailing: Icon(
-                                  Icons.person,
-                                  color: appColor.fromHex('#69efad'),
+                                trailing: CircleAvatar(
+                                  child: new Text(info[3].substring(0, 1), style: TextStyle(color: appColor.fromHex('#000000'))),
+                                  backgroundColor: appColor.fromHex('#69efad'),
                                 ),
                               )
                           ),
@@ -143,12 +146,13 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                             padding: EdgeInsets.only(left: 0, right: 100,top: 0,bottom: 0),
                             child: Card(
                                 child: ListTile(
-                                  leading: Icon(
-                                    Icons.person,
-                                    color: appColor.fromHex('#69efad'),
+                                  leading: CircleAvatar(
+                                    child: new Text(contactName.substring(0, 1), style: TextStyle(color: appColor.fromHex('#000000'))),
+                                    backgroundColor: appColor.fromHex('#69efad'),
                                   ),
-                                  title: getName(document['idFrom']),
+                                  title: new Text(contactName),
                                   subtitle: new Text(document['content']),
+                                  //trailing: new Text('${date.month}/${date.day}\n${date.hour}:${date.minute}'),
                                 )
                             )
                         );

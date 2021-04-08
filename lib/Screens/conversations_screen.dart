@@ -82,12 +82,12 @@ class _MessagingScreen extends State<MessagingScreen> {
                             Icons.person,
                             color: color[100],
                           ),
-                          title:getName(contact),
+                          title: getName(contact),
                           subtitle: new Text(document['lastMessage']['content']),
                           // trailing: new Text(document['date']),
                           onTap: () {
                             //Navigator.pushNamed(context, ConversationDetailPage.id, arguments: {'data': {loginInfo[0], contact, document.id,}});
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ConversationDetailPage(data: {loginInfo[0], contact, document.id}.toList())),);
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ConversationDetailPage(data: {loginInfo[0], contact, document.id, loginInfo[1],}.toList())),);
                           }
                       )
                   );
