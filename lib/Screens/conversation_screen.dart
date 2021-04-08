@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/update_image.dart';
+import 'dart:async';
 
 class ConversationDetailPage extends StatefulWidget{
   ConversationDetailPage({Key key, this.data}) : super(key: key);
@@ -72,7 +73,26 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                     icon: Icon(Icons.arrow_back,color: Colors.black,),
                   ),
                   SizedBox(width: 2,),
-                  getImage(info[1]),
+                  FutureBuilder<Widget>(
+                    future: getImage(info[1]),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return snapshot.data;
+                      }
+                      else if (snapshot.hasError) {
+                        return CircleAvatar(
+                          child: Icon(Icons.error_outline),
+                          backgroundColor: color[400],
+                        );
+                      }
+                      else {
+                        return CircleAvatar(
+                          child: CircularProgressIndicator(),
+                          backgroundColor: color[400],
+                        );
+                      }
+                    },
+                  ),
                   SizedBox(width: 12,),
                   Expanded(
                     child: Column(
@@ -115,9 +135,29 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                           child: Card(
                               child: ListTile(
                                 //leading: new Text('${date.month}/${date.day}\n${date.hour}:${date.minute}'),
+
                                 title: new Text(info[3]),
                                 subtitle: new Text(document['content']),
-                                trailing: getImage(info[0]),
+                                trailing: FutureBuilder<Widget>(
+                                  future: getImage(info[0]),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return snapshot.data;
+                                    }
+                                    else if (snapshot.hasError) {
+                                      return CircleAvatar(
+                                        child: Icon(Icons.error_outline),
+                                        backgroundColor: color[400],
+                                      );
+                                    }
+                                    else {
+                                      return CircleAvatar(
+                                        child: CircularProgressIndicator(),
+                                        backgroundColor: color[400],
+                                      );
+                                    }
+                                  },
+                                ),
                               )
                           ),
                         );
@@ -127,7 +167,26 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                             padding: EdgeInsets.only(left: 0, right: 100,top: 0,bottom: 0),
                             child: Card(
                                 child: ListTile(
-                                  leading: getImage(info[1]),
+                                  leading: FutureBuilder<Widget>(
+                                    future: getImage(info[1]),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return snapshot.data;
+                                      }
+                                      else if (snapshot.hasError) {
+                                        return CircleAvatar(
+                                          child: Icon(Icons.error_outline),
+                                          backgroundColor: color[400],
+                                        );
+                                      }
+                                      else {
+                                        return CircleAvatar(
+                                          child: CircularProgressIndicator(),
+                                          backgroundColor: color[400],
+                                        );
+                                      }
+                                    },
+                                  ),
                                   title: getName(info[1]),
                                   subtitle: new Text(document['content']),
                                   //trailing: new Text('${date.month}/${date.day}\n${date.hour}:${date.minute}'),

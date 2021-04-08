@@ -71,19 +71,22 @@ class _MessagingScreen extends State<MessagingScreen> {
               return new StreamBuilder(
                   stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
                   builder: (context, snapshot) {
-                    String url = snapshot.data['profileImage'];
-                    if (!snapshot.hasData ||  url.isEmpty) {
-                      return CircleAvatar(
-                        child: Icon(
-                          Icons.person,
-                          color: color[300],
-                        ),
-                        backgroundColor: color[100],
-                      );
-
+                    String url;
+                    if (snapshot.hasData) {
+                      url = snapshot.data['profileImage'];
+                      if (url.isNotEmpty) {
+                        return CircleAvatar(
+                          foregroundImage: NetworkImage(url),
+                        );
+                      }
                     }
+
                     return CircleAvatar(
-                      foregroundImage: NetworkImage(url),
+                      child: Icon(
+                        Icons.person,
+                        color: color[300],
+                      ),
+                      backgroundColor: color[100],
                     );
                   }
               );
@@ -97,6 +100,7 @@ class _MessagingScreen extends State<MessagingScreen> {
                 loginInfo[0] != document['lastMessage']['idFrom'] ?
                 contact = document['lastMessage']['idFrom'] :
                 contact = document['lastMessage']['idTo'];
+                String contactName;
 
                 if (users.contains('${loginInfo[0]}')) {
                   return Card(
@@ -107,7 +111,21 @@ class _MessagingScreen extends State<MessagingScreen> {
                           // trailing: new Text(document['date']),
                           onTap: () {
                             //Navigator.pushNamed(context, ConversationDetailPage.id, arguments: {'data': {loginInfo[0], contact, document.id,}});
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ConversationDetailPage(data: {loginInfo[0], contact, document.id, loginInfo[1],}.toList())),);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ConversationDetailPage(
+                                          data: {
+                                            loginInfo[0], // user's id
+                                            contact, // contact's id
+                                            document.id, // document id
+                                            loginInfo[1], // user's name
+
+                                          }.toList()
+                                      )
+                              ),
+                            );
                           }
                       )
                   );
