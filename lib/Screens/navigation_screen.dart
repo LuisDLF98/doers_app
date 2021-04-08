@@ -5,6 +5,8 @@ import 'package:doers_app/Components/side_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 //import 'package:location/location.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geocoder/geocoder.dart';
 
 class NavigationScreen extends StatefulWidget {
 
@@ -40,11 +42,16 @@ class _NavigationScreen extends State<NavigationScreen> {
   var lng, lat;
   static LatLng initialPosition;
 
+  //polyline
+  List<LatLng> pLineCoordinates = [];
+  Set<Polyline> polylineSet = {};
+
   initState() {
     super.initState();
     //loading = true;
     getUserLocation();
-    print("dest " + value);
+    //print("dest " + value);
+
   }
 
   Future getUserLocation() async {
@@ -58,9 +65,65 @@ class _NavigationScreen extends State<NavigationScreen> {
       print(lng);
     });
 
+    final query = value;
+    var addresses = await Geocoder.google("AIzaSyCac6e3vO4ib9gR5tMEsJcyiOiiMi1-tD0").findAddressesFromQuery(query);
+    var first = addresses.first;
+    print("lat  ${first.coordinates.latitude}  long ${first.coordinates.longitude}");
+
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
     print(isLocationServiceEnabled);
     print(lat);
+
+    var start = PointLatLng(lat,lng);
+    var end = PointLatLng(first.coordinates.latitude,first.coordinates.longitude);
+    var startLatLng = LatLng(lat,lng);
+    var endLatLng = LatLng(first.coordinates.latitude,first.coordinates.longitude);
+    //var details = await AssistantMethods.obtainPlaceDirectionDetails()
+    PolylinePoints polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates("AIzaSyCac6e3vO4ib9gR5tMEsJcyiOiiMi1-tD0", start, end );
+    //print(result);
+    //List<PointLatLng> decodedPolyLinePointsResult = polylinePoints.decodePolyline()
+
+    if(result.points.isNotEmpty){
+      print("NOT EMPTY");
+      result.points.forEach((PointLatLng pointLatLng){
+        pLineCoordinates.add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+      });
+    }
+    else{
+      print("EMPTY");
+    }
+    setState(() {
+      Polyline polyline = Polyline(
+        color: Colors.blueAccent,
+        polylineId: PolylineId("PolylineID"),
+        jointType: JointType.round,
+        points: pLineCoordinates,
+        width: 5,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
+        geodesic: true,
+      );
+      polylineSet.add(polyline);
+      });
+
+    LatLngBounds latlngBounds;
+    if(startLatLng.latitude > endLatLng.latitude && startLatLng.longitude > endLatLng.longitude){
+      latlngBounds = LatLngBounds(southwest: endLatLng, northeast: startLatLng);
+    }
+    else if(startLatLng.longitude > endLatLng.longitude){
+      latlngBounds= LatLngBounds(southwest: LatLng(startLatLng.latitude,endLatLng.longitude), northeast: LatLng(endLatLng.latitude, startLatLng.longitude));
+    }
+    else if(startLatLng.latitude > endLatLng.latitude){
+      latlngBounds= LatLngBounds(southwest: LatLng(endLatLng.latitude,startLatLng.longitude), northeast: LatLng(startLatLng.latitude, endLatLng.longitude));
+    }
+    else{
+      latlngBounds = LatLngBounds(southwest: startLatLng, northeast: endLatLng);
+    }
+
+    print(latlngBounds);
+
+    newGoogleMapController.animateCamera(CameraUpdate.newLatLngBounds(latlngBounds, 70));
   }
 
   @override
@@ -79,10 +142,16 @@ class _NavigationScreen extends State<NavigationScreen> {
               mapType: MapType.normal,
               myLocationButtonEnabled: true,
               myLocationEnabled: true,
+              polylines: polylineSet,
               initialCameraPosition: CameraPosition(
                 target: LatLng(lat, lng),
                 zoom: 13.0,
               ),
+              onMapCreated :(GoogleMapController controller){
+                  _controllerGoogleMap.complete(controller);
+                  newGoogleMapController = controller;
+              }
+
             ),
         ],
 
@@ -91,9 +160,4 @@ class _NavigationScreen extends State<NavigationScreen> {
     );
   }
 
-  void onMapCreated(GoogleMapController controller){
-    setState(() {
-      newGoogleMapController = controller;
-    });
-  }
 }

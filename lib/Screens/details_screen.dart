@@ -160,7 +160,8 @@ class _DetailsScreen extends State<DetailsScreen> {
                     onChanged: (value) {
                       isVis=true;
                       //Do something with the user input.
-                      streetAddress = value;
+                      //streetAddress = value;
+                      //print(streetAddress);
                     },
                     decoration: InputDecoration(
                       filled: true,
@@ -199,9 +200,14 @@ class _DetailsScreen extends State<DetailsScreen> {
                         return ListTile(
                           title: Text(_placeList[index]["description"]),
                           onTap: () {
-                            print(_placeList[index]["description"]);
-                            _controller.text=_placeList[index]["description"];
-                            isVis=false;
+                            //print(_placeList[index]["description"]);
+                            setState(() {
+                              _controller.text=_placeList[index]["description"];
+                              streetAddress = _placeList[index]["description"];
+                              print(streetAddress);
+                              isVis=false;
+                            });
+
                           },
                         );
                       },
