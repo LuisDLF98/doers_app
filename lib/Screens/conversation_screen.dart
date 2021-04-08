@@ -40,6 +40,15 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
           "read": false,
           "timestamp": DateTime.now().microsecondsSinceEpoch,
         });
+        FirebaseFirestore.instance.collection('Conversations').doc(info[2]).update({
+          'lastMessage': {
+            "content": message,
+            "idFrom": info[0],
+            "idTo": info[1],
+            "read": false,
+            "timestamp": DateTime.now().microsecondsSinceEpoch,
+          }
+        });
       }
     }
     var _controller = TextEditingController();
