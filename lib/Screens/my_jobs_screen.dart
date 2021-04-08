@@ -25,56 +25,45 @@ class MyJobsScreen extends StatefulWidget {
 
 // Function that automates the building of Card objects with info from the database
 ListTile populateJob(
-    String jobType, String description, String jobID, BuildContext context) {
+    String jobType, String description, String jobID, BuildContext context, List<String> userInfo) {
   return ListTile(
       leading: Icon(Icons.map, color: color[100]),
       title: new Text(jobType),
       subtitle: new Text(description),
       onTap: () {
         Navigator.pushNamed(context, JobDetailScreen.id,
-            arguments: {'JobID': jobID});
+            arguments: {'JobID': jobID, 'userInfo': userInfo});
       });
 }
 
 Future<List<ListTile>> loadJobs(
-    int index, String id, BuildContext context) async {
+    int index, List<String> userInfo, BuildContext context) async {
 // Figure out what list to add jobs to based on 'ownedBy', 'doerAssigned', and 'isCompleted' fields
   List<List<ListTile>> jobs = [[], [], [], []];
   CollectionReference tasks =
       FirebaseFirestore.instance.collection('Task Listings');
   QuerySnapshot snapshot = await tasks.get();
-  // TODO: Program currently throws error b/c 'field does not exist'
   snapshot.docs.forEach((document) {
     print(document.toString());
     String ownedBy = document.data()['ownedBy'];
     String doerAssigned = document.data()['doerAssigned'];
     bool isCompleted = document.data()['isCompleted'];
-    if (index == 0 && ownedBy == id && isCompleted == false) {
+    if (index == 0 && ownedBy == userInfo[0] && isCompleted == false) {
       jobs[0].add(populateJob(
-          document['jobType'], document['description'], document.id, context));
-    } else if (index == 1 && ownedBy == id && isCompleted == true) {
+          document['jobType'], document['description'], document.id, context, userInfo));
+    } else if (index == 1 && ownedBy == userInfo[0] && isCompleted == true) {
       jobs[1].add(populateJob(
-          document['jobType'], document['description'], document.id, context));
-    } else if (index == 2 && doerAssigned == id && isCompleted == false) {
+          document['jobType'], document['description'], document.id, context, userInfo));
+    } else if (index == 2 && doerAssigned == userInfo[0] && isCompleted == false) {
       jobs[2].add(populateJob(
-          document['jobType'], document['description'], document.id, context));
-    } else if (index == 3 && doerAssigned == id && isCompleted == true) {
+          document['jobType'], document['description'], document.id, context, userInfo));
+    } else if (index == 3 && doerAssigned == userInfo[0] && isCompleted == true) {
       jobs[3].add(populateJob(
-          document['jobType'], document['description'], document.id, context));
+          document['jobType'], document['description'], document.id, context, userInfo));
     }
   });
   return jobs[index];
 }
-
-/*ListView.builder(
-itemCount: currentList.length,
-itemBuilder:
-(BuildContext context, int idx) {
-if (currentList.isEmpty) {
-return Center(
-child: CircularProgressIndicator(),
-);
-} else {*/
 
 class _MyJobsScreen extends State<MyJobsScreen> {
   // This variable keeps track of what list to show the user based on the four choices presented
@@ -95,16 +84,6 @@ class _MyJobsScreen extends State<MyJobsScreen> {
       title: new Text(''),
       subtitle: new Text('Click one of the buttons above to load your jobs!'),
     ));
-
-    //Stream<QuerySnapshot> tasks = FirebaseFirestore.instance.collection('Task Listings').snapshots();
-    /*StreamController<Card> jobs = StreamController<Card>();
-    jobs.add(Card(
-      child: ListTile(
-        leading: Icon(Icons.info, color: color[100]),
-        title: new Text(''),
-        subtitle: new Text('Click one of the buttons above to load your jobs!'),
-      ),
-    ));*/
 
     return Scaffold(
         //drawer: NavDrawer(),
@@ -136,7 +115,7 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                                   child: Text('Requested'),
                                   onPressed: () async {
                                     requestedJobs = await loadJobs(
-                                        0, arguments['userInfo'][0], context);
+                                        0, arguments['userInfo'], context);
                                     print('requested');
                                     setState(() {
                                       while (currentList.isNotEmpty) {
@@ -161,7 +140,7 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                                   child: Text('Done'),
                                   onPressed: () async {
                                     doneJobs = await loadJobs(
-                                        1, arguments['userInfo'][0], context);
+                                        1, arguments['userInfo'], context);
                                     print('done');
                                     setState(() {
                                       while (currentList.isNotEmpty) {
@@ -189,7 +168,7 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                                   child: Text('In Progress'),
                                   onPressed: () async {
                                     inProgressJobs = await loadJobs(
-                                        2, arguments['userInfo'][0], context);
+                                        2, arguments['userInfo'], context);
                                     print('in progress');
                                     setState(() {
                                       while (currentList.isNotEmpty) {
@@ -213,7 +192,7 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                                   child: Text('Completed'),
                                   onPressed: () async {
                                     completedJobs = await loadJobs(
-                                        3, arguments['userInfo'][0], context);
+                                        3, arguments['userInfo'], context);
                                     print('completed');
                                     setState(() {
                                       while (currentList.isNotEmpty) {
@@ -231,8 +210,6 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                       ]),
                 ])),
             new Expanded(
-                //height: 696,
-                //alignment: AlignmentDirectional(20.0, 0.0),
                 child: ListView.builder(
                     itemCount: currentList.length,
                     itemBuilder: (context, idx) {
@@ -244,37 +221,6 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                         child: currentList[idx],
                       );
                     })
-
-                /*ListView.builder(
-                      itemCount: currentList.length,
-                      itemBuilder: (BuildContext context, int idx) => snapshot.data)*/
-
-                /*child: Expanded(
-                      // TODO: Change this to use one of the four lists created earlier - below code might work
-                      child: ListView(
-                        children: currentList,
-                      ),*/
-
-                /*child: ListView(
-                        children: snapshot.data.docs.map<Widget>((document) {
-                          return Card(
-                              child: ListTile(
-                                  leading: Icon(
-                                    Icons.map,
-                                    color: color[100],
-                                  ),
-                                  title: new Text(document['jobType']),
-                                  subtitle: new Text(document['description']),
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, JobDetailScreen.id,
-                                        arguments: {'JobID': document.id});
-                                  }
-                              )
-                          );
-                        }).toList(),
-                      ),*/
-                //),
                 )
           ],
         ));
