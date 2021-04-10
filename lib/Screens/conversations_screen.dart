@@ -67,31 +67,6 @@ class _MessagingScreen extends State<MessagingScreen> {
               );
             }
 
-            Widget getImage(String id) {
-              return new StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
-                  builder: (context, snapshot) {
-                    String url;
-                    if (snapshot.hasData) {
-                      url = snapshot.data['profileImage'];
-                      if (url.isNotEmpty) {
-                        return CircleAvatar(
-                          foregroundImage: NetworkImage(url),
-                        );
-                      }
-                    }
-
-                    return CircleAvatar(
-                      child: Icon(
-                        Icons.person,
-                        color: color[300],
-                      ),
-                      backgroundColor: color[100],
-                    );
-                  }
-              );
-            }
-
             return new ListView(
               children: snapshot.data.docs.map<Widget>((document) {
                 List<dynamic> users = document['users'];
@@ -100,7 +75,7 @@ class _MessagingScreen extends State<MessagingScreen> {
                 loginInfo[0] != document['lastMessage']['idFrom'] ?
                 contact = document['lastMessage']['idFrom'] :
                 contact = document['lastMessage']['idTo'];
-                String contactName;
+                DateTime date = DateTime.fromMicrosecondsSinceEpoch(document['lastMessage']['timestamp']);
 
                 if (users.contains('${loginInfo[0]}')) {
                   return Card(
@@ -108,9 +83,8 @@ class _MessagingScreen extends State<MessagingScreen> {
                           leading: getImage(contact),
                           title: getName(contact),
                           subtitle: new Text(document['lastMessage']['content']),
-                          // trailing: new Text(document['date']),
+                          trailing: new Text('${date.month}/${date.day}\n${date.hour}:${date.minute}'),
                           onTap: () {
-                            //Navigator.pushNamed(context, ConversationDetailPage.id, arguments: {'data': {loginInfo[0], contact, document.id,}});
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -121,7 +95,6 @@ class _MessagingScreen extends State<MessagingScreen> {
                                             contact, // contact's id
                                             document.id, // document id
                                             loginInfo[1], // user's name
-
                                           }.toList()
                                       )
                               ),

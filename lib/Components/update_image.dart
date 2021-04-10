@@ -8,7 +8,7 @@ void updateImage(String id, String imageUrl) {
     "profileImage": imageUrl,
   });
 }
-Future<Widget> getImage(String id) async {
+Widget getImage(String id) {
   return new StreamBuilder(
       stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
       builder: (context, snapshot) {
