@@ -31,6 +31,12 @@ class _JobDetailScreen extends State<JobDetailScreen>{
         future: tasks.doc(arguments['JobID']).get(),
         builder:
         (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+          if(!snapshot.hasData){
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
           if (snapshot.hasError){
             return Text("Something went wrong");
           }
@@ -69,48 +75,79 @@ class _JobDetailScreen extends State<JobDetailScreen>{
                                             ),
                                             child: Text('Message'),
                                             onPressed: () async {
-                                             DocumentReference newConversation = await convos.add({
-                                                "lastMessage" : {
-                                                  "content" : "",
-                                                  "idFrom" : "",
-                                                  "idTo" : "",
-                                                  "read" : false,
-                                                  "timestamp" : DateTime.now().microsecondsSinceEpoch,
-                                                },
 
-                                                "users" : FieldValue.arrayUnion([arguments['userInfo'][0],"${data['ownedBy']}"])
+                                              var arr = [arguments['userInfo'][0], "${data['ownedBy']}"];
+                                              var arr2 = ["${data['ownedBy']}", arguments['userInfo'][0]];
 
-                                              });
-                                             
-                                             DocumentReference firstMessage = await newConversation.collection("Messages").add({
-                                               "content": "hello",
-                                               "idFrom": arguments['userInfo'][0],
-                                               "idTo": "${data['ownedBy']}",
-                                               "read": false,
-                                               "timestamp" : DateTime.now().microsecondsSinceEpoch
-                                             });
+                                              var result = await firestoreInstance
+                                                  .collection("Conversations")
+                                                  .where("users", isEqualTo: arr )
+                                                  .limit(1)
+                                                  .get();
 
-                                             firstMessage.get().then((value) {
-                                               newConversation.update({
-                                               "lastMessage" : {
-                                                   "content" : value.data()["content"],
-                                                   "idFrom" : value.data()["idFrom"],
-                                                   "idTo" : value.data()["idTo"],
-                                                   "read" : value.data()["read"],
-                                                   "timestamp" : value.data()["timestamp"],
-                                                 },
-                                               });
-                                             });
+                                              var resultFlipped = await firestoreInstance
+                                                  .collection("Conversations")
+                                                  .where("users", isEqualTo: arr2 )
+                                                  .limit(1)
+                                                  .get();
+
+                                              if(result.size == 1){
+                                                final List<String> myList = new List<String>.from({arguments['userInfo'][0], "${data['ownedBy']}", result.docs.first.id, arguments['userInfo'][1]});
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => ConversationDetailPage(data: myList)  ),);
+                                              }else {
+
+                                                if(resultFlipped.size == 1){
+                                                  final List<String> myList = new List<String>.from({arguments['userInfo'][0], "${data['ownedBy']}", resultFlipped.docs.first.id, arguments['userInfo'][1]});
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ConversationDetailPage(data: myList)  ),);
+                                                }else{
+                                                  DocumentReference newConversation = await convos.add({
+                                                    "lastMessage" : {
+                                                      "content" : "",
+                                                      "idFrom" : "",
+                                                      "idTo" : "",
+                                                      "read" : false,
+                                                      "timestamp" : DateTime.now().microsecondsSinceEpoch,
+                                                    },
+
+                                                    "users" : FieldValue.arrayUnion([arguments['userInfo'][0],"${data['ownedBy']}"])
+
+                                                  });
+
+                                                  Future.delayed(const Duration(milliseconds: 250));
+
+                                                  DocumentReference firstMessage = await newConversation.collection("Messages").add({
+                                                    "content": "hello",
+                                                    "idFrom": arguments['userInfo'][0],
+                                                    "idTo": "${data['ownedBy']}",
+                                                    "read": false,
+                                                    "timestamp" : DateTime.now().microsecondsSinceEpoch
+                                                  });
+
+                                                  firstMessage.get().then((value) {
+                                                    newConversation.update({
+                                                      "lastMessage" : {
+                                                        "content" : value.data()["content"],
+                                                        "idFrom" : value.data()["idFrom"],
+                                                        "idTo" : value.data()["idTo"],
+                                                        "read" : value.data()["read"],
+                                                        "timestamp" : value.data()["timestamp"],
+                                                      },
+                                                    });
+                                                  });
 
 
 
 
-                                             final List<String> myList = new List<String>.from({arguments['userInfo'][0], "${data['ownedBy']}", newConversation.id, arguments['userInfo'][1]});
+                                                  final List<String> myList = new List<String>.from({arguments['userInfo'][0], "${data['ownedBy']}", newConversation.id, arguments['userInfo'][1]});
 
 
 
-                                             //Navigator.pushNamed(context, MessagingScreen.id);
-                                             Navigator.push(context, MaterialPageRoute(builder: (context) => ConversationDetailPage(data: myList)  ),);
+                                                  //Navigator.pushNamed(context, MessagingScreen.id);
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ConversationDetailPage(data: myList)  ),);
+                                                }
+                                              }
+
+
 
                                             },
                                           ),

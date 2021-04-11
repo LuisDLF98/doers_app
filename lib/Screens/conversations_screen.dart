@@ -69,6 +69,11 @@ class _MessagingScreen extends State<MessagingScreen> {
 
             return new ListView(
               children: snapshot.data.docs.map<Widget>((document) {
+                if(!snapshot.hasData){
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
                 List<dynamic> users = document['users'];
                 Map<String, dynamic> lastMessage = document['lastMessage'];
                 String contact;
