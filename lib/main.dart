@@ -1,6 +1,7 @@
 import 'package:doers_app/Screens/details_screen.dart';
 import 'package:doers_app/Screens/my_jobs_screen.dart';
 import 'package:doers_app/Screens/registration_form_screen.dart';
+import 'package:doers_app/Screens/reviews_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Screens/welcome_screen.dart';
@@ -62,7 +63,7 @@ class FlashChat extends StatelessWidget {
           JobDetailScreen.id: (context) => JobDetailScreen(),
           MyJobsScreen.id: (context) => MyJobsScreen(),
           ConversationDetailPage.id: (context) => ConversationDetailPage(),
-          ContactsScreen.id: (context) => ContactsScreen(),
+          ReviewsScreen.id: (context) => ReviewsScreen(),
           //ChatScreen.id: (context) => ChatScreen(),
         }
     );

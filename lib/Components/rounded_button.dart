@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 
 class RoundedButton extends StatelessWidget {
-  RoundedButton({this.title, this.colour, @required this.onPressed});
+  RoundedButton({this.title, this.colour, this.font_size, this.text_color,  @required this.onPressed});
 
   final Color colour;
   final String title;
   final Function onPressed;
+  final double font_size;
+  final Color text_color;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -17,13 +19,14 @@ class RoundedButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(30.0),
         child: MaterialButton(
           onPressed: onPressed,
-          minWidth: 200.0,
+          minWidth: 300.0,
           height: 42.0,
           child: Text(
             title,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: color[300],
+              color: text_color,
+              fontSize: font_size,
             ),
           ),
         ),
