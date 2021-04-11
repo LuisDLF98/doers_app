@@ -1,5 +1,6 @@
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Screens/conversation_screen.dart';
+import 'package:doers_app/Screens/reviews_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,6 +41,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
           if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data = snapshot.data.data();
             bool ownerView = (arguments['userInfo'][0] == data['ownedBy']);
+            bool doerView = (arguments['userInfo'][0] == data['doerAssigned']);
 
             return Container(
               color: color[300],
@@ -273,6 +275,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                           style: OutlinedButton.styleFrom(
                                             primary: color[200],
                                             backgroundColor: color[300],
+
                                           ),
                                           child: Text('Complete'),
                                           onPressed: () {
@@ -341,7 +344,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                         ),
                                       ),
                                       Visibility(
-                                        visible: data['isCompleted'],
+                                        visible: (ownerView || doerView) && data['isCompleted'],
                                         child: OutlinedButton(
                                             style: OutlinedButton.styleFrom(
                                               primary: color[200],
@@ -349,7 +352,12 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                             ),
                                             child: Text('Review'),
                                             onPressed: () {
-                                              // Navigate to Reviews Page, passing in user's ID & job ID
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => ReviewsScreen(
+    reviewer: arguments['userInfo'][0],
+    jobID: arguments['JobID'],
+    )));
+    // Navigate to Reviews Page, passing in user's ID & job info
                                             }),
                                       ),
                                       OutlinedButton(

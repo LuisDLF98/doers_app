@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doers_app/Components/hex_colors.dart';
+import 'package:doers_app/Components/rounded_button.dart';
+import 'package:intl/intl.dart';
 
 class ReviewsScreen extends StatefulWidget {
-  ReviewsScreen({Key key}) : super(key: key);
+  ReviewsScreen({Key key, this.reviewer, this.jobID}) : super(key: key);
   static const String id = 'reviews_screen';
-
+  String reviewer;
+  String jobID;
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -14,44 +19,160 @@ class ReviewsScreen extends StatefulWidget {
   // always marked "final".
 
   @override
-  _ReviewsScreen createState() => _ReviewsScreen();
+  _ReviewsScreen createState() => _ReviewsScreen(reviewer, jobID);
 }
 
 class _ReviewsScreen extends State<ReviewsScreen> {
+  _ReviewsScreen(this.reviewer, this.jobID);
+  String reviewer;
+  String jobID;
+
+
   @override
   Widget build(BuildContext context) {
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    final formKey = GlobalKey<FormState>();
+
+    String review;
+    int rating;
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text('Reviews'),
+        title: Text('Leave A Review'),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You are now in the Reviews Page',
-            ),
-          ],
+        child: Form(
+          key: formKey,
+          autovalidateMode: AutovalidateMode.disabled,
+          child: ListView(
+            children: <Widget>[
+              SizedBox(
+                height: 48.0,
+              ),
+              TextFormField(
+                keyboardType: TextInputType.multiline,
+                maxLines: 15,
+                onChanged: (value) {
+                  //Do something with the user input.
+                  review = value;
+                },
+                decoration: InputDecoration(
+                  icon: Icon(Icons.article),
+                  hintText: 'Enter your review here',
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: color[50], width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: color[100], width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return "First name needed!";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 12.0,
+              ),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  //Do something with the user input.
+                  rating = int.parse(value);
+                },
+                decoration: InputDecoration(
+                  icon: Icon(Icons.star),
+                  hintText: '# of Stars',
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: color[50], width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: color[100], width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                ),
+                validator: (value) {
+                  int valueInt = int.parse(value);
+                  if (valueInt < 1 || valueInt > 5) {
+                    return "Please input a rating between 1-5";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 12.0,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 25),
+                child: RoundedButton(
+                  colour: color[200],
+                  title: 'Submit',
+                  onPressed: () async {
+                    if (formKey.currentState.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Review submitted!')));
+                      final firestoreInstance = FirebaseFirestore.instance;
+                      DocumentReference ref = firestoreInstance.collection('Task Listings').doc(jobID);
+                      String jobType;
+                      String doerAssigned;
+                      String owner;
+
+                      await ref.get().then((snapshot) {
+                        jobType = snapshot.data()['jobType'];
+                        doerAssigned = snapshot.data()['doerAssigned'];
+                        owner = snapshot.data()['ownedBy'];
+                      });
+
+                      bool isDoer = doerAssigned == reviewer;
+                      String recipient;
+                      if (isDoer) {
+                        recipient = owner;
+                      }
+                      else {
+                        recipient = doerAssigned;
+                      }
+
+                      DocumentReference docRef =
+                          await firestoreInstance.collection('Reviews').add({
+                        "date": DateFormat("yyyy-MM-dd").format(DateTime.now()),
+                        "isDoer": isDoer,
+                        "jobID": jobID,
+                        "jobType": jobType,
+                        "rating": rating,
+                        "recipient": recipient,
+                        "review": review,
+                        "reviewer": reviewer
+                      });
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Information still needed!')));
+                    }
+                  }, // onPressed
+                ),
+              ),
+            ],
+          ),
         ),
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }

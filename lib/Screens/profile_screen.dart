@@ -28,25 +28,16 @@ class ProfileScreen extends StatefulWidget {
 /*
   TODO: Add "Profile" button to job listing that sends to correct profile
 
-  On db:
-    Review/Rating:
-      Text                Detailed review
-      Star#               1, 2, 3, 4, 5
-      Job Type?           from Job
-      Date                current Date
-      Reviewer            id
-      Recipient           id
-      Customer/Doer?      T/F
-
-  .. After job is confirmed, add new button to job details page?
+  TODO: Test below functionality (implemented)
   if (ownedBy == currentUser || doerAssigned == currentUser) && isCompleted
-    Add extra button to review doer/customer
-    Prompt for review + rating
-    Save to db
-    Associate with currentUser + doerAssigned + jobType on db
-    Update Profile page with new info
-    Allow users to be anonymous? Or associate review/rating with userID?
+    * Add extra button to review doer/customer
+    * Prompt for review + rating
+    * Save to db
+    * Associate with currentUser + doerAssigned + jobType on db
 
+    TODO: See below idea
+    Update Profile page with new info
+      Make users anonymous by not showing IDs of reviewers
     Ratings/Reviews button - click
       Display list of reviews/ratings associated
       Click on individual review or make card big enough to fit the review
