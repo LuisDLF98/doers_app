@@ -1,8 +1,10 @@
 import 'package:doers_app/Screens/navigation_screen.dart';
+import 'package:doers_app/Screens/conversation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
+import 'package:doers_app/Screens/conversations_screen.dart';
 
 class JobDetailScreen extends StatefulWidget {
   JobDetailScreen({Key key, this.title}) : super(key: key);
@@ -21,6 +23,9 @@ class _JobDetailScreen extends State<JobDetailScreen>{
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     final firestoreInstance = FirebaseFirestore.instance;
     CollectionReference tasks = firestoreInstance.collection('Task Listings');
+    CollectionReference convos = firestoreInstance.collection('Conversations');
+
+
     return FutureBuilder<DocumentSnapshot>(
         future: tasks.doc(arguments['JobID']).get(),
         builder:
@@ -31,6 +36,8 @@ class _JobDetailScreen extends State<JobDetailScreen>{
 
           if(snapshot.connectionState == ConnectionState.done){
             Map<String, dynamic> data = snapshot.data.data();
+
+
 
             return Container(
               color: color[300],
@@ -60,7 +67,51 @@ class _JobDetailScreen extends State<JobDetailScreen>{
                                               backgroundColor: color[300],
                                             ),
                                             child: Text('Message'),
-                                            onPressed: () {  },
+                                            onPressed: () async {
+                                             DocumentReference newConversation = await convos.add({
+                                                "lastMessage" : {
+                                                  "content" : "",
+                                                  "idFrom" : "",
+                                                  "idTo" : "",
+                                                  "read" : false,
+                                                  "timestamp" : DateTime.now().microsecondsSinceEpoch,
+                                                },
+
+                                                "users" : FieldValue.arrayUnion([arguments['userInfo'][0],"${data['ownedBy']}"])
+
+                                              });
+                                             
+                                             DocumentReference firstMessage = await newConversation.collection("Messages").add({
+                                               "content": "hello",
+                                               "idFrom": arguments['userInfo'][0],
+                                               "idTo": "${data['ownedBy']}",
+                                               "read": false,
+                                               "timestamp" : DateTime.now().microsecondsSinceEpoch
+                                             });
+
+                                             firstMessage.get().then((value) {
+                                               newConversation.update({
+                                               "lastMessage" : {
+                                                   "content" : value.data()["content"],
+                                                   "idFrom" : value.data()["idFrom"],
+                                                   "idTo" : value.data()["idTo"],
+                                                   "read" : value.data()["read"],
+                                                   "timestamp" : value.data()["timestamp"],
+                                                 },
+                                               });
+                                             });
+
+
+
+
+                                             final List<String> myList = new List<String>.from({arguments['userInfo'][0], "${data['ownedBy']}", newConversation.id });
+
+
+
+                                             //Navigator.pushNamed(context, MessagingScreen.id);
+                                             Navigator.push(context, MaterialPageRoute(builder: (context) => ConversationDetailPage(data: myList)  ),);
+
+                                            },
                                           ),
                                           OutlinedButton(
                                             style: OutlinedButton.styleFrom(
