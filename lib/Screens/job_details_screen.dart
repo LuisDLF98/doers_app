@@ -19,333 +19,408 @@ class JobDetailScreen extends StatefulWidget {
 class _JobDetailScreen extends State<JobDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final Map arguments = ModalRoute
-        .of(context)
-        .settings
-        .arguments as Map;
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     final firestoreInstance = FirebaseFirestore.instance;
     CollectionReference tasks = firestoreInstance.collection('Task Listings');
     CollectionReference convos = firestoreInstance.collection('Conversations');
     CollectionReference users = firestoreInstance.collection('Users');
 
-
     return FutureBuilder<DocumentSnapshot>(
         future: tasks.doc(arguments['JobID']).get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (snapshot.hasError) {
-                return Text("Something went wrong");
-              }
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasError) {
+            return Text("Something went wrong");
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data = snapshot.data.data();
+            bool ownerView = (arguments['userInfo'][0] == data['ownedBy']);
 
-              if (snapshot.connectionState == ConnectionState.done) {
-                Map<String, dynamic> data = snapshot.data.data();
-                bool ownerView = (arguments['userInfo'][0] == data['ownedBy']);
+            return Container(
+              color: color[300],
+              child: CustomScrollView(slivers: <Widget>[
+                SliverAppBar(
+                  expandedHeight: 150.0,
+                  backgroundColor: color[500],
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text("${data['jobType']}"),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                    child: Center(
+                        child: SizedBox(
+                            height: 80,
+                            child: Column(
+                              children: <Widget>[
+                                ButtonBar(
+                                    alignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          primary: color[200],
+                                          backgroundColor: color[300],
+                                        ),
+                                        child: Text('Message'),
+                                        onPressed: () async {
+                                          var arr = [
+                                            arguments['userInfo'][0],
+                                            "${data['ownedBy']}"
+                                          ];
+                                          var arr2 = [
+                                            "${data['ownedBy']}",
+                                            arguments['userInfo'][0]
+                                          ];
 
+                                          var result = await firestoreInstance
+                                              .collection("Conversations")
+                                              .where("users", isEqualTo: arr)
+                                              .limit(1)
+                                              .get();
 
-                return Container(
-                  color: color[300],
-                  child: CustomScrollView(slivers: <Widget>[
-                    SliverAppBar(
-                      expandedHeight: 150.0,
-                      backgroundColor: color[500],
-                      flexibleSpace: FlexibleSpaceBar(
-                        title: Text("${data['jobType']}"),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                        child: Center(
-                            child: SizedBox(
-                                height: 80,
-                                child: Column(children: <Widget>[
-                                  ButtonBar(
-                                      alignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        OutlinedButton(
+                                          var resultFlipped =
+                                              await firestoreInstance
+                                                  .collection("Conversations")
+                                                  .where("users",
+                                                      isEqualTo: arr2)
+                                                  .limit(1)
+                                                  .get();
+
+                                          if (result.size == 1) {
+                                            final List<String> myList =
+                                                new List<String>.from({
+                                              arguments['userInfo'][0],
+                                              "${data['ownedBy']}",
+                                              result.docs.first.id,
+                                              arguments['userInfo'][1]
+                                            });
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ConversationDetailPage(
+                                                          data: myList)),
+                                            );
+                                          } else {
+                                            if (resultFlipped.size == 1) {
+                                              final List<String> myList =
+                                                  new List<String>.from({
+                                                arguments['userInfo'][0],
+                                                "${data['ownedBy']}",
+                                                resultFlipped.docs.first.id,
+                                                arguments['userInfo'][1]
+                                              });
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ConversationDetailPage(
+                                                            data: myList)),
+                                              );
+                                            } else {
+                                              DocumentReference
+                                                  newConversation =
+                                                  await convos.add({
+                                                "lastMessage": {
+                                                  "content": "",
+                                                  "idFrom": "",
+                                                  "idTo": "",
+                                                  "read": false,
+                                                  "timestamp": DateTime.now()
+                                                      .microsecondsSinceEpoch,
+                                                },
+                                                "users": FieldValue.arrayUnion([
+                                                  arguments['userInfo'][0],
+                                                  "${data['ownedBy']}"
+                                                ])
+                                              });
+
+                                              Future.delayed(const Duration(
+                                                  milliseconds: 250));
+
+                                              DocumentReference firstMessage =
+                                                  await newConversation
+                                                      .collection("Messages")
+                                                      .add({
+                                                "content": "hello",
+                                                "idFrom": arguments['userInfo']
+                                                    [0],
+                                                "idTo": "${data['ownedBy']}",
+                                                "read": false,
+                                                "timestamp": DateTime.now()
+                                                    .microsecondsSinceEpoch
+                                              });
+
+                                              firstMessage.get().then((value) {
+                                                newConversation.update({
+                                                  "lastMessage": {
+                                                    "content":
+                                                        value.data()["content"],
+                                                    "idFrom":
+                                                        value.data()["idFrom"],
+                                                    "idTo":
+                                                        value.data()["idTo"],
+                                                    "read":
+                                                        value.data()["read"],
+                                                    "timestamp": value
+                                                        .data()["timestamp"],
+                                                  },
+                                                });
+                                              });
+
+                                              final List<String> myList =
+                                                  new List<String>.from({
+                                                arguments['userInfo'][0],
+                                                "${data['ownedBy']}",
+                                                newConversation.id,
+                                                arguments['userInfo'][1]
+                                              });
+
+                                              //Navigator.pushNamed(context, MessagingScreen.id);
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ConversationDetailPage(
+                                                            data: myList)),
+                                              );
+                                            }
+                                          }
+                                        },
+                                      ),
+                                      Visibility(
+                                        visible: (!ownerView &&
+                                            !data['isCompleted']),
+                                        child: OutlinedButton(
                                           style: OutlinedButton.styleFrom(
                                             primary: color[200],
                                             backgroundColor: color[300],
                                           ),
-                                          child: Text('Message'),
-                                          onPressed: () async {
-                                            var arr = [
-                                              arguments['userInfo'][0],
-                                              "${data['ownedBy']}"
-                                            ];
-                                            var arr2 = [
-                                              "${data['ownedBy']}",
-                                              arguments['userInfo'][0]
-                                            ];
-
-                                            var result = await firestoreInstance
-                                                .collection("Conversations")
-                                                .where("users", isEqualTo: arr)
-                                                .limit(1)
-                                                .get();
-
-                                            var resultFlipped = await firestoreInstance
-                                                .collection("Conversations")
-                                                .where("users", isEqualTo: arr2)
-                                                .limit(1)
-                                                .get();
-
-                                            if (result.size == 1) {
-                                              final List<
-                                                  String> myList = new List<
-                                                  String>.from({
-                                                arguments['userInfo'][0],
-                                                "${data['ownedBy']}",
-                                                result.docs.first.id,
-                                                arguments['userInfo'][1]
-                                              });
-                                              Navigator.push(context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ConversationDetailPage(
-                                                            data: myList)),);
-                                            } else {
-                                              if (resultFlipped.size == 1) {
-                                                final List<
-                                                    String> myList = new List<
-                                                    String>.from({
-                                                  arguments['userInfo'][0],
-                                                  "${data['ownedBy']}",
-                                                  resultFlipped.docs.first.id,
-                                                  arguments['userInfo'][1]
+                                          child: Text('Accept'),
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                        "Are you sure you want to accept this task?"),
+                                                    actions: <Widget>[
+                                                      OutlinedButton(
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                          primary: color[200],
+                                                          backgroundColor:
+                                                              color[300],
+                                                        ),
+                                                        child: Text('Accept'),
+                                                        onPressed: () {
+                                                          final firestoreInstance =
+                                                              FirebaseFirestore
+                                                                  .instance;
+                                                          firestoreInstance
+                                                              .collection(
+                                                                  'Task Listings')
+                                                              .doc(arguments[
+                                                                  'JobID'])
+                                                              .set(
+                                                                  {
+                                                                "doerAssigned":
+                                                                    arguments[
+                                                                        'userInfo'][0]
+                                                              },
+                                                                  SetOptions(
+                                                                      merge:
+                                                                          true));
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(SnackBar(
+                                                                  content: Text(
+                                                                      'Task Accepted!')));
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
+                                                        }, // onPressed()
+                                                      ),
+                                                      OutlinedButton(
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                          primary: color[200],
+                                                          backgroundColor:
+                                                              color[300],
+                                                        ),
+                                                        child: Text('Cancel'),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
                                                 });
-                                                Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ConversationDetailPage(
-                                                              data: myList)),);
-                                              } else {
-                                                DocumentReference newConversation = await convos
-                                                    .add({
-                                                  "lastMessage": {
-                                                    "content": "",
-                                                    "idFrom": "",
-                                                    "idTo": "",
-                                                    "read": false,
-                                                    "timestamp": DateTime
-                                                        .now()
-                                                        .microsecondsSinceEpoch,
-                                                  },
-
-                                                  "users": FieldValue
-                                                      .arrayUnion([
-                                                    arguments['userInfo'][0],
-                                                    "${data['ownedBy']}"
-                                                  ])
-                                                });
-
-                                                Future.delayed(const Duration(
-                                                    milliseconds: 250));
-
-                                                DocumentReference firstMessage = await newConversation
-                                                    .collection("Messages").add(
-                                                    {
-                                                      "content": "hello",
-                                                      "idFrom": arguments['userInfo'][0],
-                                                      "idTo": "${data['ownedBy']}",
-                                                      "read": false,
-                                                      "timestamp": DateTime
-                                                          .now()
-                                                          .microsecondsSinceEpoch
-                                                    });
-
-                                                firstMessage.get().then((
-                                                    value) {
-                                                  newConversation.update({
-                                                    "lastMessage": {
-                                                      "content": value
-                                                          .data()["content"],
-                                                      "idFrom": value
-                                                          .data()["idFrom"],
-                                                      "idTo": value
-                                                          .data()["idTo"],
-                                                      "read": value
-                                                          .data()["read"],
-                                                      "timestamp": value
-                                                          .data()["timestamp"],
-                                                    },
-                                                  });
-                                                });
-
-
-                                                final List<
-                                                    String> myList = new List<
-                                                    String>.from({
-                                                  arguments['userInfo'][0],
-                                                  "${data['ownedBy']}",
-                                                  newConversation.id,
-                                                  arguments['userInfo'][1]
-                                                });
-
-
-                                                //Navigator.pushNamed(context, MessagingScreen.id);
-                                                Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ConversationDetailPage(
-                                                              data: myList)),);
-                                              }
-                                            }
                                           },
                                         ),
-                                        Visibility(
-                                          visible: !ownerView,
-                                          child: OutlinedButton(
+                                      ),
+                                      Visibility(
+                                        visible:
+                                            (ownerView && !data['isCompleted']),
+                                        child: OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            primary: color[200],
+                                            backgroundColor: color[300],
+                                          ),
+                                          child: Text('Complete'),
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                        "Are you sure you want to mark this task as completed?"),
+                                                    actions: <Widget>[
+                                                      OutlinedButton(
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                          primary: color[200],
+                                                          backgroundColor:
+                                                              color[300],
+                                                        ),
+                                                        child: Text('Complete'),
+                                                        onPressed: () {
+                                                          final firestoreInstance =
+                                                              FirebaseFirestore
+                                                                  .instance;
+                                                          firestoreInstance
+                                                              .collection(
+                                                                  'Task Listings')
+                                                              .doc(arguments[
+                                                                  'JobID'])
+                                                              .set(
+                                                                  {
+                                                                "isCompleted":
+                                                                    true
+                                                              },
+                                                                  SetOptions(
+                                                                      merge:
+                                                                          true));
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(SnackBar(
+                                                                  content: Text(
+                                                                      'Task Completed!')));
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
+                                                        }, // onPressed()
+                                                      ),
+                                                      OutlinedButton(
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                          primary: color[200],
+                                                          backgroundColor:
+                                                              color[300],
+                                                        ),
+                                                        child: Text('Cancel'),
+                                                        onPressed: () {
+                                                          //TODO:: Navigate back to og page
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: data['isCompleted'],
+                                        child: OutlinedButton(
                                             style: OutlinedButton.styleFrom(
                                               primary: color[200],
                                               backgroundColor: color[300],
                                             ),
-                                            child: Text('Accept'),
+                                            child: Text('Review'),
                                             onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (
-                                                      BuildContext context) {
-                                                    return AlertDialog(
-                                                      title: Text(
-                                                          "Are you sure you want to accept this task?"),
-                                                      actions: <Widget>[
-                                                        OutlinedButton(
-                                                          style: OutlinedButton
-                                                              .styleFrom(
-                                                            primary: color[200],
-                                                            backgroundColor:
-                                                            color[300],
-                                                          ),
-                                                          child: Text('Accept'),
-                                                          onPressed: () {
-                                                            final firestoreInstance =
-                                                                FirebaseFirestore
-                                                                    .instance;
-                                                            firestoreInstance
-                                                                .collection(
-                                                                'Task Listings')
-                                                                .doc(arguments[
-                                                            'JobID'])
-                                                                .set(
-                                                                {
-                                                                  "doerAssigned":
-                                                                  arguments[
-                                                                  'userInfo'][0]
-                                                                },
-                                                                SetOptions(
-                                                                    merge: true));
-                                                            ScaffoldMessenger
-                                                                .of(
-                                                                context)
-                                                                .showSnackBar(
-                                                                SnackBar(
-                                                                    content: Text(
-                                                                        'Task Accepted!')));
-                                                            Navigator.pop(
-                                                                context);
-                                                            Navigator.pop(
-                                                                context);
-                                                          }, // onPressed()
-                                                        ),
-                                                        OutlinedButton(
-                                                          style: OutlinedButton
-                                                              .styleFrom(
-                                                            primary: color[200],
-                                                            backgroundColor: color[300],
-                                                          ),
-                                                          child: Text('Cancel'),
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                context)
-                                                                .pop();
-                                                          },
-                                                        ),
-
-                                                      ],
-                                                    );
-                                                  }
-                                              );
-                                            },
-                                          ),
+                                              // Navigate to Reviews Page, passing in user's ID & job ID
+                                            }),
+                                      ),
+                                      OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          primary: color[200],
+                                          backgroundColor: color[300],
                                         ),
-                                        OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            primary: color[200],
-                                            backgroundColor: color[300],
-                                          ),
-                                          child: Text('Navigate'),
-                                          onPressed: () {
-                                            String value = data['address'];
-                                            //Navigator.pushNamed(context, NavigationScreen.id, arguments: {data['address']});
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        NavigationScreen(
-                                                            value: value)
-                                                ));
-                                          },
-                                        ),
-                                      ]
-                                  )
-                                ],
-                                )
-                            )
-                        )
-                    ),
-                    SliverToBoxAdapter(
-                        child: Center(
-                            child: Card(
-                                child: ListTile(
-                                  leading: Icon(
-                                    Icons.work_off_outlined,
-                                    color: color[100],
-                                  ),
-                                  title: Text("${data['description']}"),
-                                )))),
-                    SliverToBoxAdapter(
-                        child: Center(
-                            child: Card(
-                                child: ListTile(
-                                  leading: Icon(
-                                    Icons.work_off_outlined,
-                                    color: color[100],
-                                  ),
-                                  title: Text("${data['address']}"),
-                                )))),
-                    SliverToBoxAdapter(
-                        child: Center(
-                            child: Card(
-                                child: ListTile(
-                                  leading: Icon(
-                                    Icons.work_off_outlined,
-                                    color: color[100],
-                                  ),
-                                  title: Text("${data['payment']}"),
-                                )))),
-                    SliverToBoxAdapter(
-                        child: Center(
-                            child: Card(
-                                child: ListTile(
-                                  leading: Icon(
-                                    Icons.work_off_outlined,
-                                    color: color[100],
-                                  ),
-                                  title: Text("${data['date']}"),
-                                ))))
-                  ]),
-                );
-                // return Text("Job Type, Then descrpition: ${data['jobType']} ${data['description']}");
-              }
-              return Text("failed");
-              });
+                                        child: Text('Navigate'),
+                                        onPressed: () {
+                                          String value = data['address'];
+                                          //Navigator.pushNamed(context, NavigationScreen.id, arguments: {data['address']});
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NavigationScreen(
+                                                          value: value)));
+                                        },
+                                      ),
+                                    ])
+                              ],
+                            )))),
+                SliverToBoxAdapter(
+                    child: Center(
+                        child: Card(
+                            child: ListTile(
+                  leading: Icon(
+                    Icons.work_off_outlined,
+                    color: color[100],
+                  ),
+                  title: Text("${data['description']}"),
+                )))),
+                SliverToBoxAdapter(
+                    child: Center(
+                        child: Card(
+                            child: ListTile(
+                  leading: Icon(
+                    Icons.work_off_outlined,
+                    color: color[100],
+                  ),
+                  title: Text("${data['address']}"),
+                )))),
+                SliverToBoxAdapter(
+                    child: Center(
+                        child: Card(
+                            child: ListTile(
+                  leading: Icon(
+                    Icons.work_off_outlined,
+                    color: color[100],
+                  ),
+                  title: Text("${data['payment']}"),
+                )))),
+                SliverToBoxAdapter(
+                    child: Center(
+                        child: Card(
+                            child: ListTile(
+                  leading: Icon(
+                    Icons.work_off_outlined,
+                    color: color[100],
+                  ),
+                  title: Text("${data['date']}"),
+                ))))
+              ]),
+            );
+            // return Text("Job Type, Then descrpition: ${data['jobType']} ${data['description']}");
           }
-        }
+          return Text("failed");
+        });
+  }
+}
 
-    /*return MaterialApp(
+/*return MaterialApp(
         home:Scaffold(
           drawer: NavDrawer(),
           appBar: AppBar(
