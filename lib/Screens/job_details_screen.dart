@@ -24,6 +24,7 @@ class _JobDetailScreen extends State<JobDetailScreen>{
     final firestoreInstance = FirebaseFirestore.instance;
     CollectionReference tasks = firestoreInstance.collection('Task Listings');
     CollectionReference convos = firestoreInstance.collection('Conversations');
+    CollectionReference users = firestoreInstance.collection('Users');
 
 
     return FutureBuilder<DocumentSnapshot>(
@@ -104,7 +105,7 @@ class _JobDetailScreen extends State<JobDetailScreen>{
 
 
 
-                                             final List<String> myList = new List<String>.from({arguments['userInfo'][0], "${data['ownedBy']}", newConversation.id });
+                                             final List<String> myList = new List<String>.from({arguments['userInfo'][0], "${data['ownedBy']}", newConversation.id, arguments['userInfo'][1]});
 
 
 
