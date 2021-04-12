@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Screens/reviews_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,10 @@ import 'package:doers_app/Screens/welcome_screen.dart';
 
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({Key key}) : super(key: key);
+  ProfileScreen({Key key, this.args}) : super(key: key);
   static const String id = 'profile_screen';
+  Map args;
+
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -22,18 +25,13 @@ class ProfileScreen extends StatefulWidget {
   // always marked "final".
 
   @override
-  _ProfileScreen createState() => _ProfileScreen();
+  _ProfileScreen createState() => _ProfileScreen(args);
 }
 
 /*
   TODO: Add "Profile" button to job listing that sends to correct profile
 
-  TODO: Test below functionality (implemented)
-  if (ownedBy == currentUser || doerAssigned == currentUser) && isCompleted
-    * Add extra button to review doer/customer
-    * Prompt for review + rating
-    * Save to db
-    * Associate with currentUser + doerAssigned + jobType on db
+  NOTE:
 
     TODO: See below idea
     Update Profile page with new info
@@ -46,9 +44,15 @@ class ProfileScreen extends StatefulWidget {
  */
 
 class _ProfileScreen extends State<ProfileScreen> {
+  _ProfileScreen(this.args);
+  Map args;
+
+  // TODO: Guide - 'ID' = db ID, 'name' = First + Last name, 'email' = email, 'image' = Profile image
+
+
   @override
   Widget build(BuildContext context) {
-    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    //final Map arguments = ModalRoute.of(context).settings.arguments as Map;
 
     return Scaffold(
       appBar: AppBar(
@@ -69,10 +73,10 @@ class _ProfileScreen extends State<ProfileScreen> {
               CircleAvatar(
                 radius: 90.0,
                 backgroundImage: NetworkImage(
-                    arguments['userInfo'][3]),
+                    args['image']),
               ),
               Text(
-                arguments['userInfo'][1],
+                args['name'],
                 style: TextStyle(
                   fontSize: 45,
                   color: Colors.white,
@@ -84,7 +88,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                 height: 10,
               ),
               Text(
-                arguments['userInfo'][2],
+                args['email'],
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -115,7 +119,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                 },
               ),
               SizedBox(
-                height: 180,
+                height: 100,
               ),
               OutlinedButton(
                 child: Text(

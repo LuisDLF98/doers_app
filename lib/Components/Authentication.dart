@@ -88,6 +88,14 @@ Future<List<String>> signInWithGoogle() async {
     print('signInWithGoogle succeeded: $user');
     print('id: $id');
 
+    DocumentReference ref = FirebaseFirestore.instance.collection('Users').doc(id);
+    DocumentSnapshot data = await ref.get();
+    if (data['profileImage'] == "") {
+      await ref.update({
+        "profileImage": imageUrl
+      });
+    }
+
     result.add(id);
     result.add(name);
     result.add(email);

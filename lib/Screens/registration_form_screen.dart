@@ -304,7 +304,9 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                           "streetAddress": streetAddress,
                           "city": city,
                           "state": state,
-                          "zipCode": zipCode});
+                          "zipCode": zipCode,
+                          "profileImage": ""
+                            });
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) =>
