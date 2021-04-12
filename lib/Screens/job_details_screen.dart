@@ -1,5 +1,6 @@
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Screens/conversation_screen.dart';
+import 'package:doers_app/Screens/profile_screen.dart';
 import 'package:doers_app/Screens/reviews_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
@@ -77,7 +78,6 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                             "${data['ownedBy']}",
                                             arguments['userInfo'][0]
                                           ];
-
                                           var result = await firestoreInstance
                                               .collection("Conversations")
                                               .where("users", isEqualTo: arr)
@@ -194,6 +194,41 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                           }
                                         },
                                       ),
+                                      OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          primary: color[200],
+                                          backgroundColor: color[300],
+                                        ),
+                                        child: Text('Profile'),
+                                        onPressed: () async {
+                                          Map<String, dynamic> arguments = {};
+                                          DocumentReference ref =
+                                              FirebaseFirestore.instance
+                                                  .collection('Users')
+                                                  .doc(data['ownedBy']);
+                                          DocumentSnapshot snap =
+                                              await ref.get();
+
+                                          Map<String, dynamic> snapData =
+                                              snap.data();
+                                          arguments['ID'] = snapData['ownedBy'];
+                                          arguments['name'] =
+                                              snapData['firstName'] +
+                                                  ' ' +
+                                                  snapData['lastName'];
+                                          arguments['email'] =
+                                              snapData['email'];
+                                          arguments['image'] =
+                                              snapData['profileImage'];
+
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfileScreen(
+                                                          args: arguments)));
+                                        },
+                                      ),
                                       Visibility(
                                         visible: (!ownerView &&
                                             !data['isCompleted']),
@@ -218,12 +253,13 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                           primary: color[200],
                                                           backgroundColor:
                                                               color[300],
-                                                            ),
-                                                            child: Text('Accept'),
-                                                            onPressed: () {
-                                                              tasks.doc(arguments[
-                                                              'JobID'])
-                                                                  .set(
+                                                        ),
+                                                        child: Text('Accept'),
+                                                        onPressed: () {
+                                                          tasks
+                                                              .doc(arguments[
+                                                                  'JobID'])
+                                                              .set(
                                                                   {
                                                                 "doerAssigned":
                                                                     arguments[
@@ -269,7 +305,6 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                           style: OutlinedButton.styleFrom(
                                             primary: color[200],
                                             backgroundColor: color[300],
-
                                           ),
                                           child: Text('Complete'),
                                           onPressed: () {
@@ -290,7 +325,8 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                         ),
                                                         child: Text('Complete'),
                                                         onPressed: () {
-                                                          tasks.doc(arguments[
+                                                          tasks
+                                                              .doc(arguments[
                                                                   'JobID'])
                                                               .set(
                                                                   {
@@ -332,7 +368,8 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                         ),
                                       ),
                                       Visibility(
-                                        visible: (ownerView || doerView) && data['isCompleted'],
+                                        visible: (ownerView || doerView) &&
+                                            data['isCompleted'],
                                         child: OutlinedButton(
                                             style: OutlinedButton.styleFrom(
                                               primary: color[200],
@@ -340,12 +377,17 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                             ),
                                             child: Text('Review'),
                                             onPressed: () {
-    Navigator.push(context,
-    MaterialPageRoute(builder: (context) => ReviewsScreen(
-    reviewer: arguments['userInfo'][0],
-    jobID: arguments['JobID'],
-    )));
-    // Navigate to Reviews Page, passing in user's ID & job info
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ReviewsScreen(
+                                                            reviewer: arguments[
+                                                                'userInfo'][0],
+                                                            jobID: arguments[
+                                                                'JobID'],
+                                                          )));
+                                              // Navigate to Reviews Page, passing in user's ID & job info
                                             }),
                                       ),
                                       OutlinedButton(
@@ -412,8 +454,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
             // return Text("Job Type, Then descrpition: ${data['jobType']} ${data['description']}");
           }
           return Text("failed");
-        }
-          );
+        });
   }
 }
 

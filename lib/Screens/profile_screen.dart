@@ -31,8 +31,6 @@ class ProfileScreen extends StatefulWidget {
 /*
   TODO: Add "Profile" button to job listing that sends to correct profile
 
-  NOTE:
-
     TODO: See below idea
     Update Profile page with new info
       Make users anonymous by not showing IDs of reviewers
@@ -78,7 +76,7 @@ class _ProfileScreen extends State<ProfileScreen> {
               Text(
                 args['name'],
                 style: TextStyle(
-                  fontSize: 45,
+                  fontSize: 35,
                   color: Colors.white,
                   fontWeight: FontWeight.w400,
                   decoration: TextDecoration.underline,
