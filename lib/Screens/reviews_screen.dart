@@ -77,7 +77,7 @@ class _ReviewsScreen extends State<ReviewsScreen> {
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return "First name needed!";
+                    return "Please give a review!";
                   }
                   return null;
                 },
@@ -109,7 +109,10 @@ class _ReviewsScreen extends State<ReviewsScreen> {
                   ),
                 ),
                 validator: (value) {
-                  int valueInt = int.parse(value);
+                  int valueInt = 0;
+                  if (!value.isEmpty) {
+                    valueInt = int.parse(value);
+                  }
                   if (valueInt < 1 || valueInt > 5) {
                     return "Please input a rating between 1-5";
                   }
