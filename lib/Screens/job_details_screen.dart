@@ -218,18 +218,12 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                           primary: color[200],
                                                           backgroundColor:
                                                               color[300],
-                                                        ),
-                                                        child: Text('Accept'),
-                                                        onPressed: () {
-                                                          final firestoreInstance =
-                                                              FirebaseFirestore
-                                                                  .instance;
-                                                          firestoreInstance
-                                                              .collection(
-                                                                  'Task Listings')
-                                                              .doc(arguments[
-                                                                  'JobID'])
-                                                              .set(
+                                                            ),
+                                                            child: Text('Accept'),
+                                                            onPressed: () {
+                                                              tasks.doc(arguments[
+                                                              'JobID'])
+                                                                  .set(
                                                                   {
                                                                 "doerAssigned":
                                                                     arguments[
@@ -296,13 +290,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                         ),
                                                         child: Text('Complete'),
                                                         onPressed: () {
-                                                          final firestoreInstance =
-                                                              FirebaseFirestore
-                                                                  .instance;
-                                                          firestoreInstance
-                                                              .collection(
-                                                                  'Task Listings')
-                                                              .doc(arguments[
+                                                          tasks.doc(arguments[
                                                                   'JobID'])
                                                               .set(
                                                                   {
@@ -424,7 +412,8 @@ class _JobDetailScreen extends State<JobDetailScreen> {
             // return Text("Job Type, Then descrpition: ${data['jobType']} ${data['description']}");
           }
           return Text("failed");
-        });
+        }
+          );
   }
 }
 
