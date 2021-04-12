@@ -29,8 +29,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 /*
-  TODO: Add "Profile" button to job listing that sends to correct profile
-
     TODO: See below idea
     Update Profile page with new info
       Make users anonymous by not showing IDs of reviewers

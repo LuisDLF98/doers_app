@@ -202,31 +202,41 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                         child: Text('Profile'),
                                         onPressed: () async {
                                           Map<String, dynamic> arguments = {};
-                                          DocumentReference ref =
-                                              FirebaseFirestore.instance
-                                                  .collection('Users')
-                                                  .doc(data['ownedBy']);
-                                          DocumentSnapshot snap =
-                                              await ref.get();
+                                          DocumentReference ref = FirebaseFirestore
+                                              .instance
+                                              .collection('Users')
+                                              .doc(data['ownedBy']);
+                                          DocumentSnapshot snap = await ref.get();
 
-                                          Map<String, dynamic> snapData =
-                                              snap.data();
+                                          Map<String, dynamic> snapData = snap.data();
                                           arguments['ID'] = snapData['ownedBy'];
-                                          arguments['name'] =
-                                              snapData['firstName'] +
-                                                  ' ' +
-                                                  snapData['lastName'];
-                                          arguments['email'] =
-                                              snapData['email'];
-                                          arguments['image'] =
-                                              snapData['profileImage'];
+                                          arguments['name'] = snapData['firstName'] +
+                                              ' ' +
+                                              snapData['lastName'];
+                                          arguments['email'] = snapData['email'];
+                                          arguments['image'] = snapData['profileImage'];
 
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      ProfileScreen(
-                                                          args: arguments)));
+                                                      ProfileScreen(args: arguments)));
+                                        },
+                                      ),
+                                      OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          primary: color[200],
+                                          backgroundColor: color[300],
+                                        ),
+                                        child: Text('Navigate'),
+                                        onPressed: () {
+                                          String value = data['address'];
+                                          //Navigator.pushNamed(context, NavigationScreen.id, arguments: {data['address']});
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NavigationScreen(
+                                                          value: value)));
                                         },
                                       ),
                                       Visibility(
@@ -389,22 +399,6 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                           )));
                                               // Navigate to Reviews Page, passing in user's ID & job info
                                             }),
-                                      ),
-                                      OutlinedButton(
-                                        style: OutlinedButton.styleFrom(
-                                          primary: color[200],
-                                          backgroundColor: color[300],
-                                        ),
-                                        child: Text('Navigate'),
-                                        onPressed: () {
-                                          String value = data['address'];
-                                          //Navigator.pushNamed(context, NavigationScreen.id, arguments: {data['address']});
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      NavigationScreen(
-                                                          value: value)));
-                                        },
                                       ),
                                     ])
                               ],
