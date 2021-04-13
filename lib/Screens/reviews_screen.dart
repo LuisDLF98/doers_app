@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Components/rounded_button.dart';
 import 'package:intl/intl.dart';
+import 'package:doers_app/constants.dart';
 
 class ReviewsScreen extends StatefulWidget {
   ReviewsScreen({Key key, this.reviewer, this.jobID}) : super(key: key);
@@ -31,7 +32,6 @@ class _ReviewsScreen extends State<ReviewsScreen> {
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    final formKey = GlobalKey<FormState>();
 
     String review;
     int rating;

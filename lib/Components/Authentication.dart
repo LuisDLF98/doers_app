@@ -102,10 +102,6 @@ Future<List<String>> signInWithGoogle() async {
     result.add(imageUrl);
     result.add('$user');
 
-    FirebaseFirestore.instance.collection('Users').doc(id).update({
-      "profileImage": imageUrl,
-    });
-
     return result;
   }
 

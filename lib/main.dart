@@ -14,12 +14,8 @@ import 'package:doers_app/Screens/conversation_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
-<<<<<<< HEAD
-import 'package:doers_app/Screens/contacts_screen.dart';
-=======
 import 'package:doers_app/Screens/profile_reviews_screen.dart';
 import 'package:doers_app/Screens/review_details_screen.dart';
->>>>>>> Reviews mach 1
 
 
 void main() async {
@@ -53,7 +49,7 @@ class FlashChat extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: ContactsScreen.id,
+        initialRoute: WelcomeScreen.id,
         routes: {
           WelcomeScreen.id: (context) => WelcomeScreen(),
           //LoginScreen.id: (context) => LoginScreen(),
