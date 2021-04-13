@@ -8,7 +8,6 @@ import 'package:doers_app/Components/side_bar.dart';
 import 'package:doers_app/Screens/home_screen.dart';
 import 'package:doers_app/Screens/profile_screen.dart';
 import 'package:doers_app/Screens/settings_screen.dart';
-import 'package:doers_app/Screens/payment_screen.dart';
 import 'package:doers_app/Screens/conversations_screen.dart';
 import 'package:doers_app/Screens/conversation_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
@@ -57,7 +56,6 @@ class FlashChat extends StatelessWidget {
           ProfileScreen.id: (context) => ProfileScreen(),
           SettingsScreen.id: (context) => SettingsScreen(),
           MessagingScreen.id: (context) => MessagingScreen(),
-          PaymentsScreen.id: (context) => PaymentsScreen(),
           NavigationScreen.id: (context) => NavigationScreen(),
           DetailsScreen.id: (context) => DetailsScreen(),
           JobDetailScreen.id: (context) => JobDetailScreen(),

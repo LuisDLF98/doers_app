@@ -3,7 +3,6 @@ import 'package:doers_app/Screens/home_screen.dart';
 import 'package:doers_app/Screens/conversations_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Screens/details_screen.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title, this.userData}) : super(key: key);
@@ -47,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       return FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, DetailsScreen.id);
+          Navigator.pushNamed(context, DetailsScreen.id, arguments: {'userInfo': loginInfo});
         },
         tooltip: 'Add Job',
         child: Icon(Icons.add),
