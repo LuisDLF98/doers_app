@@ -73,6 +73,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             RoundedButton(
               title: 'Log In',
               colour: color[200],
+              font_size: 17,
+              text_color: color[300],
               onPressed: () async {
                 signOutGoogle(); // Ensure user is signed out before attempting to sign in
                 List<String> signIn = await signInWithGoogle();
@@ -97,6 +99,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             RoundedButton(
               title: 'Register',
               colour: color[200],
+              font_size: 17,
+              text_color: color[300],
               onPressed: () {
                 Navigator.pushNamed(context, RegistrationFormScreen.id);
               },

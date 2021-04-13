@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Components/rounded_button.dart';
+import 'package:doers_app/constants.dart';
 
 class RegistrationFormScreen extends StatefulWidget {
   static const String id = 'registration_form_screen';
@@ -27,7 +28,6 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
   Widget build(BuildContext context) {
     // For getting the User ID argument from 'registration_screen.dart'
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    final formKey = GlobalKey<FormState>();
 
     // TODO: Add input checking through regex (particularly for email address)
     return Scaffold(
@@ -304,7 +304,9 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                           "streetAddress": streetAddress,
                           "city": city,
                           "state": state,
-                          "zipCode": zipCode});
+                          "zipCode": zipCode,
+                          "profileImage": ""
+                            });
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) =>

@@ -4,6 +4,7 @@ import 'package:doers_app/Screens/profile_screen.dart';
 import 'package:doers_app/Screens/welcome_screen.dart';
 import 'package:doers_app/Components/Authentication.dart';
 import 'package:doers_app/Screens/my_jobs_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class NavDrawer extends StatelessWidget {
@@ -23,7 +24,21 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Profile'),
-            onTap: () => {Navigator.pushNamed(context, ProfileScreen.id, arguments: {'userInfo': userData})},
+            onTap: () async {
+              Map<String, dynamic> arguments = {};
+              DocumentReference ref = FirebaseFirestore.instance.collection('Users').doc(userData[0]);
+              DocumentSnapshot snap = await ref.get();
+
+              Map<String, dynamic> data = snap.data();
+              arguments['ID'] = userData[0];
+              arguments['name'] = data['firstName'] + ' ' + data['lastName'];
+              arguments['email'] = data['email'];
+              arguments['image'] = data['profileImage'];
+
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => ProfileScreen(args: arguments)
+              ));
+            },
           ),
           ListTile(
             leading: Icon(Icons.settings),
