@@ -36,7 +36,7 @@ class _HomeScreen extends State<HomeScreen> {
         title: Text('Home'),
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('Task Listings').snapshots(),
+          stream: FirebaseFirestore.instance.collection('Task Listings').where("ownedBy", isNotEqualTo: loginInfo[0]).snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
             if(!snapshot.hasData){
               return Center(

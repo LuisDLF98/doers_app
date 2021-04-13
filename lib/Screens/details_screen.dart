@@ -103,8 +103,8 @@ class _DetailsScreen extends State<DetailsScreen> {
         builder: (context, child) {
           return Theme(
             data: ThemeData(
-              colorScheme: ColorScheme.highContrastLight(
-                primary: color[100],
+              colorScheme: ColorScheme.highContrastDark(
+                primary: color[200],
               ),
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
@@ -116,30 +116,6 @@ class _DetailsScreen extends State<DetailsScreen> {
         setState(() {
           widget.selectedDate = picked;
         });
-    }
-
-    _selectTime(BuildContext context) async {
-      final TimeOfDay newtime = await showTimePicker(
-        context: context,
-        initialTime: widget.selectedTime,
-        builder: (context, child) {
-          return Theme(
-            data: ThemeData(
-              colorScheme: ColorScheme.highContrastLight(
-                primary: color[100],
-              ),
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            child: child,
-          );
-        },
-      );
-
-      if (newtime != null) {
-        setState(() {
-          widget.selectedTime = newtime;
-        });
-      }
     }
 
     return Scaffold(
@@ -360,6 +336,19 @@ class _DetailsScreen extends State<DetailsScreen> {
 
                         TimeRange result = await showTimeRangePicker(
                         context: context,
+                        builder: (context, child) {
+                          return Theme(
+                            data: ThemeData(
+                              colorScheme: ColorScheme.highContrastDark(
+                                primary: color[100],
+                              ),
+                              visualDensity: VisualDensity.adaptivePlatformDensity,
+                            ),
+                            child: child,
+                          );
+                        },
+                        handlerColor: color[100],
+                        strokeColor: color[200],
                         fromText: "",
                         toText: "",
                         use24HourFormat: false,
@@ -378,6 +367,7 @@ class _DetailsScreen extends State<DetailsScreen> {
                           fontSize: 26,
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.bold,
+                          color: color[100],
                         ),
                         labels: [
                           "12 pm",
