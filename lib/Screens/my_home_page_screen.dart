@@ -104,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             HomeScreen(userData: loginInfo),
             MessagingScreen(userData: loginInfo),
-            NavigationScreen(userData: loginInfo),
+            NavigationScreen(value: "", userData: loginInfo),
           ],
         ),
       ),

@@ -4,12 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+//import 'package:location/location.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geocoder/geocoder.dart';
 
 class NavigationScreen extends StatefulWidget {
-  NavigationScreen({Key key, this.userData}) : super(key: key);
-  static const String id = 'navigation_screen';
-  final List<String> userData;
 
+  String value;
+  NavigationScreen({Key key, this.value, this.userData}) : super(key: key);
+  static const String id = 'navigation_screen';
+final List<String> userData;
+  //final String dest;
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -20,40 +25,107 @@ class NavigationScreen extends StatefulWidget {
   // always marked "final".
 
   @override
-  _NavigationScreen createState() => _NavigationScreen(userData);
+
+  _NavigationScreen createState() => _NavigationScreen(value, userData);
 }
 
 class _NavigationScreen extends State<NavigationScreen> {
   List<String> loginInfo;
-  _NavigationScreen(this.loginInfo);
+  String value;
+  _NavigationScreen(this.value, this.loginInfo);
 
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   GoogleMapController newGoogleMapController;
-
   Position currentPosition;
+
+  //Location myUserLocation;
+  var lng, lat;
   static LatLng initialPosition;
 
-//  void initState() async{
-//    super.initState();
-//
-//    getUserLocation();
-//  }
+  //polyline
+  List<LatLng> pLineCoordinates = [];
+  Set<Polyline> polylineSet = {};
 
-  void getUserLocation() async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    currentPosition = position;
+  initState() {
+    super.initState();
+    //loading = true;
+    getUserLocation();
+    //print("dest " + value);
 
-    LatLng latlangposition = LatLng(position.latitude,position.longitude);
-    print(latlangposition.longitude);
-    initialPosition = latlangposition;
-    //ameraPosition cameraPosition = new CameraPosition(target:latlangposition,zoom: 14);
-    //newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-    //return latlangposition;
   }
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target:LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+
+  Future getUserLocation() async {
+    final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    //currentPosition = position;
+    setState(() {
+      lat = position.latitude;
+      lng = position.longitude;
+      print(lat);
+      print(lng);
+    });
+
+    final query = value;
+    var addresses = await Geocoder.google("AIzaSyCac6e3vO4ib9gR5tMEsJcyiOiiMi1-tD0").findAddressesFromQuery(query);
+    var first = addresses.first;
+    print("lat  ${first.coordinates.latitude}  long ${first.coordinates.longitude}");
+
+    bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    print(isLocationServiceEnabled);
+    print(lat);
+
+    var start = PointLatLng(lat,lng);
+    var end = PointLatLng(first.coordinates.latitude,first.coordinates.longitude);
+    var startLatLng = LatLng(lat,lng);
+    var endLatLng = LatLng(first.coordinates.latitude,first.coordinates.longitude);
+    //var details = await AssistantMethods.obtainPlaceDirectionDetails()
+    PolylinePoints polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates("AIzaSyCac6e3vO4ib9gR5tMEsJcyiOiiMi1-tD0", start, end );
+    //print(result);
+    //List<PointLatLng> decodedPolyLinePointsResult = polylinePoints.decodePolyline()
+
+    if(result.points.isNotEmpty){
+      print("NOT EMPTY");
+      result.points.forEach((PointLatLng pointLatLng){
+        pLineCoordinates.add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+      });
+    }
+    else{
+      print("EMPTY");
+    }
+    setState(() {
+      Polyline polyline = Polyline(
+        color: Colors.blueAccent,
+        polylineId: PolylineId("PolylineID"),
+        jointType: JointType.round,
+        points: pLineCoordinates,
+        width: 5,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
+        geodesic: true,
+      );
+      polylineSet.add(polyline);
+      });
+
+    LatLngBounds latlngBounds;
+    if(startLatLng.latitude > endLatLng.latitude && startLatLng.longitude > endLatLng.longitude){
+      latlngBounds = LatLngBounds(southwest: endLatLng, northeast: startLatLng);
+    }
+    else if(startLatLng.longitude > endLatLng.longitude){
+      latlngBounds= LatLngBounds(southwest: LatLng(startLatLng.latitude,endLatLng.longitude), northeast: LatLng(endLatLng.latitude, startLatLng.longitude));
+    }
+    else if(startLatLng.latitude > endLatLng.latitude){
+      latlngBounds= LatLngBounds(southwest: LatLng(endLatLng.latitude,startLatLng.longitude), northeast: LatLng(startLatLng.latitude, endLatLng.longitude));
+    }
+    else{
+      latlngBounds = LatLngBounds(southwest: startLatLng, northeast: endLatLng);
+    }
+
+    print(latlngBounds);
+
+    newGoogleMapController.animateCamera(CameraUpdate.newLatLngBounds(latlngBounds, 70));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,33 +137,27 @@ class _NavigationScreen extends State<NavigationScreen> {
       ),
       body: Stack(
         children: [
-          GoogleMap(
-            mapType: MapType.normal,
-            myLocationButtonEnabled: true,
-            myLocationEnabled: true,
-            zoomControlsEnabled: true,
-            zoomGesturesEnabled: true,
+            lat == null || lng == null ? Container() :
+            GoogleMap(
+              mapType: MapType.normal,
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
+              polylines: polylineSet,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(lat, lng),
+                zoom: 13.0,
+              ),
+              onMapCreated :(GoogleMapController controller){
+                  _controllerGoogleMap.complete(controller);
+                  newGoogleMapController = controller;
+              }
 
-//            initialCameraPosition: CameraPosition(
-//              target: _kGooglePlex,
-//              zoom: 14,
-//            ),
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller)
-            {
-
-              _controllerGoogleMap.complete(controller);
-              newGoogleMapController = controller;
-              setState(() {
-
-              });
-
-            },
-          ),
+            ),
         ],
 
 
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
 }

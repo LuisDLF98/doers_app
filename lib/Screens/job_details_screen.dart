@@ -1,3 +1,4 @@
+import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -108,7 +109,13 @@ class _JobDetailScreen extends State<JobDetailScreen>{
                                               backgroundColor: color[300],
                                             ),
                                             child: Text('Navigate'),
-                                            onPressed: () {  },
+                                            onPressed: () {
+                                              String value = data['address'];
+                                              //Navigator.pushNamed(context, NavigationScreen.id, arguments: {data['address']});
+                                              Navigator.of(context).push(MaterialPageRoute(
+                                                builder: (context) => NavigationScreen(value: value)
+                                              ));
+                                            },
                                           ),
                                         ]
                                     ),
