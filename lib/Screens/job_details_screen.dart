@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/conversations_screen.dart';
+import 'package:intl/intl.dart';
 
 class JobDetailScreen extends StatefulWidget {
   JobDetailScreen({Key key, this.title}) : super(key: key);
@@ -42,6 +43,8 @@ class _JobDetailScreen extends State<JobDetailScreen> {
             Map<String, dynamic> data = snapshot.data.data();
             bool ownerView = (arguments['userInfo'][0] == data['ownedBy']);
             bool doerView = (arguments['userInfo'][0] == data['doerAssigned']);
+            Timestamp time = data['date'];
+            DateTime dateTime = time.toDate();
 
             return Container(
               color: color[300],
@@ -473,7 +476,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                         child: Card(
                             child: ListTile(
                   leading: Icon(
-                    Icons.work_off_outlined,
+                    Icons.description,
                     color: color[100],
                   ),
                   title: Text("${data['description']}"),
@@ -483,7 +486,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                         child: Card(
                             child: ListTile(
                   leading: Icon(
-                    Icons.work_off_outlined,
+                    Icons.streetview,
                     color: color[100],
                   ),
                   title: Text("${data['address']}"),
@@ -493,7 +496,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                         child: Card(
                             child: ListTile(
                   leading: Icon(
-                    Icons.work_off_outlined,
+                    Icons.monetization_on,
                     color: color[100],
                   ),
                   title: Text("${data['payment']}"),
@@ -503,10 +506,10 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                         child: Card(
                             child: ListTile(
                   leading: Icon(
-                    Icons.work_off_outlined,
+                    Icons.calendar_today,
                     color: color[100],
                   ),
-                  title: Text("${data['date']}"),
+                  title: Text("${DateFormat.yMMMd().format(dateTime)} at ${DateFormat.jm().format(dateTime)}"),
                 ))))
               ]),
             );

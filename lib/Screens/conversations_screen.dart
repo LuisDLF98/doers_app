@@ -11,6 +11,7 @@ import 'package:doers_app/Screens/conversation_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:doers_app/Components/update_image.dart';
+import 'package:intl/intl.dart';
 
 class MessagingScreen extends StatefulWidget {
   MessagingScreen({Key key, this.userData}) : super(key: key);
@@ -88,7 +89,7 @@ class _MessagingScreen extends State<MessagingScreen> {
                           leading: getImage(contact),
                           title: getName(contact),
                           subtitle: new Text(document['lastMessage']['content']),
-                          trailing: new Text('${date.month}/${date.day}\n${date.hour}:${date.minute}'),
+                          trailing: new Text('${DateFormat.MMMd().format(date)}\n${DateFormat.jm().format(date)}'),
                           onTap: () {
                             Navigator.push(
                               context,

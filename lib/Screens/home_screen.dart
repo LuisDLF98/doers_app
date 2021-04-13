@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,7 +38,7 @@ class _HomeScreen extends State<HomeScreen> {
         title: Text('Home'),
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('Task Listings').where("ownedBy", isNotEqualTo: loginInfo[0]).snapshots(),
+          stream: FirebaseFirestore.instance.collection('Task Listings').where('ownedBy', isNotEqualTo: loginInfo[0]).snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
             if(!snapshot.hasData){
               return Center(
