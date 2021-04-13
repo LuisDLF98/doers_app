@@ -14,7 +14,12 @@ import 'package:doers_app/Screens/conversation_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
+<<<<<<< HEAD
 import 'package:doers_app/Screens/contacts_screen.dart';
+=======
+import 'package:doers_app/Screens/profile_reviews_screen.dart';
+import 'package:doers_app/Screens/review_details_screen.dart';
+>>>>>>> Reviews mach 1
 
 
 void main() async {
@@ -64,6 +69,8 @@ class FlashChat extends StatelessWidget {
           MyJobsScreen.id: (context) => MyJobsScreen(),
           ConversationDetailPage.id: (context) => ConversationDetailPage(),
           ReviewsScreen.id: (context) => ReviewsScreen(),
+          ProfileReviewsScreen.id: (context) => ProfileReviewsScreen(),
+          ReviewDetailsScreen.id: (context) => ReviewDetailsScreen(),
           //ChatScreen.id: (context) => ChatScreen(),
         }
     );

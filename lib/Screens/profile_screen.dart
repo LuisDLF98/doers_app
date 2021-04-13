@@ -7,6 +7,7 @@ import 'package:doers_app/Components/rounded_button.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Components/Authentication.dart';
 import 'package:doers_app/Screens/welcome_screen.dart';
+import 'package:doers_app/Screens/profile_reviews_screen.dart';
 
 
 class ProfileScreen extends StatefulWidget {
@@ -106,17 +107,20 @@ class _ProfileScreen extends State<ProfileScreen> {
                 height: 40,
               ),
               RoundedButton(
-                title: 'My Reviews',
+                title: 'See Reviews',
                 colour: color[100],
                 font_size: 17,
                 text_color: color[600],
                 onPressed: () {
-                  Navigator.pushNamed(context, ReviewsScreen.id);
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => ProfileReviewsScreen(argmts: args)
+                  ));
                 },
               ),
               SizedBox(
                 height: 100,
               ),
+              /*
               OutlinedButton(
                 child: Text(
                   'Logout',
@@ -133,7 +137,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => WelcomeScreen()));
                 },
-              ),
+              ), */
             ],
           ),
         ),
