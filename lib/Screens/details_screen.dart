@@ -456,6 +456,7 @@ class _DetailsScreen extends State<DetailsScreen> {
                       "date": widget.selectedDate,
                       // "duration": jobDuration,
                       "timeRange" : timeRange,
+                      // TODO: entry time to database
                       "ownedBy": id,
                       "isCompleted": false,
                       "doerAssigned": null,
