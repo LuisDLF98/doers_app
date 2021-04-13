@@ -14,14 +14,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "197594004707-0f48ob8sglfh79cs8bba5ua9stf8tla9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.doers_app",
-            "certificate_hash": "200f52c6a3e43e5ee161fc413af37d37d3565499"
-          }
-        },
-        {
           "client_id": "197594004707-imgh2g6ccmr3fvfvom5dmqfa95sra2n8.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -37,13 +29,6 @@
             {
               "client_id": "197594004707-imgh2g6ccmr3fvfvom5dmqfa95sra2n8.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "197594004707-kf1ehlm55j1uef1gp2nusvda1mqnc6ar.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.doersApp"
-              }
             }
           ]
         }
