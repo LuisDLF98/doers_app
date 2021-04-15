@@ -218,26 +218,16 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                             ),
                                             child: Text('Profile'),
                                             onPressed: () async {
-                                              Map<String, dynamic> arguments =
-                                                  {};
+                                              Map<String, dynamic> arguments = {};
                                               DocumentReference ref =
-                                                  FirebaseFirestore.instance
-                                                      .collection('Users')
-                                                      .doc(data['ownedBy']);
-                                              DocumentSnapshot snap =
-                                                  await ref.get();
+                                                  FirebaseFirestore.instance.collection('Users').doc(data['ownedBy']);
+                                              DocumentSnapshot snap = await ref.get();
 
-                                              Map<String, dynamic> snapData =
-                                                  snap.data();
-                                              arguments['ID'] = data['ownedBy'];
-                                              arguments['name'] =
-                                                  snapData['firstName'] +
-                                                      ' ' +
-                                                      snapData['lastName'];
-                                              arguments['email'] =
-                                                  snapData['email'];
-                                              arguments['image'] =
-                                                  snapData['profileImage'];
+                                              Map<String, dynamic> snapData = snap.data();
+                                              arguments['ID'] = snapData['ownedBy'];
+                                              arguments['name'] = snapData['firstName'] + ' ' + snapData['lastName'];
+                                              arguments['email'] = snapData['email'];
+                                              arguments['image'] = snapData['profileImage'];
 
                                               // Get ratings average
                                               int count = 0;
@@ -263,10 +253,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ProfileScreen(
-                                                              args:
-                                                                  arguments)));
+                                                      builder: (context) => ProfileScreen(args: arguments)));
                                             },
                                           ),
                                           OutlinedButton(
