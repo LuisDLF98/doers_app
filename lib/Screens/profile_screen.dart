@@ -1,44 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:doers_app/Screens/reviews_screen.dart';
+import 'package:doers_app/Components/Authentication.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:doers_app/Components/barchart_simple.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:doers_app/Components/rounded_button.dart';
 import 'package:doers_app/Components/hex_colors.dart';
-import 'package:doers_app/Components/Authentication.dart';
-import 'package:doers_app/Screens/welcome_screen.dart';
 import 'package:doers_app/Screens/profile_reviews_screen.dart';
-
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key, this.args}) : super(key: key);
   static const String id = 'profile_screen';
   Map args;
 
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   @override
   _ProfileScreen createState() => _ProfileScreen(args);
 }
-
-/*
-    TODO: See below idea
-    Update Profile page with new info
-      Make users anonymous by not showing IDs of reviewers
-    Ratings/Reviews button - click
-      Display list of reviews/ratings associated
-      Click on individual review or make card big enough to fit the review
-        Display individual review
-      Average Star# together to obtain overall rating
- */
 
 class _ProfileScreen extends State<ProfileScreen> {
   _ProfileScreen(this.args);
@@ -46,10 +22,8 @@ class _ProfileScreen extends State<ProfileScreen> {
 
   // TODO: Guide - 'ID' = db ID, 'name' = First + Last name, 'email' = email, 'image' = Profile image
 
-
   @override
   Widget build(BuildContext context) {
-    //final Map arguments = ModalRoute.of(context).settings.arguments as Map;
 
     return Scaffold(
       appBar: AppBar(
@@ -69,14 +43,13 @@ class _ProfileScreen extends State<ProfileScreen> {
             children: <Widget>[
               CircleAvatar(
                 radius: 90.0,
-                backgroundImage: NetworkImage(
-                    args['image']),
+                backgroundImage: NetworkImage(args['image']),
               ),
               Text(
                 args['name'],
                 style: TextStyle(
                   fontSize: 35,
-                  color: Colors.white,
+                  color: color[300],
                   fontWeight: FontWeight.w400,
                   decoration: TextDecoration.underline,
                 ),
@@ -88,20 +61,35 @@ class _ProfileScreen extends State<ProfileScreen> {
                 args['email'],
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.white,
+                  color: color[300],
                   fontWeight: FontWeight.w400,
                 ),
               ),
               SizedBox(
                 height: 7,
               ),
-              Text(
-                'Rating:  5.0 \u{2B50}\u{2B50}\u{2B50}\u{2B50}\u{2B50}',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                ),
+              Padding(
+                padding: EdgeInsets.only(left: 57),
+                child: Row(children: <Widget>[
+                  Text(
+                    'Rating: ',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: color[300],
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  RatingBarIndicator(
+                    rating: double.parse(args['rating'].toString()),
+                    itemBuilder: (context, index) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    itemCount: 5,
+                    itemSize: 25.0,
+                    direction: Axis.horizontal,
+                  )
+                ]),
               ),
               SizedBox(
                 height: 40,
@@ -112,32 +100,16 @@ class _ProfileScreen extends State<ProfileScreen> {
                 font_size: 17,
                 text_color: color[600],
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => ProfileReviewsScreen(argmts: args)
-                  ));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ProfileReviewsScreen(argmts: args)));
                 },
               ),
               SizedBox(
                 height: 100,
               ),
-              /*
-              OutlinedButton(
-                child: Text(
-                  'Logout',
-                  style: TextStyle(
-                  color: color[300],
-                  ),
-                ),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: Colors.white, width: 2),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
-                ),
-                onPressed: () async {
-                  await signOutGoogle();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => WelcomeScreen()));
-                },
-              ), */
             ],
           ),
         ),
