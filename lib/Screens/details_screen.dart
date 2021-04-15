@@ -227,17 +227,26 @@ class _DetailsScreen extends State<DetailsScreen> {
                   SizedBox(
                     height: 20.0,
                   ),
-                  TextFormField(
-                    onChanged: (value) {
-                      //Do something with the user input.
-                      jobType = value;
-                    },
+                  DropdownButtonFormField(
+
+                    items:["Yard Services","Plumbing","Electrical", 'Pet Services','Construction','Cleaning Services','Other']
+                      .map((label)=> DropdownMenuItem(
+                      child: Text(label),
+                      value: label,
+                    ))
+                    .toList(),
+                    onChanged: (value){
+                    setState(() => jobType = value);
+                       },
+
                     decoration: InputDecoration(
+
                       filled: true,
                       fillColor: color[300],
                       //focusColor: color[100],
                       icon: Icon(Icons.tag),
                       hintText: 'Job type',
+
                       contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                       border: OutlineInputBorder(
