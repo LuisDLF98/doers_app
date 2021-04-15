@@ -1,10 +1,11 @@
 import 'dart:math';
-
+import 'package:doers_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key, this.userData}) : super(key: key);
@@ -50,14 +51,15 @@ class _HomeScreen extends State<HomeScreen> {
             }
 
             snapshot.data.docs.forEach((document) {
+              Timestamp time = document['date'];
+              DateTime dateTime = time.toDate();
               test.add(Card(
                   child: ListTile(
-                      leading: Icon(
-                        Icons.map,
-                        color: color[100],
-                      ),
+                      leading: jobCategoryIcon[document['jobType']],
+
                       title: new Text(document['jobType']),
                       subtitle: new Text(document['description']),
+                      trailing: Text("${DateFormat.jm().format(dateTime)}"),
                       // trailing: new Text(document['date']),
                       onTap: (){
                         Navigator.pushNamed(context, JobDetailScreen.id, arguments: {'JobID': document.id, 'userInfo': loginInfo});
