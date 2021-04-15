@@ -287,7 +287,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                           ),
                                           Visibility(
                                             visible: (!ownerView &&
-                                                !data['isCompleted']),
+                                                !data['isCompleted'] && data['doerAssigned'] == null),
                                             child: OutlinedButton(
                                               style: OutlinedButton.styleFrom(
                                                 primary: color[200],
@@ -365,7 +365,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                           ),
                                           Visibility(
                                             visible: (ownerView &&
-                                                !data['isCompleted']),
+                                                !data['isCompleted'] && data['doerAssigned'] != null),
                                             child: OutlinedButton(
                                               style: OutlinedButton.styleFrom(
                                                 primary: color[200],
@@ -442,7 +442,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                             ),
                                           ),
                                           Visibility(
-                                            visible: (ownerView || doerView) &&
+                                            visible: ((ownerView && data['doerAssigned'] != null) || doerView) &&
                                                 data['isCompleted'],
                                             child: OutlinedButton(
                                                 style: OutlinedButton.styleFrom(

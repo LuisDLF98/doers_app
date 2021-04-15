@@ -30,6 +30,9 @@ class _HomeScreen extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Card> test = [];
+    List<bool> test2 = [];
+
     return Scaffold(
       drawer: NavDrawer(userData: loginInfo),
       appBar: AppBar(
@@ -46,7 +49,36 @@ class _HomeScreen extends State<HomeScreen> {
               );
             }
 
+            snapshot.data.docs.forEach((document) {
+              test.add(Card(
+                  child: ListTile(
+                      leading: Icon(
+                        Icons.map,
+                        color: color[100],
+                      ),
+                      title: new Text(document['jobType']),
+                      subtitle: new Text(document['description']),
+                      // trailing: new Text(document['date']),
+                      onTap: (){
+                        Navigator.pushNamed(context, JobDetailScreen.id, arguments: {'JobID': document.id, 'userInfo': loginInfo});
+                      }
+                  )
+              ));
+              test2.add(document['isCompleted']);
+            });
+
+            List<Card> actual = [];
+            for(int i = 0; i < test.length; i++) {
+              if (!test2[i]) {
+                actual.add(test[i]);
+              }
+            }
+
             return new ListView(
+              children: actual
+            );
+
+            /*return new ListView(
              children: snapshot.data.docs.map<Widget>((document) {
                  return Card(
                    child: ListTile(
@@ -62,8 +94,8 @@ class _HomeScreen extends State<HomeScreen> {
                        }
                    )
                  );
-             }).toList(),
-            );
+             }).toList()
+            );*/
           }
       ),
     );
