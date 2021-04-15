@@ -1,19 +1,21 @@
 import 'dart:async';
-
+import 'dart:math' show cos, sqrt, asin;
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 //import 'package:location/location.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:doers_app/Components/hex_colors.dart';
 
 class NavigationScreen extends StatefulWidget {
 
   String value;
   NavigationScreen({Key key, this.value, this.userData}) : super(key: key);
   static const String id = 'navigation_screen';
-final List<String> userData;
+  final List<String> userData;
   //final String dest;
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -37,7 +39,8 @@ class _NavigationScreen extends State<NavigationScreen> {
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   GoogleMapController newGoogleMapController;
   Position currentPosition;
-
+  double dis=0.0;
+  String distanceRounded;
   //Location myUserLocation;
   var lng, lat;
   static LatLng initialPosition;
@@ -46,12 +49,26 @@ class _NavigationScreen extends State<NavigationScreen> {
   List<LatLng> pLineCoordinates = [];
   Set<Polyline> polylineSet = {};
 
+  //markers
+
+  Set<Marker> markersSet = {};
+  Set<Circle> circlesSet = {};
+
   initState() {
     super.initState();
     //loading = true;
     getUserLocation();
     //print("dest " + value);
 
+  }
+
+  double distance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
   }
 
   Future getUserLocation() async {
@@ -84,6 +101,22 @@ class _NavigationScreen extends State<NavigationScreen> {
     //print(result);
     //List<PointLatLng> decodedPolyLinePointsResult = polylinePoints.decodePolyline()
 
+    for (int i = 0; i < result.points.length - 1; i++) {
+      dis += distance(
+        result.points[i].latitude,
+        result.points[i].longitude,
+        result.points[i + 1].latitude,
+        result.points[i + 1].longitude,
+      );
+    }
+
+    setState(() {
+      dis = dis*0.621371;
+      String distanceRounded = dis.toStringAsFixed(2);
+      print(distanceRounded + " Miles");
+    });
+
+
     if(result.points.isNotEmpty){
       print("NOT EMPTY");
       result.points.forEach((PointLatLng pointLatLng){
@@ -105,7 +138,7 @@ class _NavigationScreen extends State<NavigationScreen> {
         geodesic: true,
       );
       polylineSet.add(polyline);
-      });
+    });
 
     LatLngBounds latlngBounds;
     if(startLatLng.latitude > endLatLng.latitude && startLatLng.longitude > endLatLng.longitude){
@@ -124,6 +157,26 @@ class _NavigationScreen extends State<NavigationScreen> {
     print(latlngBounds);
 
     newGoogleMapController.animateCamera(CameraUpdate.newLatLngBounds(latlngBounds, 70));
+
+    Marker pickUpMarker = Marker(
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+      //infoWindow: InfoWindow(title: start.placeName, snippet: "my Location"),
+      position: startLatLng,
+      markerId: MarkerId("pickUpId"),
+    );
+    Marker dropOffMarker = Marker(
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+      //infoWindow: InfoWindow(title: start.placeName, snippet: "my Location"),
+      position: endLatLng,
+      markerId: MarkerId("dropOffId"),
+    );
+
+    setState(() {
+      markersSet.add(pickUpMarker);
+      markersSet.add(dropOffMarker);
+    });
+
+
   }
 
   @override
@@ -136,27 +189,74 @@ class _NavigationScreen extends State<NavigationScreen> {
         title: Text('Navigation'),
       ),
       body: Stack(
-        children: [
+          children: [
             lat == null || lng == null ? Container() :
             GoogleMap(
-              mapType: MapType.normal,
-              myLocationButtonEnabled: true,
-              myLocationEnabled: true,
-              polylines: polylineSet,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(lat, lng),
-                zoom: 13.0,
-              ),
-              onMapCreated :(GoogleMapController controller){
+                mapType: MapType.normal,
+                myLocationButtonEnabled: true,
+                myLocationEnabled: true,
+                polylines: polylineSet,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat, lng),
+                  zoom: 13.0,
+                ),
+                markers: markersSet,
+                circles: circlesSet,
+                onMapCreated :(GoogleMapController controller){
                   _controllerGoogleMap.complete(controller);
                   newGoogleMapController = controller;
-              }
+                }
 
             ),
-        ],
+            Visibility(
+              visible: dis ==  0? false : true,
+              child: Column(
+                children: [
+
+                  Expanded(
+                      flex: 8,
+                      child:
+                      SizedBox(
+                        height: 100,
+                      )),
+                  Expanded(
+                    flex:1,
+                    child:
+                    Center(
+                      child: Container(
+
+                        //alignment: Alignment.bottomCenter,
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                            color: color[100],
+                            borderRadius: BorderRadius.all(Radius.circular(20))),
+
+                        child: Text(
+
+                          'Distance: ' +  dis.toStringAsFixed(2) + ' Miles',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child:
+                      SizedBox(
+                        height: 100,
+                      )),
+
+                ],
+              ),
+            ),
 
 
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+
+          ]), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
