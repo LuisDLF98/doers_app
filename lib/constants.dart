@@ -22,7 +22,7 @@ const kMessageContainerDecoration = BoxDecoration(
 final formKey = GlobalKey<FormState>();
 
 Map<String, Icon> jobCategoryIcon = {
-  'Yard Work': Icon(Icons.grass, color: color[100]),
+  'Yard Services': Icon(Icons.grass, color: color[100]),
   'Plumbing': Icon(Icons.plumbing, color: color[100]),
   'Electrical': Icon(Icons.electrical_services, color: color[100]),
   'Construction': Icon(Icons.construction, color: color[100]),
