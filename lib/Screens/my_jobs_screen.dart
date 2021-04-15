@@ -5,6 +5,8 @@ import 'package:doers_app/Components/side_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
+import 'package:doers_app/constants.dart';
+import 'package:intl/intl.dart';
 
 class MyJobsScreen extends StatefulWidget {
   MyJobsScreen({Key key}) : super(key: key);
@@ -25,11 +27,12 @@ class MyJobsScreen extends StatefulWidget {
 
 // Function that automates the building of Card objects with info from the database
 ListTile populateJob(
-    String jobType, String description, String jobID, BuildContext context, List<String> userInfo) {
+    String jobType, String description, String jobID, DateTime date, BuildContext context, List<String> userInfo) {
   return ListTile(
-      leading: Icon(Icons.map, color: color[100]),
+      leading: jobCategoryIcon[jobType],
       title: new Text(jobType),
       subtitle: new Text(description),
+      trailing: Text("${DateFormat.jm().format(date)}"),
       onTap: () {
         Navigator.pushNamed(context, JobDetailScreen.id,
             arguments: {'JobID': jobID, 'userInfo': userInfo});
@@ -48,18 +51,21 @@ Future<List<ListTile>> loadJobs(
     String ownedBy = document.data()['ownedBy'];
     String doerAssigned = document.data()['doerAssigned'];
     bool isCompleted = document.data()['isCompleted'];
+    Timestamp time = document['date'];
+    DateTime dateTime = time.toDate();
+
     if (index == 0 && ownedBy == userInfo[0] && isCompleted == false) {
       jobs[0].add(populateJob(
-          document['jobType'], document['description'], document.id, context, userInfo));
+          document['jobType'], document['description'], document.id, dateTime, context, userInfo));
     } else if (index == 1 && ownedBy == userInfo[0] && isCompleted == true) {
       jobs[1].add(populateJob(
-          document['jobType'], document['description'], document.id, context, userInfo));
+          document['jobType'], document['description'], document.id, dateTime, context, userInfo));
     } else if (index == 2 && doerAssigned == userInfo[0] && isCompleted == false) {
       jobs[2].add(populateJob(
-          document['jobType'], document['description'], document.id, context, userInfo));
+          document['jobType'], document['description'], document.id, dateTime, context, userInfo));
     } else if (index == 3 && doerAssigned == userInfo[0] && isCompleted == true) {
       jobs[3].add(populateJob(
-          document['jobType'], document['description'], document.id, context, userInfo));
+          document['jobType'], document['description'], document.id, dateTime, context, userInfo));
     }
   });
   return jobs[index];
