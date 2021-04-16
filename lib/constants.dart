@@ -28,5 +28,6 @@ Map<String, Icon> jobCategoryIcon = {
   'Construction': Icon(Icons.construction, color: color[100]),
   'Cleaning Services': Icon(Icons.cleaning_services, color: color[100]),
   'Pet Services': Icon(Icons.pets, color: color[100]),
+  'Food Services': Icon(Icons.restaurant, color:color[100]),
   'Other': Icon(Icons.build, color: color[100])
 };

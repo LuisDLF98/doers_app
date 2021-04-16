@@ -228,8 +228,8 @@ class _DetailsScreen extends State<DetailsScreen> {
                     height: 20.0,
                   ),
                   DropdownButtonFormField(
-
-                    items:["Yard Services","Plumbing","Electrical", 'Pet Services','Construction','Cleaning Services','Other']
+                    icon: Icon(Icons.arrow_drop_down, color: color[100]),
+                    items:["Yard Services","Plumbing","Electrical", 'Pet Services','Construction','Cleaning Services', 'Food Services', 'Other']
                       .map((label)=> DropdownMenuItem(
                       child: Text(label),
                       value: label,
