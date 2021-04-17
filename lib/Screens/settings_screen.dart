@@ -1,4 +1,9 @@
+import 'package:doers_app/Components/rounded_button.dart';
 import 'package:flutter/material.dart';
+import 'package:doers_app/Components/hex_colors.dart';
+import 'package:settings_ui/settings_ui.dart';
+
+import '../constants.dart';
 
 class SettingsScreen extends StatefulWidget {
   SettingsScreen({Key key}) : super(key: key);
@@ -18,6 +23,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreen extends State<SettingsScreen> {
+  bool val = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,29 +36,40 @@ class _SettingsScreen extends State<SettingsScreen> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You are now in the Settings Page',
+        child: SettingsList(
+
+          backgroundColor: fromHex('#cfd8dc'),
+          sections: [
+            SettingsSection(
+              title: 'General',
+              titleTextStyle: TextStyle(color: fromHex('#2bbc7d'), fontWeight: FontWeight.bold, fontSize: 18
+              ),
+              tiles: [
+                  SettingsTile(
+                    title: 'Address',
+                    leading: Icon(Icons.house),
+                    onPressed: (BuildContext context) {},),
+                  SettingsTile.switchTile(title: 'Dark Mode',
+                      leading: Icon(Icons.lightbulb_outline),
+                      onToggle: (bool val){},
+                      switchValue: val),
+              ],
+            ),
+            SettingsSection(
+              title: 'Misc',
+              titleTextStyle: TextStyle(color: fromHex('#2bbc7d'), fontWeight: FontWeight.bold, fontSize: 18),
+              tiles: [
+                SettingsTile(
+                    title: 'Terms of Service', leading: Icon(Icons.description)),
+                SettingsTile(
+                    title: 'Open source licenses',
+                    leading: Icon(Icons.collections_bookmark)),
+              ],
             ),
           ],
         ),
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
