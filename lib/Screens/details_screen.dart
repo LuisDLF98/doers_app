@@ -42,7 +42,6 @@ class _DetailsScreen extends State<DetailsScreen> {
   String timeRange;
   var txt = TextEditingController();
   var txt1 = TextEditingController();
-  Duration jobDuration = Duration(hours: 0, minutes: 0);
 
   var _controller = TextEditingController();
   var uuid = new Uuid();
@@ -342,8 +341,7 @@ class _DetailsScreen extends State<DetailsScreen> {
                     showCursor: true,
                     readOnly: true,
                     onTap: () async {
-
-                        TimeRange result = await showTimeRangePicker(
+                      TimeRange result = await showTimeRangePicker(
                         context: context,
                         builder: (context, child) {
                           return Theme(
@@ -351,7 +349,8 @@ class _DetailsScreen extends State<DetailsScreen> {
                               colorScheme: ColorScheme.highContrastDark(
                                 primary: color[100],
                               ),
-                              visualDensity: VisualDensity.adaptivePlatformDensity,
+                              visualDensity: VisualDensity
+                                  .adaptivePlatformDensity,
                             ),
                             child: child,
                           );
@@ -379,15 +378,18 @@ class _DetailsScreen extends State<DetailsScreen> {
                           color: color[100],
                         ),
                         labels: [
-                          "12 pm",
-                          "3 pm",
-                          "6 pm",
-                          "9 pm",
                           "12 am",
                           "3 am",
                           "6 am",
                           "9 am",
-                        ].asMap().entries.map((e) {
+                          "12 pm",
+                          "3 pm",
+                          "6 pm",
+                          "9 pm",
+                        ]
+                            .asMap()
+                            .entries
+                            .map((e) {
                           return ClockLabel.fromIndex(
                               idx: e.key, length: 8, text: e.value
                           );
@@ -395,13 +397,11 @@ class _DetailsScreen extends State<DetailsScreen> {
                       );
                       //_selectTime(context);
                       //widget.selectedTime.toString()
+                      String start = result.startTime.toString();
+                      String end = result.endTime.toString();
 
-                        String start = result.startTime.toString();
-                        String end = result.endTime.toString();
-
-                        
-                      txt1.text= start.substring(10,15) + '-' + end.substring(10,15);
-
+                      timeRange = start.substring(10, 15) + '-' + end.substring(10, 15);
+                      txt1.text = start.substring(10, 15) + '-' + end.substring(10, 15);
                     },
                     onChanged: (value) {
                       //Do something with the user input.
@@ -447,14 +447,20 @@ class _DetailsScreen extends State<DetailsScreen> {
                       )
                     );
                     final firestoreInstance = FirebaseFirestore.instance;
+                    DateTime end = widget.selectedDate;
                     firestoreInstance.collection("Task Listings").add({
                       "address": streetAddress,
                       "payment": payment,
                       "jobType": jobType,
                       "description": description,
-                      "date": widget.selectedDate,
-                      // "duration": jobDuration,
-                      "timeRange" : timeRange,
+                      "date": widget.selectedDate.add(Duration(
+                        hours: int.parse(timeRange.substring(0, 2)),
+                        minutes: int.parse(timeRange.substring(3, 5))
+                      )),
+                      "timeRange" : end.add(Duration(
+                        hours: int.parse(timeRange.substring(6, 8)),
+                        minutes: int.parse(timeRange.substring(9, 11))
+                      )),
                       // TODO: entry time to database
                       "ownedBy": id,
                       "isCompleted": false,

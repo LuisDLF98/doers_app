@@ -31,8 +31,9 @@ class _HomeScreen extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Card> test = [];
-    List<bool> test2 = [];
+    List<Card> base = [];
+    List<bool> completed = [];
+    List<Card> jobs = [];
 
     return Scaffold(
       drawer: NavDrawer(userData: loginInfo),
@@ -53,7 +54,7 @@ class _HomeScreen extends State<HomeScreen> {
             snapshot.data.docs.forEach((document) {
               Timestamp time = document['date'];
               DateTime dateTime = time.toDate();
-              test.add(Card(
+              base.add(Card(
                   child: ListTile(
                       leading: jobCategoryIcon[document['jobType']],
 
@@ -66,18 +67,19 @@ class _HomeScreen extends State<HomeScreen> {
                       }
                   )
               ));
-              test2.add(document['isCompleted']);
+              completed.add(document['isCompleted']);
             });
 
-            List<Card> actual = [];
-            for(int i = 0; i < test.length; i++) {
-              if (!test2[i]) {
-                actual.add(test[i]);
+            if (jobs.isEmpty) {
+              for (int i = 0; i < base.length; i++) {
+                if (!completed[i] && !jobs.contains(base[i])) {
+                  jobs.add(base[i]);
+                }
               }
             }
 
             return new ListView(
-              children: actual
+              children: jobs
             );
 
             /*return new ListView(

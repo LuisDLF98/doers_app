@@ -45,6 +45,8 @@ class _JobDetailScreen extends State<JobDetailScreen> {
             bool doerView = (arguments['userInfo'][0] == data['doerAssigned']);
             Timestamp time = data['date'];
             DateTime dateTime = time.toDate();
+            Timestamp end = data['timeRange'];
+            DateTime endTime = end.toDate();
 
             return Container(
               color: color[300],
@@ -496,7 +498,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                     Icons.calendar_today,
                     color: color[100],
                   ),
-                  title: Text("${DateFormat.yMMMd().format(dateTime)} at ${DateFormat.jm().format(dateTime)}"),
+                  title: Text("${DateFormat.yMMMd().format(dateTime)} from ${DateFormat.jm().format(dateTime)} - ${DateFormat.jm().format(endTime)}"),
                 ))))
               ]),
             );

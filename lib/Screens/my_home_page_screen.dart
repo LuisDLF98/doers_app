@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   Widget _getFAB() {
-    if (pageNum == 1) {
+    if (pageNum != 0) {
       return Container();
     } else {
       return FloatingActionButton(
