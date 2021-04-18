@@ -47,7 +47,7 @@ class _MessagingScreen extends State<MessagingScreen> {
         title: Text('Conversations'),
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('Conversations').snapshots(),
+          stream: FirebaseFirestore.instance.collection('Conversations').orderBy('lastMessage.timestamp', descending: true).snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
             if(!snapshot.hasData){
               return Center(
