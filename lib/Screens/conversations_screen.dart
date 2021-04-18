@@ -41,7 +41,7 @@ class _MessagingScreen extends State<MessagingScreen> {
 
     return Scaffold(
 
-      backgroundColor: Colors.white,
+      backgroundColor: color[500],
       drawer: NavDrawer(userData: loginInfo),
       appBar: AppBar(
         title: Text('Conversations'),

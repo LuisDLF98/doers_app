@@ -60,7 +60,7 @@ class _HomeScreen extends State<HomeScreen> {
 
                       title: new Text(document['jobType']),
                       subtitle: new Text(document['description']),
-                      trailing: Text("${DateFormat.jm().format(dateTime)}"),
+                      trailing: Text("${DateFormat.MMMd().format(dateTime)}"),
                       // trailing: new Text(document['date']),
                       onTap: (){
                         Navigator.pushNamed(context, JobDetailScreen.id, arguments: {'JobID': document.id, 'userInfo': loginInfo});

@@ -84,11 +84,9 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                       children: <Widget>[
                         getName(info[1]),
                         SizedBox(height: 6,),
-                        Text("Online",style: TextStyle(color: color[500]),),
                       ],
                     ),
                   ),
-                  Icon(Icons.settings,color: Colors.black54,),
                 ],
               ),
             ),
