@@ -64,7 +64,7 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
-            onTap: () => {Navigator.pushNamed(context, SettingsScreen.id)},
+            onTap: () => {Navigator.pushNamed(context, SettingsScreen.id, arguments: {'userInfo': userData})},
           ),
           ListTile(
             leading: Icon(Icons.cases),
