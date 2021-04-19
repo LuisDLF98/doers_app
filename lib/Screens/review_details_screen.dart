@@ -23,7 +23,9 @@ class _ReviewDetailsScreen extends State<ReviewDetailsScreen> {
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text("Something went wrong");
-          } else {
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data = snapshot.data.data();
 
             return Container(
@@ -88,6 +90,8 @@ class _ReviewDetailsScreen extends State<ReviewDetailsScreen> {
               ]),
             );
           }
+          return Container(
+              color: color[500]);
         } // builder
         );
   }
