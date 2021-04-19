@@ -32,7 +32,7 @@ class _HomeScreen extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     List<Card> base = [];
-    List<bool> completed = [];
+    List<String> assignedIDs = [];
     List<Card> jobs = [];
 
     return Scaffold(
@@ -67,12 +67,12 @@ class _HomeScreen extends State<HomeScreen> {
                       }
                   )
               ));
-              completed.add(document['isCompleted']);
+              assignedIDs.add(document['doerAssigned']);
             });
 
             if (jobs.isEmpty) {
               for (int i = 0; i < base.length; i++) {
-                if (!completed[i] && !jobs.contains(base[i])) {
+                if (assignedIDs[i] == null && !jobs.contains(base[i])) {
                   jobs.add(base[i]);
                 }
               }
