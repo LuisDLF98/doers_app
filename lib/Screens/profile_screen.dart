@@ -120,9 +120,6 @@ class _ProfileScreen extends State<ProfileScreen> {
                               ProfileReviewsScreen(argmts: args)));
                 },
               ),
-              SizedBox(
-                height: 100,
-              ),
             ],
           ),
         ),

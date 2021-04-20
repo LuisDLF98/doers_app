@@ -236,7 +236,7 @@ class _NavigationScreen extends State<NavigationScreen> {
 
                           'Distance: ' +  dis.toStringAsFixed(2) + ' Miles',
                           style: TextStyle(
-                            fontSize: 30,
+                            fontSize: 28,
                             fontWeight: FontWeight.bold,
                           ),
 
