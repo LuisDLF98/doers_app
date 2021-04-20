@@ -3,6 +3,10 @@ import 'package:doers_app/Components/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:doers_app/Screens/welcome_screen.dart';
+import 'package:doers_app/globals.dart';
+import 'package:doers_app/Screens/home_screen.dart';
+import 'package:doers_app/Screens/my_home_page_screen.dart';
 
 import '../constants.dart';
 
@@ -29,6 +33,10 @@ class _SettingsScreen extends State<SettingsScreen> {
   String city;
   String state;
   String zipCode;
+  var cb;
+  var ct;
+  var ci;
+
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -186,11 +194,29 @@ class _SettingsScreen extends State<SettingsScreen> {
           );
         });
   }
-
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(nightMode){
+      cb = color[600];
+      ct = color[300];
+      ci = color[300];
+    }
+    else{
+      cb = color[400];
+      ct = color[700];
+      ci = color[200];
+    }
+  }
+  @override
+
+
+
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     return Scaffold(
+      //backgroundColor: cb,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -201,7 +227,7 @@ class _SettingsScreen extends State<SettingsScreen> {
         // in the middle of the parent.
         child: SettingsList(
 
-          backgroundColor: fromHex('#cfd8dc'),
+          backgroundColor: cb,
           sections: [
             SettingsSection(
               title: 'General',
@@ -210,14 +236,47 @@ class _SettingsScreen extends State<SettingsScreen> {
               tiles: [
                   SettingsTile(
                     title: 'Address',
-                    leading: Icon(Icons.house),
+                    titleTextStyle: TextStyle(color: ct),
+                    leading: Icon(Icons.house, color: ci),
                     onPressed: (BuildContext context) async {
                       await showEditAddressDialog(context, arguments);
                     },),
                   SettingsTile.switchTile(title: 'Dark Mode',
-                      leading: Icon(Icons.lightbulb_outline),
-                      onToggle: (bool val){},
-                      switchValue: val),
+                      titleTextStyle: TextStyle(color: ct),
+                      leading: Icon(Icons.lightbulb_outline,
+                      color: ci,),
+                      onToggle: (bool value){
+                        setState(() {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) =>
+                                  WelcomeScreen()));
+                          val = value;
+                          nightMode = val;
+                          print(nightMode);
+                          if(nightMode){
+                            cb = color[600];
+                            ct = color[300];
+                            ci = color[300];
+                          }
+                          else{
+                            cb = color[400];
+                            ct = color[700];
+                            ci = color[200];
+                          }
+
+
+//                          Navigator.push(
+//                            context,
+//                            MaterialPageRoute(
+//                              builder: (context) => WelcomeScreen(
+//                                nightMode: val,
+//                              ),
+//                            ),
+//                          );
+                        });
+                      },
+                      switchValue: nightMode),
               ],
 
             ),
@@ -226,10 +285,10 @@ class _SettingsScreen extends State<SettingsScreen> {
               titleTextStyle: TextStyle(color: fromHex('#2bbc7d'), fontWeight: FontWeight.bold, fontSize: 18),
               tiles: [
                 SettingsTile(
-                    title: 'Terms of Service', leading: Icon(Icons.description)),
+                    title: 'Terms of Service', leading: Icon(Icons.description, color: ci,), titleTextStyle: TextStyle(color: ct),),
                 SettingsTile(
-                    title: 'Open source licenses',
-                    leading: Icon(Icons.collections_bookmark)),
+                    title: 'Open source licenses', titleTextStyle: TextStyle(color: ct),
+                    leading: Icon(Icons.collections_bookmark, color: ci,)),
               ],
             ),
           ],
@@ -238,4 +297,5 @@ class _SettingsScreen extends State<SettingsScreen> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
 }

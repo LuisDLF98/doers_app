@@ -7,6 +7,7 @@ import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
 import 'package:doers_app/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:doers_app/globals.dart';
 
 class MyJobsScreen extends StatefulWidget {
   MyJobsScreen({Key key}) : super(key: key);
@@ -74,6 +75,24 @@ Future<List<ListTile>> loadJobs(
 class _MyJobsScreen extends State<MyJobsScreen> {
   // This variable keeps track of what list to show the user based on the four choices presented
   final List<ListTile> currentList = [];
+  var cb;
+  var ct;
+  var barC;
+  void initState() {
+    super.initState();
+
+    if(nightMode){
+      cb = color[600];
+      ct = color[300];
+      barC = color[650];
+    }
+    else{
+      cb = color[400];
+      ct = color[700];
+      barC=color[300];
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +111,7 @@ class _MyJobsScreen extends State<MyJobsScreen> {
     ));
 
     return Scaffold(
+      backgroundColor: cb,
         //drawer: NavDrawer(),
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -115,8 +135,8 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    primary: color[100],
-                                    backgroundColor: color[300],
+                                    primary: ct,
+                                    backgroundColor: barC,
                                   ),
                                   child: Text('Requested'),
                                   onPressed: () async {
@@ -140,10 +160,11 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    primary: color[100],
-                                    backgroundColor: color[300],
+                                    primary: ct,
+                                    backgroundColor: barC,
                                   ),
                                   child: Text('Done'),
+
                                   onPressed: () async {
                                     doneJobs = await loadJobs(
                                         1, arguments['userInfo'], context);
@@ -168,8 +189,8 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    primary: color[100],
-                                    backgroundColor: color[300],
+                                    primary: ct,
+                                    backgroundColor: barC,
                                   ),
                                   child: Text('In Progress'),
                                   onPressed: () async {
@@ -192,8 +213,8 @@ class _MyJobsScreen extends State<MyJobsScreen> {
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    primary: color[100],
-                                    backgroundColor: color[300],
+                                    primary: ct,
+                                    backgroundColor: barC,
                                   ),
                                   child: Text('Completed'),
                                   onPressed: () async {

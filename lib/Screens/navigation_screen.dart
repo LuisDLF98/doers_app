@@ -9,7 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:doers_app/Components/hex_colors.dart';
-
+import 'package:doers_app/globals.dart';
 class NavigationScreen extends StatefulWidget {
 
   String value;
@@ -54,12 +54,12 @@ class _NavigationScreen extends State<NavigationScreen> {
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
 
+
   initState() {
     super.initState();
     //loading = true;
     getUserLocation();
     //print("dest " + value);
-
   }
 
   double distance(lat1, lon1, lat2, lon2) {
@@ -193,6 +193,7 @@ class _NavigationScreen extends State<NavigationScreen> {
             lat == null || lng == null ? Container() :
             GoogleMap(
                 mapType: MapType.normal,
+
                 myLocationButtonEnabled: true,
                 myLocationEnabled: true,
                 polylines: polylineSet,

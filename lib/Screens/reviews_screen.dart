@@ -4,6 +4,7 @@ import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Components/rounded_button.dart';
 import 'package:intl/intl.dart';
 import 'package:doers_app/constants.dart';
+import 'package:doers_app/globals.dart';
 
 class ReviewsScreen extends StatefulWidget {
   ReviewsScreen({Key key, this.reviewer, this.jobID}) : super(key: key);
@@ -27,6 +28,30 @@ class _ReviewsScreen extends State<ReviewsScreen> {
   _ReviewsScreen(this.reviewer, this.jobID);
   String reviewer;
   String jobID;
+  var cb;
+  var textFieldC;
+  var hintC;
+  var textC;
+  var ic;
+  void initState() {
+    super.initState();
+
+    if(nightMode){
+      cb = color[600];
+      textFieldC = color[650];
+      hintC=color[500];
+      textC=color[300];
+      ic = color[300];
+    }
+    else{
+      cb = color[400];
+      textFieldC=color[300];
+      hintC= color[500];
+      textC=color[700];
+      ic = color[200];
+
+    }
+  }
 
 
   @override
@@ -37,6 +62,7 @@ class _ReviewsScreen extends State<ReviewsScreen> {
     int rating;
 
     return Scaffold(
+      backgroundColor: cb,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -52,6 +78,7 @@ class _ReviewsScreen extends State<ReviewsScreen> {
                 height: 48.0,
               ),
               TextFormField(
+                style: TextStyle(color: textC),
                 keyboardType: TextInputType.multiline,
                 maxLines: 15,
                 onChanged: (value) {
@@ -59,8 +86,12 @@ class _ReviewsScreen extends State<ReviewsScreen> {
                   review = value;
                 },
                 decoration: InputDecoration(
-                  icon: Icon(Icons.article),
+                  fillColor: textFieldC,
+                  filled: true,
+                  icon: Icon(Icons.article, color: ic),
                   hintText: 'Enter your review here',
+                  hintStyle: TextStyle(color: hintC),
+
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                   border: OutlineInputBorder(
@@ -86,14 +117,18 @@ class _ReviewsScreen extends State<ReviewsScreen> {
                 height: 12.0,
               ),
               TextFormField(
+                style: TextStyle(color: textC),
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   //Do something with the user input.
                   rating = int.parse(value);
                 },
                 decoration: InputDecoration(
-                  icon: Icon(Icons.star),
+                  fillColor: textFieldC,
+                  filled: true,
+                  icon: Icon(Icons.star, color: ic),
                   hintText: '# of Stars',
+                  hintStyle: TextStyle(color: hintC),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                   border: OutlineInputBorder(
