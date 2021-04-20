@@ -21,7 +21,6 @@ class _ProfileScreen extends State<ProfileScreen> {
   _ProfileScreen(this.args);
   Map args;
   var cb;
-  // TODO: Guide - 'ID' = db ID, 'name' = First + Last name, 'email' = email, 'image' = Profile image
 
   void initState() {
     super.initState();

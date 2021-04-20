@@ -37,156 +37,183 @@ class _SettingsScreen extends State<SettingsScreen> {
   var ct;
   var ci;
 
-
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> showEditAddressDialog(BuildContext context, Map args) async {
-
-    return await showDialog(context: context,
-        builder: (context){
-
-          final TextEditingController _zipcodeController = TextEditingController();
-          final TextEditingController _stateController = TextEditingController();
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          final TextEditingController _zipcodeController =
+              TextEditingController();
+          final TextEditingController _stateController =
+              TextEditingController();
           final TextEditingController _cityController = TextEditingController();
-          final TextEditingController _streetController = TextEditingController();
+          final TextEditingController _streetController =
+              TextEditingController();
           return AlertDialog(
             content: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("Enter your new address"),
-                  Padding(padding: const EdgeInsets.symmetric(vertical: 15.0)),
-                  TextFormField(
-                    controller: _streetController,
-                    validator: (value){
-                      return value.isNotEmpty ? null : "Street address needed!";
-                    },
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.house),
-                      hintText: 'Street address',
-                      contentPadding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                key: _formKey,
+                child: Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Text("Enter your new address"),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15.0)),
+                      TextFormField(
+                        controller: _streetController,
+                        validator: (value) {
+                          return value.isNotEmpty
+                              ? null
+                              : "Street address needed!";
+                        },
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.house),
+                          hintText: 'Street address',
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: color[50], width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: color[100], width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          streetAddress = value;
+                        },
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: color[50], width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      SizedBox(
+                        height: 20.0,
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: color[100], width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      TextFormField(
+                        controller: _cityController,
+                        validator: (value) {
+                          return value.isNotEmpty ? null : "City needed!";
+                        },
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.location_city),
+                          hintText: 'City',
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: color[50], width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: color[100], width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          city = value;
+                        },
                       ),
-                    ),
-                    onChanged: (value){
-                      streetAddress = value;
-                    },
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      TextFormField(
+                        controller: _stateController,
+                        validator: (value) {
+                          return value.isNotEmpty ? null : "State needed!";
+                        },
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.art_track),
+                          hintText: 'State',
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: color[50], width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: color[100], width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          state = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      TextFormField(
+                        controller: _zipcodeController,
+                        validator: (value) {
+                          return value.isNotEmpty ? null : "Zip code needed!";
+                        },
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.location_on),
+                          hintText: 'Zip code',
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: color[50], width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: color[100], width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          zipCode = value;
+                        },
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  TextFormField(
-                    controller: _cityController,
-                    validator: (value){
-                      return value.isNotEmpty ? null: "City needed!";
-                    },
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.location_city),
-                      hintText: 'City',
-                      contentPadding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: color[50], width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: color[100], width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      ),
-                    ),
-                    onChanged: (value){
-                      city = value;
-                    },
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  TextFormField(
-                    controller: _stateController,
-                    validator: (value){
-                      return value.isNotEmpty ? null: "State needed!";
-                    },
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.art_track),
-                      hintText: 'State',
-                      contentPadding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: color[50], width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: color[100], width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      ),
-                    ),
-                    onChanged: (value){
-                      state = value;
-                    },
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  TextFormField(
-                    controller: _zipcodeController,
-                    validator: (value){
-                      return value.isNotEmpty ? null: "Zip code needed!";
-                    },
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.location_on),
-                      hintText: 'Zip code',
-                      contentPadding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: color[50], width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: color[100], width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      ),
-                    ),
-                    onChanged: (value){
-                      zipCode = value;
-                    },
-                  ),
-
-                ],
-              ),
-            ),
+                )),
             actions: <Widget>[
               TextButton(
-                  onPressed: (){
-                    if(_formKey.currentState.validate()){
-                        final firestoreInstance = FirebaseFirestore.instance;
-                        DocumentReference userRef = firestoreInstance.collection('Users').doc(args['userInfo'][0]);
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      final firestoreInstance = FirebaseFirestore.instance;
+                      DocumentReference userRef = firestoreInstance
+                          .collection('Users')
+                          .doc(args['userInfo'][0]);
 
-                            userRef.update(
-                            {"streetAddress": streetAddress,
-                            "city": city,
-                            "state": state,
-                            "zipCode": zipCode,});
-                        Navigator.of(context).pop();
+                      userRef.update({
+                        "streetAddress": streetAddress,
+                        "city": city,
+                        "state": state,
+                        "zipCode": zipCode,
+                      });
+                      Navigator.of(context).pop();
                     }
                   },
                   child: Text('Submit'))
@@ -194,25 +221,23 @@ class _SettingsScreen extends State<SettingsScreen> {
           );
         });
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(nightMode){
+    if (nightMode) {
       cb = color[600];
       ct = color[300];
       ci = color[300];
-    }
-    else{
+    } else {
       cb = color[400];
       ct = color[700];
       ci = color[200];
     }
   }
+
   @override
-
-
-
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     return Scaffold(
@@ -226,45 +251,83 @@ class _SettingsScreen extends State<SettingsScreen> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: SettingsList(
-
           backgroundColor: cb,
           sections: [
             SettingsSection(
               title: 'General',
-              titleTextStyle: TextStyle(color: fromHex('#2bbc7d'), fontWeight: FontWeight.bold, fontSize: 18
-              ),
+              titleTextStyle: TextStyle(
+                  color: fromHex('#2bbc7d'),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
               tiles: [
-                  SettingsTile(
-                    title: 'Address',
+                SettingsTile(
+                  title: 'Address',
+                  titleTextStyle: TextStyle(color: ct),
+                  leading: Icon(Icons.house, color: ci),
+                  onPressed: (BuildContext context) async {
+                    await showEditAddressDialog(context, arguments);
+                  },
+                ),
+                SettingsTile.switchTile(
+                    title: 'Dark Mode',
                     titleTextStyle: TextStyle(color: ct),
-                    leading: Icon(Icons.house, color: ci),
-                    onPressed: (BuildContext context) async {
-                      await showEditAddressDialog(context, arguments);
-                    },),
-                  SettingsTile.switchTile(title: 'Dark Mode',
-                      titleTextStyle: TextStyle(color: ct),
-                      leading: Icon(Icons.lightbulb_outline,
-                      color: ci,),
-                      onToggle: (bool value){
-                        setState(() {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) =>
-                                  WelcomeScreen()));
-                          val = value;
-                          nightMode = val;
-                          print(nightMode);
-                          if(nightMode){
-                            cb = color[600];
-                            ct = color[300];
-                            ci = color[300];
-                          }
-                          else{
-                            cb = color[400];
-                            ct = color[700];
-                            ci = color[200];
-                          }
+                    leading: Icon(
+                      Icons.lightbulb_outline,
+                      color: ci,
+                    ),
+                    onToggle: (bool value) {
+                      setState(() {
+                        showDialog(
+                          context: context,
+                            builder: ((context) {
+                          return AlertDialog(
+                            title: Text(
+                                "This action will return you to the login screen.\n\nAre you ok with this?"),
+                            actions: <Widget>[
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  primary: color[200],
+                                  backgroundColor: color[300],
+                                ),
+                                child: Text('Yes'),
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              WelcomeScreen()));
+                                  val = value;
+                                  nightMode = val;
+                                  print(nightMode);
+                                  if (nightMode) {
+                                    cb = color[600];
+                                    ct = color[300];
+                                    ci = color[300];
+                                  } else {
+                                    cb = color[400];
+                                    ct = color[700];
+                                    ci = color[200];
+                                  }
 
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text('Dark Mode Initialized')));
+                                }, // onPressed()
+                              ),
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  primary: color[200],
+                                  backgroundColor: color[300],
+                                ),
+                                child: Text('No'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        }));
 
 //                          Navigator.push(
 //                            context,
@@ -274,28 +337,38 @@ class _SettingsScreen extends State<SettingsScreen> {
 //                              ),
 //                            ),
 //                          );
-                        });
-                      },
-                      switchValue: nightMode),
+                      });
+                    },
+                    switchValue: nightMode),
               ],
-
             ),
             SettingsSection(
               title: 'Misc',
-              titleTextStyle: TextStyle(color: fromHex('#2bbc7d'), fontWeight: FontWeight.bold, fontSize: 18),
+              titleTextStyle: TextStyle(
+                  color: fromHex('#2bbc7d'),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
               tiles: [
                 SettingsTile(
-                    title: 'Terms of Service', leading: Icon(Icons.description, color: ci,), titleTextStyle: TextStyle(color: ct),),
+                  title: 'Terms of Service',
+                  leading: Icon(
+                    Icons.description,
+                    color: ci,
+                  ),
+                  titleTextStyle: TextStyle(color: ct),
+                ),
                 SettingsTile(
-                    title: 'Open source licenses', titleTextStyle: TextStyle(color: ct),
-                    leading: Icon(Icons.collections_bookmark, color: ci,)),
+                    title: 'Open source licenses',
+                    titleTextStyle: TextStyle(color: ct),
+                    leading: Icon(
+                      Icons.collections_bookmark,
+                      color: ci,
+                    )),
               ],
             ),
           ],
         ),
-
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-
 }

@@ -83,11 +83,12 @@ class _HomeScreen extends State<HomeScreen> {
               DateTime dateTime = time.toDate();
               base.add(Card(
                   child: ListTile(
+                      tileColor: ct,
                       leading: jobCategoryIcon[document['jobType']],
 
-                      title: new Text(document['jobType']),
-                      subtitle: new Text(document['description']),
-                      trailing: Text("${DateFormat.MMMd().format(dateTime)}"),
+                      title: new Text(document['jobType'], style: TextStyle(color:tc)),
+                      subtitle: new Text(document['description'], style: TextStyle(color:ts)),
+                      trailing: new Text("${DateFormat.MMMd().format(dateTime)}",  style: TextStyle(color:ts)),
                       // trailing: new Text(document['date']),
                       onTap: (){
                         Navigator.pushNamed(context, JobDetailScreen.id, arguments: {'JobID': document.id, 'userInfo': loginInfo});
