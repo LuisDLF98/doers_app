@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/conversations_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:doers_app/globals.dart';
 
 class JobDetailScreen extends StatefulWidget {
   JobDetailScreen({Key key, this.title}) : super(key: key);
@@ -19,6 +20,30 @@ class JobDetailScreen extends StatefulWidget {
 }
 
 class _JobDetailScreen extends State<JobDetailScreen> {
+  var cb;
+  var cardC;
+  var ct;
+  var ac;
+  var sc;
+  void initState() {
+    super.initState();
+
+    if(nightMode){
+      cb = color[600];
+      cardC = color[650];
+      ct = color[300];
+      ac = color[300];
+      sc = color[600];
+    }
+    else{
+      cb = color[400];
+      cardC = color[300];
+      ct = color[700];
+      ac = color[600];
+      sc = color[500];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
@@ -37,7 +62,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
             );
           }
           if (snapshot.hasError) {
-            return Text("Something went wrong");
+            return Text("Something went wrong", style: TextStyle(color: ct));
           }
           if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data = snapshot.data.data();
@@ -49,13 +74,16 @@ class _JobDetailScreen extends State<JobDetailScreen> {
             DateTime endTime = end.toDate();
 
             return Container(
-              color: color[300],
+              color: cardC,
               child: CustomScrollView(slivers: <Widget>[
                 SliverAppBar(
                   expandedHeight: 150.0,
-                  backgroundColor: color[500],
+                  backgroundColor: sc,
+                  leading: BackButton(
+                    color: ct
+                  ),
                   flexibleSpace: FlexibleSpaceBar(
-                    title: Text("${data['jobType']}"),
+                    title: Text("${data['jobType']}", style: TextStyle(color: ct)),
                   ),
                 ),
                 SliverToBoxAdapter(
@@ -72,7 +100,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                           OutlinedButton(
                                             style: OutlinedButton.styleFrom(
                                               primary: color[200],
-                                              backgroundColor: color[300],
+                                              backgroundColor: cardC,
                                             ),
                                             child: Text('Message'),
                                             onPressed: () async {
@@ -216,7 +244,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                           OutlinedButton(
                                             style: OutlinedButton.styleFrom(
                                               primary: color[200],
-                                              backgroundColor: color[300],
+                                              backgroundColor: cardC,
                                             ),
                                             child: Text('Profile'),
                                             onPressed: () async {
@@ -261,7 +289,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                           OutlinedButton(
                                             style: OutlinedButton.styleFrom(
                                               primary: color[200],
-                                              backgroundColor: color[300],
+                                              backgroundColor: cardC,
                                             ),
                                             child: Text('Navigate'),
                                             onPressed: () {
@@ -280,7 +308,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                             child: OutlinedButton(
                                               style: OutlinedButton.styleFrom(
                                                 primary: color[200],
-                                                backgroundColor: color[300],
+                                                backgroundColor: cardC,
                                               ),
                                               child: Text('Accept'),
                                               onPressed: () {
@@ -299,10 +327,10 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                               primary:
                                                                   color[200],
                                                               backgroundColor:
-                                                                  color[300],
+                                                              cardC,
                                                             ),
                                                             child:
-                                                                Text('Accept'),
+                                                                Text('Accept', style: TextStyle(color: ct)),
                                                             onPressed: () {
                                                               tasks
                                                                   .doc(arguments[
@@ -322,7 +350,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                                   .showSnackBar(
                                                                       SnackBar(
                                                                           content:
-                                                                              Text('Task Accepted!')));
+                                                                              Text('Task Accepted!', style: TextStyle(color: ct))));
                                                               Navigator.pop(
                                                                   context);
                                                               Navigator.pop(
@@ -336,10 +364,10 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                               primary:
                                                                   color[200],
                                                               backgroundColor:
-                                                                  color[300],
+                                                              cardC,
                                                             ),
                                                             child:
-                                                                Text('Cancel'),
+                                                                Text('Cancel', style: TextStyle(color: ct)),
                                                             onPressed: () {
                                                               Navigator.of(
                                                                       context)
@@ -358,9 +386,9 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                             child: OutlinedButton(
                                               style: OutlinedButton.styleFrom(
                                                 primary: color[200],
-                                                backgroundColor: color[300],
+                                                backgroundColor: cardC,
                                               ),
-                                              child: Text('Complete'),
+                                              child: Text('Complete', style: TextStyle(color: ct)),
                                               onPressed: () {
                                                 showDialog(
                                                     context: context,
@@ -368,7 +396,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                         (BuildContext context) {
                                                       return AlertDialog(
                                                         title: Text(
-                                                            "Are you sure you want to mark this task as completed?"),
+                                                            "Are you sure you want to mark this task as completed?", style: TextStyle(color: ct)),
                                                         actions: <Widget>[
                                                           OutlinedButton(
                                                             style:
@@ -377,10 +405,10 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                               primary:
                                                                   color[200],
                                                               backgroundColor:
-                                                                  color[300],
+                                                              cardC,
                                                             ),
                                                             child: Text(
-                                                                'Complete'),
+                                                                'Complete', style: TextStyle(color: ct)),
                                                             onPressed: () {
                                                               tasks
                                                                   .doc(arguments[
@@ -399,7 +427,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                                   .showSnackBar(
                                                                       SnackBar(
                                                                           content:
-                                                                              Text('Task Completed!')));
+                                                                              Text('Task Completed!', style: TextStyle(color: ct))));
                                                               Navigator.pop(
                                                                   context);
                                                               Navigator.pop(
@@ -413,7 +441,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                               primary:
                                                                   color[200],
                                                               backgroundColor:
-                                                                  color[300],
+                                                              cardC,
                                                             ),
                                                             child:
                                                                 Text('Cancel'),
@@ -436,7 +464,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                             child: OutlinedButton(
                                                 style: OutlinedButton.styleFrom(
                                                   primary: color[200],
-                                                  backgroundColor: color[300],
+                                                  backgroundColor: cardC,
                                                 ),
                                                 child: Text('Review'),
                                                 onPressed: () {
@@ -463,48 +491,52 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                 SliverToBoxAdapter(
                     child: Center(
                         child: Card(
+                          color: cardC,
                             child: ListTile(
                   leading: Icon(
                     Icons.description,
                     color: color[100],
                   ),
-                  title: Text("${data['description']}"),
+                  title: Text("${data['description']}", style: TextStyle(color: ct)),
                 )))),
                 SliverToBoxAdapter(
                     child: Center(
                         child: Card(
+                            color: cardC,
                             child: ListTile(
                   leading: Icon(
                     Icons.streetview,
                     color: color[100],
                   ),
-                  title: Text("${data['address']}"),
+                  title: Text("${data['address']}", style: TextStyle(color: ct)),
                 )))),
                 SliverToBoxAdapter(
                     child: Center(
                         child: Card(
+                            color: cardC,
                             child: ListTile(
                   leading: Icon(
                     Icons.monetization_on,
                     color: color[100],
                   ),
-                  title: Text("${data['payment']}"),
+                  title: Text("${data['payment']}", style: TextStyle(color: ct)),
                 )))),
                 SliverToBoxAdapter(
                     child: Center(
                         child: Card(
+                            color: cardC,
                             child: ListTile(
                   leading: Icon(
                     Icons.calendar_today,
                     color: color[100],
                   ),
-                  title: Text("${DateFormat.yMMMd().format(dateTime)} from ${DateFormat.jm().format(dateTime)} - ${DateFormat.jm().format(endTime)}"),
+                  title: Text("${DateFormat.yMMMd().format(dateTime)} from ${DateFormat.jm().format(dateTime)} - ${DateFormat.jm().format(endTime)}", style: TextStyle(color: ct)),
                 ))))
               ]),
             );
             // return Text("Job Type, Then descrpition: ${data['jobType']} ${data['description']}");
           }
-          return Text("failed");
+          return Text("failed", style: TextStyle(color: ct));
         });
   }
 }

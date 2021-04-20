@@ -79,7 +79,7 @@ class _MessagingScreen extends State<MessagingScreen> {
                       return new Text("Loading",style: TextStyle(color: ct));
                     }
                     var document = snapshot.data;
-                    return new Text('${document["firstName"]} ${document["lastName"]}',style: TextStyle(color: ct));
+                    return new Text('${document["firstName"]} ${document["lastName"]}', style: TextStyle(color: ct));
                   }
               );
             }
