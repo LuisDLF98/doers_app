@@ -53,9 +53,10 @@ class _SettingsScreen extends State<SettingsScreen> {
           return AlertDialog(
             content: Form(
                 key: _formKey,
-                child: Flexible(
-                  child: ListView(
-                    shrinkWrap: true,
+               // child: Flexible(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+
                     children: [
                       Text("Enter your new address"),
                       Padding(
@@ -197,7 +198,7 @@ class _SettingsScreen extends State<SettingsScreen> {
                       ),
                     ],
                   ),
-                )),
+                ),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
