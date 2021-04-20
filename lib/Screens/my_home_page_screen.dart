@@ -3,6 +3,8 @@ import 'package:doers_app/Screens/home_screen.dart';
 import 'package:doers_app/Screens/conversations_screen.dart';
 import 'package:doers_app/Screens/navigation_screen.dart';
 import 'package:doers_app/Screens/details_screen.dart';
+import 'package:doers_app/globals.dart';
+import 'package:doers_app/Components/hex_colors.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title, this.userData}) : super(key: key);
@@ -27,9 +29,24 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentTab = 0;
   int pageNum = 0;
   List<String> loginInfo;
-
+  var cb;
+  var bb;
   _MyHomePageState(this.loginInfo);
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(nightMode){
+      cb = color[600];
+      bb = color[650];
+    }
+    else{
+      cb = color[400];
+      bb = color[300];
+    }
+
+  }
   void _selectTab(int tab) {
     setState(() {
       _currentTab = tab;
@@ -63,7 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+
+      backgroundColor: cb,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: bb,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             label: 'Home',
@@ -84,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
+
         child: IndexedStack(
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
@@ -110,5 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       floatingActionButton: _getFAB(),
     );
+
+
   }
 }

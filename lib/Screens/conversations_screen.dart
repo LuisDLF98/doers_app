@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:doers_app/Components/update_image.dart';
 import 'package:intl/intl.dart';
+import 'package:doers_app/globals.dart';
 
 class MessagingScreen extends StatefulWidget {
   MessagingScreen({Key key, this.userData}) : super(key: key);
@@ -35,13 +35,29 @@ class _MessagingScreen extends State<MessagingScreen> {
 
   List<String> loginInfo;
   _MessagingScreen(this.loginInfo);
+  var cb;
+  var cardC;
+  var ct;
+  void initState() {
+    super.initState();
+
+    if(nightMode){
+      cb = color[600];
+      cardC = color[650];
+      ct = color[300];
+    }
+    else{
+      cb = color[400];
+      cardC = color[300];
+      ct = color[700];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-
-      backgroundColor: color[500],
+      backgroundColor: cb,
       drawer: NavDrawer(userData: loginInfo),
       appBar: AppBar(
         title: Text('Conversations'),
@@ -60,10 +76,10 @@ class _MessagingScreen extends State<MessagingScreen> {
                   stream: FirebaseFirestore.instance.collection('Users').doc(id).snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return new Text("Loading");
+                      return new Text("Loading",style: TextStyle(color: ct));
                     }
                     var document = snapshot.data;
-                    return new Text('${document["firstName"]} ${document["lastName"]}');
+                    return new Text('${document["firstName"]} ${document["lastName"]}',style: TextStyle(color: ct));
                   }
               );
             }
@@ -85,11 +101,12 @@ class _MessagingScreen extends State<MessagingScreen> {
 
                 if (users.contains('${loginInfo[0]}')) {
                   return Card(
+                      color: cardC,
                       child: ListTile(
                           leading: getImage(contact),
                           title: getName(contact),
-                          subtitle: new Text(document['lastMessage']['content']),
-                          trailing: new Text('${DateFormat.MMMd().format(date)}\n${DateFormat.jm().format(date)}'),
+                          subtitle: new Text(document['lastMessage']['content'], style: TextStyle(color: ct)),
+                          trailing: new Text('${DateFormat.MMMd().format(date)}\n${DateFormat.jm().format(date)}', style: TextStyle(color: ct)),
                           onTap: () {
                             Navigator.push(
                               context,

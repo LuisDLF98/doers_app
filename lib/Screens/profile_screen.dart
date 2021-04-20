@@ -6,6 +6,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:doers_app/Components/rounded_button.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/profile_reviews_screen.dart';
+import 'package:doers_app/globals.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key, this.args}) : super(key: key);
@@ -19,13 +20,25 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreen extends State<ProfileScreen> {
   _ProfileScreen(this.args);
   Map args;
+  var cb;
 
-  // TODO: Guide - 'ID' = db ID, 'name' = First + Last name, 'email' = email, 'image' = Profile image
+  void initState() {
+    super.initState();
+
+    if(nightMode){
+      cb = color[600];
+    }
+    else{
+      cb = color[400];
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: cb,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.

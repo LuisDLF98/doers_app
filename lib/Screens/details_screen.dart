@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:doers_app/globals.dart';
 
 
 class DetailsScreen extends StatefulWidget {
@@ -51,12 +52,32 @@ class _DetailsScreen extends State<DetailsScreen> {
 
   @override
 
+  var cb;
+  var fillC;
+  var textC;
+  var ic;
+  var hintTextC;
 
   void initState() {
     super.initState();
     _controller.addListener(() {
       _onChanged();
     });
+    if(nightMode){
+      cb = color[600];
+      fillC = color[650];
+      textC = color[300];
+      ic = color[300];
+      hintTextC = color[400];
+    }
+    else{
+      cb = color[400];
+      fillC = color[300];
+      textC = color[600];
+      ic = color[200];
+      hintTextC= color[500];
+
+    }
   }
 
   _onChanged() {
@@ -118,7 +139,7 @@ class _DetailsScreen extends State<DetailsScreen> {
     }
 
     return Scaffold(
-      backgroundColor: color[500],
+      backgroundColor: cb,
       appBar: AppBar(
         title: Text('Create Job'),
       ),
@@ -134,6 +155,7 @@ class _DetailsScreen extends State<DetailsScreen> {
                     height: 10.0,
                   ),
                   TextFormField(
+                    style: TextStyle(color: textC),
                     controller: _controller,
                     onChanged: (value) {
                       isVis=true;
@@ -143,10 +165,13 @@ class _DetailsScreen extends State<DetailsScreen> {
                     },
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: color[300],
+                      fillColor: fillC,
                       //focusColor: color[100],
-                      icon: Icon(Icons.location_pin),
+                      icon: Icon(Icons.location_pin,
+                      color: ic,),
                       hintText: 'Address of this job',
+                      hintStyle: TextStyle(color: hintTextC),
+                      //labelStyle: TextStyle(color: textC),
                       contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                       border: OutlineInputBorder(
@@ -176,7 +201,8 @@ class _DetailsScreen extends State<DetailsScreen> {
                       //controller: _controller,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(_placeList[index]["description"]),
+                          title: Text(_placeList[index]["description"], style: TextStyle(color: textC),),
+
                           onTap: () {
                             //print(_placeList[index]["description"]);
                             setState(() {
@@ -202,10 +228,11 @@ class _DetailsScreen extends State<DetailsScreen> {
                     },
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: color[300],
+                      fillColor: fillC,
                       //focusColor: color[100],
-                      icon: Icon(Icons.attach_money),
+                      icon: Icon(Icons.attach_money, color: ic),
                       hintText: 'Payment offered',
+                      hintStyle: TextStyle(color: hintTextC),
                       contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                       border: OutlineInputBorder(
@@ -241,11 +268,11 @@ class _DetailsScreen extends State<DetailsScreen> {
                     decoration: InputDecoration(
 
                       filled: true,
-                      fillColor: color[300],
+                      fillColor: fillC,
                       //focusColor: color[100],
-                      icon: Icon(Icons.tag),
+                      icon: Icon(Icons.tag, color:ic),
                       hintText: 'Job type',
-
+                      hintStyle: TextStyle(color: hintTextC),
                       contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                       border: OutlineInputBorder(
@@ -273,10 +300,11 @@ class _DetailsScreen extends State<DetailsScreen> {
                     },
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: color[300],
+                      fillColor: fillC,
                       //focusColor: color[100],
-                      icon: Icon(Icons.description),
+                      icon: Icon(Icons.description, color: ic),
                       hintText: 'Description',
+                      hintStyle: TextStyle(color: hintTextC),
                       contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                       border: OutlineInputBorder(
@@ -312,10 +340,11 @@ class _DetailsScreen extends State<DetailsScreen> {
                     },
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: color[300],
+                      fillColor: fillC,
                       //focusColor: color[100],
-                      icon: Icon(Icons.calendar_today_rounded),
+                      icon: Icon(Icons.calendar_today_rounded, color: ic),
                       hintText: 'Select date',
+                      hintStyle: TextStyle(color: hintTextC),
                       contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                       border: OutlineInputBorder(
@@ -409,10 +438,11 @@ class _DetailsScreen extends State<DetailsScreen> {
                     },
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: color[300],
+                      fillColor: fillC,
                       //focusColor: color[100],
-                      icon: Icon(Icons.watch_later),
+                      icon: Icon(Icons.watch_later, color: ic),
                       hintText: 'Select start/end time',
+                      hintStyle: TextStyle(color: hintTextC),
                       contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                       border: OutlineInputBorder(

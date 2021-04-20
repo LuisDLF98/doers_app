@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:doers_app/globals.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key, this.userData}) : super(key: key);
@@ -28,14 +29,40 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreen extends State<HomeScreen> {
   List<String> loginInfo;
   _HomeScreen(this.loginInfo);
+  var ct;
+  var tc;
+  var cb;
+  var ts;
+  var ic;
+  void initState() {
+    super.initState();
+    if(nightMode){
+      cb = color[600];
+      ct = color[650];
+      tc = color[300];
+      ts = color[300];
+      ic = color[200];
+    }
+    else{
+      cb = color[500];
+      ct = color[300];
+      tc = color[700];
+      ts = color[700];
+      ic = color[200];
 
-  @override
+
+    }
+  }
+
+
+@override
   Widget build(BuildContext context) {
     List<Card> base = [];
     List<String> assignedIDs = [];
     List<Card> jobs = [];
 
     return Scaffold(
+      backgroundColor: cb,
       drawer: NavDrawer(userData: loginInfo),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -56,11 +83,12 @@ class _HomeScreen extends State<HomeScreen> {
               DateTime dateTime = time.toDate();
               base.add(Card(
                   child: ListTile(
+                      tileColor: ct,
                       leading: jobCategoryIcon[document['jobType']],
 
-                      title: new Text(document['jobType']),
-                      subtitle: new Text(document['description']),
-                      trailing: Text("${DateFormat.MMMd().format(dateTime)}"),
+                      title: new Text(document['jobType'], style: TextStyle(color:tc)),
+                      subtitle: new Text(document['description'], style: TextStyle(color:ts)),
+                      trailing: new Text("${DateFormat.MMMd().format(dateTime)}",  style: TextStyle(color:ts)),
                       // trailing: new Text(document['date']),
                       onTap: (){
                         Navigator.pushNamed(context, JobDetailScreen.id, arguments: {'JobID': document.id, 'userInfo': loginInfo});
@@ -86,12 +114,13 @@ class _HomeScreen extends State<HomeScreen> {
              children: snapshot.data.docs.map<Widget>((document) {
                  return Card(
                    child: ListTile(
+                     tileColor: ct,
                      leading: Icon(
                        Icons.map,
-                       color: color[100],
+                       color: ic,
                      ),
-                     title: new Text(document['jobType']),
-                     subtitle: new Text(document['description']),
+                     title: new Text(document['jobType'], style: TextStyle(color:tc)),
+                     subtitle: new Text(document['description'], style: TextStyle(color:ts)),
                     // trailing: new Text(document['date']),
                        onTap: (){
                          Navigator.pushNamed(context, JobDetailScreen.id, arguments: {'JobID': document.id, 'userInfo': loginInfo});

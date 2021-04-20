@@ -6,6 +6,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Components/rounded_button.dart';
 import 'package:doers_app/constants.dart';
+import 'package:doers_app/globals.dart';
 
 class RegistrationFormScreen extends StatefulWidget {
   static const String id = 'registration_form_screen';
@@ -23,6 +24,31 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
   String state;
   String zipCode;
   String cellPhoneNumber;
+  var cb;
+  var fillC;
+  var textC;
+  var ic;
+  var hintTextC;
+
+  void initState() {
+    super.initState();
+
+    if(nightMode){
+      cb = color[600];
+      fillC = color[650];
+      textC = color[300];
+      ic = color[300];
+      hintTextC = color[400];
+    }
+    else{
+      cb = color[400];
+      fillC = color[300];
+      textC = color[600];
+      ic = color[200];
+      hintTextC= color[500];
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +57,7 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
 
     // TODO: Add input checking through regex (particularly for email address)
     return Scaffold(
-      backgroundColor: color[500],
+      backgroundColor: cb,
       appBar: AppBar(
         title: Text('Registration Details'),
       ),
@@ -58,13 +84,17 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   height: 48.0,
                 ),
                 TextFormField(
+                  style: TextStyle(color: textC),
                   onChanged: (value) {
                     //Do something with the user input.
                     firstName = value;
                   },
                   decoration: InputDecoration(
-                    icon: Icon(Icons.perm_identity),
+                    filled: true,
+                    fillColor: fillC,
+                    icon: Icon(Icons.perm_identity, color: ic),
                     hintText: 'First name',
+                    hintStyle: TextStyle(color: hintTextC),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -90,13 +120,17 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   height: 12.0,
                 ),
                 TextFormField(
+                  style: TextStyle(color: textC),
                   onChanged: (value) {
                     //Do something with the user input.
                     lastName = value;
                   },
                   decoration: InputDecoration(
-                    icon: Icon(Icons.perm_identity),
+                    filled: true,
+                    fillColor: fillC,
+                    icon: Icon(Icons.perm_identity, color: ic),
                     hintText: 'Last name',
+                    hintStyle: TextStyle(color: hintTextC),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -122,14 +156,18 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   height: 12.0,
                 ),
                 TextFormField(
+                  style: TextStyle(color: textC),
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (value) {
                     //Do something with the user input.
                     email= value;
                   },
                   decoration: InputDecoration(
-                    icon: Icon(Icons.email),
+                    filled: true,
+                    fillColor: fillC,
+                    icon: Icon(Icons.email, color: ic),
                     hintText: 'Email',
+                    hintStyle: TextStyle(color: hintTextC),
                     contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -157,13 +195,17 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   height: 12.0,
                 ),
                 TextFormField(
+                  style: TextStyle(color: textC),
                   onChanged: (value) {
                     //Do something with the user input.
                     streetAddress = value;
                   },
                   decoration: InputDecoration(
-                    icon: Icon(Icons.house),
+                    filled: true,
+                    fillColor: fillC,
+                    icon: Icon(Icons.house, color: ic),
                     hintText: 'Street address',
+                    hintStyle: TextStyle(color: hintTextC),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -189,13 +231,17 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   height: 12.0,
                 ),
                 TextFormField(
+                  style: TextStyle(color: textC),
                   onChanged: (value) {
                     //Do something with the user input.
                     city = value;
                   },
                   decoration: InputDecoration(
-                    icon: Icon(Icons.location_city),
+                    filled: true,
+                    fillColor: fillC,
+                    icon: Icon(Icons.location_city, color:ic),
                     hintText: 'City',
+                    hintStyle: TextStyle(color: hintTextC),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -221,13 +267,17 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   height: 12.0,
                 ),
                 TextFormField(
+                  style: TextStyle(color: textC),
                   onChanged: (value) {
                     //Do something with the user input.
                     state = value;
                   },
                   decoration: InputDecoration(
-                    icon: Icon(Icons.art_track),
+                    filled: true,
+                    fillColor: fillC,
+                    icon: Icon(Icons.art_track, color: ic),
                     hintText: 'State',
+                    hintStyle: TextStyle(color: hintTextC),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -253,13 +303,17 @@ class _RegistrationFormScreenState extends State<RegistrationFormScreen> {
                   height: 12.0,
                 ),
                 TextFormField(
+                  style: TextStyle(color: textC),
                   onChanged: (value) {
                     //Do something with the user input.
                     zipCode = value;
                   },
                   decoration: InputDecoration(
-                    icon: Icon(Icons.location_on),
+                    filled: true,
+                    fillColor: fillC,
+                    icon: Icon(Icons.location_on, color: ic),
                     hintText: 'Zip code',
+                    hintStyle: TextStyle(color: hintTextC),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(

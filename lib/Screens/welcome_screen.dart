@@ -7,9 +7,12 @@ import 'package:doers_app/Components/hex_colors.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:doers_app/Components/Authentication.dart';
 import 'my_home_page_screen.dart';
-
+import 'package:doers_app/globals.dart';
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
+
+//  bool nightMode;
+//  WelcomeScreen({Key key, this.nightMode}) : super(key: key);
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -17,8 +20,14 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
+
+//  bool nightMode;
+//  _WelcomeScreenState(this.nightMode);
+
   AnimationController controller;
   Animation animation;
+  var c;
+  var ct;
   @override
   void initState() {
     super.initState();
@@ -31,6 +40,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     controller.addListener(() {
       setState(() {});
     });
+    if(nightMode){
+      c = color[600];
+      ct = color[300];
+    }
+    else{
+      c = color[550];
+      ct = color[700];
+    }
   }
 
   @override
@@ -42,7 +59,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: color[500],
+      backgroundColor: c,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -63,6 +80,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   textStyle: TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
+                    color: ct,
                   ),
                 ),
               ],

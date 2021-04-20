@@ -14,5 +14,11 @@ Map<int, Color> color = {
   300: fromHex('#ffffff'), // white
   400: fromHex('#cfd8dc'), // light grey
   500: fromHex('#9ea7aa'), // dark grey
-  600: fromHex('#000000'), // black
+  600: fromHex('#181818'), // dark grey
+  650: fromHex('#404040'), // dark grey
+  700: fromHex('#000000'),
+  //700: fromHex('#000000'), // black
+
 };
+
+//9ea7aa
