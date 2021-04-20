@@ -21,9 +21,17 @@ class _ReviewDetailsScreen extends State<ReviewDetailsScreen> {
         future: reviews.doc(arguments['ReviewID']).get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
           if (snapshot.hasError) {
             return Text("Something went wrong");
-          } else {
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data = snapshot.data.data();
 
             return Container(
@@ -48,12 +56,9 @@ class _ReviewDetailsScreen extends State<ReviewDetailsScreen> {
                                 color: color[300],
                                 child: ListTile(
                                   title: Row(children: <Widget>[
-                                    Text(
-                                      'Rating: ',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color: color[600]
-                                    )),
+                                    Text('Rating: ',
+                                        style: TextStyle(
+                                            fontSize: 20, color: color[600])),
                                     RatingBarIndicator(
                                       rating: data['rating'].toDouble(),
                                       itemBuilder: (context, index) => Icon(
@@ -88,6 +93,7 @@ class _ReviewDetailsScreen extends State<ReviewDetailsScreen> {
               ]),
             );
           }
+          return Text("failed");
         } // builder
         );
   }
