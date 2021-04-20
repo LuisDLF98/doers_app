@@ -42,7 +42,6 @@ class _DetailsScreen extends State<DetailsScreen> {
   String timeRange;
   var txt = TextEditingController();
   var txt1 = TextEditingController();
-  Duration jobDuration = Duration(hours: 0, minutes: 0);
 
   var _controller = TextEditingController();
   var uuid = new Uuid();
@@ -103,8 +102,8 @@ class _DetailsScreen extends State<DetailsScreen> {
         builder: (context, child) {
           return Theme(
             data: ThemeData(
-              colorScheme: ColorScheme.highContrastLight(
-                primary: color[100],
+              colorScheme: ColorScheme.highContrastDark(
+                primary: color[200],
               ),
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
@@ -116,30 +115,6 @@ class _DetailsScreen extends State<DetailsScreen> {
         setState(() {
           widget.selectedDate = picked;
         });
-    }
-
-    _selectTime(BuildContext context) async {
-      final TimeOfDay newtime = await showTimePicker(
-        context: context,
-        initialTime: widget.selectedTime,
-        builder: (context, child) {
-          return Theme(
-            data: ThemeData(
-              colorScheme: ColorScheme.highContrastLight(
-                primary: color[100],
-              ),
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            child: child,
-          );
-        },
-      );
-
-      if (newtime != null) {
-        setState(() {
-          widget.selectedTime = newtime;
-        });
-      }
     }
 
     return Scaffold(
@@ -251,17 +226,26 @@ class _DetailsScreen extends State<DetailsScreen> {
                   SizedBox(
                     height: 20.0,
                   ),
-                  TextFormField(
-                    onChanged: (value) {
-                      //Do something with the user input.
-                      jobType = value;
-                    },
+                  DropdownButtonFormField(
+                    icon: Icon(Icons.arrow_drop_down, color: color[100]),
+                    items:["Yard Services","Plumbing","Electrical", 'Pet Services','Construction','Cleaning Services', 'Food Services', 'Other']
+                      .map((label)=> DropdownMenuItem(
+                      child: Text(label),
+                      value: label,
+                    ))
+                    .toList(),
+                    onChanged: (value){
+                    setState(() => jobType = value);
+                       },
+
                     decoration: InputDecoration(
+
                       filled: true,
                       fillColor: color[300],
                       //focusColor: color[100],
                       icon: Icon(Icons.tag),
                       hintText: 'Job type',
+
                       contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                       border: OutlineInputBorder(
@@ -357,9 +341,22 @@ class _DetailsScreen extends State<DetailsScreen> {
                     showCursor: true,
                     readOnly: true,
                     onTap: () async {
-
-                        TimeRange result = await showTimeRangePicker(
+                      TimeRange result = await showTimeRangePicker(
                         context: context,
+                        builder: (context, child) {
+                          return Theme(
+                            data: ThemeData(
+                              colorScheme: ColorScheme.highContrastDark(
+                                primary: color[100],
+                              ),
+                              visualDensity: VisualDensity
+                                  .adaptivePlatformDensity,
+                            ),
+                            child: child,
+                          );
+                        },
+                        handlerColor: color[100],
+                        strokeColor: color[200],
                         fromText: "",
                         toText: "",
                         use24HourFormat: false,
@@ -378,17 +375,21 @@ class _DetailsScreen extends State<DetailsScreen> {
                           fontSize: 26,
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.bold,
+                          color: color[100],
                         ),
                         labels: [
-                          "12 pm",
-                          "3 pm",
-                          "6 pm",
-                          "9 pm",
                           "12 am",
                           "3 am",
                           "6 am",
                           "9 am",
-                        ].asMap().entries.map((e) {
+                          "12 pm",
+                          "3 pm",
+                          "6 pm",
+                          "9 pm",
+                        ]
+                            .asMap()
+                            .entries
+                            .map((e) {
                           return ClockLabel.fromIndex(
                               idx: e.key, length: 8, text: e.value
                           );
@@ -396,13 +397,11 @@ class _DetailsScreen extends State<DetailsScreen> {
                       );
                       //_selectTime(context);
                       //widget.selectedTime.toString()
+                      String start = result.startTime.toString();
+                      String end = result.endTime.toString();
 
-                        String start = result.startTime.toString();
-                        String end = result.endTime.toString();
-
-                        
-                      txt1.text= start.substring(10,15) + '-' + end.substring(10,15);
-
+                      timeRange = start.substring(10, 15) + '-' + end.substring(10, 15);
+                      txt1.text = start.substring(10, 15) + '-' + end.substring(10, 15);
                     },
                     onChanged: (value) {
                       //Do something with the user input.
@@ -448,14 +447,20 @@ class _DetailsScreen extends State<DetailsScreen> {
                       )
                     );
                     final firestoreInstance = FirebaseFirestore.instance;
+                    DateTime end = widget.selectedDate;
                     firestoreInstance.collection("Task Listings").add({
                       "address": streetAddress,
                       "payment": payment,
                       "jobType": jobType,
                       "description": description,
-                      "date": widget.selectedDate,
-                      // "duration": jobDuration,
-                      "timeRange" : timeRange,
+                      "date": widget.selectedDate.add(Duration(
+                        hours: int.parse(timeRange.substring(0, 2)),
+                        minutes: int.parse(timeRange.substring(3, 5))
+                      )),
+                      "timeRange" : end.add(Duration(
+                        hours: int.parse(timeRange.substring(6, 8)),
+                        minutes: int.parse(timeRange.substring(9, 11))
+                      )),
                       // TODO: entry time to database
                       "ownedBy": id,
                       "isCompleted": false,

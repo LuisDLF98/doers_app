@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/update_image.dart';
 import 'dart:async';
 
+import 'package:intl/intl.dart';
+
 class ConversationDetailPage extends StatefulWidget{
   ConversationDetailPage({Key key, this.data}) : super(key: key);
   static const String id = 'conversation_screen';
@@ -82,11 +84,9 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                       children: <Widget>[
                         getName(info[1]),
                         SizedBox(height: 6,),
-                        Text("Online",style: TextStyle(color: color[500]),),
                       ],
                     ),
                   ),
-                  Icon(Icons.settings,color: Colors.black54,),
                 ],
               ),
             ),
@@ -115,7 +115,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                           padding: EdgeInsets.only(left: 90, right: 0,top: 0,bottom: 0),
                           child: Card(
                               child: ListTile(
-                                leading: new Text('${date.month}/${date.day}\n${date.hour}:${date.minute}'),
+                                leading: new Text('${DateFormat.MMMd().format(date)}\n${DateFormat.jm().format(date)}'),
                                 title: new Text(info[3]),
                                 subtitle: new Text(document['content']),
                                 trailing: getImage(info[0])
@@ -131,7 +131,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
                                   leading: getImage(info[1]),
                                   title: getName(info[1]),
                                   subtitle: new Text(document['content']),
-                                  trailing: new Text('${date.month}/${date.day}\n${date.hour}:${date.minute}'),
+                                  trailing: new Text('${DateFormat.MMMd().format(date)}\n${DateFormat.jm().format(date)}'),
                                 )
                             )
                         );

@@ -1,8 +1,11 @@
+import 'dart:math';
+import 'package:doers_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:doers_app/Components/side_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/job_details_screen.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key, this.userData}) : super(key: key);
@@ -28,6 +31,10 @@ class _HomeScreen extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Card> base = [];
+    List<String> assignedIDs = [];
+    List<Card> jobs = [];
+
     return Scaffold(
       drawer: NavDrawer(userData: loginInfo),
       appBar: AppBar(
@@ -36,7 +43,7 @@ class _HomeScreen extends State<HomeScreen> {
         title: Text('Home'),
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('Task Listings').snapshots(),
+          stream: FirebaseFirestore.instance.collection('Task Listings').where('ownedBy', isNotEqualTo: loginInfo[0]).snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
             if(!snapshot.hasData){
               return Center(
@@ -44,7 +51,38 @@ class _HomeScreen extends State<HomeScreen> {
               );
             }
 
+            snapshot.data.docs.forEach((document) {
+              Timestamp time = document['date'];
+              DateTime dateTime = time.toDate();
+              base.add(Card(
+                  child: ListTile(
+                      leading: jobCategoryIcon[document['jobType']],
+
+                      title: new Text(document['jobType']),
+                      subtitle: new Text(document['description']),
+                      trailing: Text("${DateFormat.MMMd().format(dateTime)}"),
+                      // trailing: new Text(document['date']),
+                      onTap: (){
+                        Navigator.pushNamed(context, JobDetailScreen.id, arguments: {'JobID': document.id, 'userInfo': loginInfo});
+                      }
+                  )
+              ));
+              assignedIDs.add(document['doerAssigned']);
+            });
+
+            if (jobs.isEmpty) {
+              for (int i = 0; i < base.length; i++) {
+                if (assignedIDs[i] == null && !jobs.contains(base[i])) {
+                  jobs.add(base[i]);
+                }
+              }
+            }
+
             return new ListView(
+              children: jobs
+            );
+
+            /*return new ListView(
              children: snapshot.data.docs.map<Widget>((document) {
                  return Card(
                    child: ListTile(
@@ -60,8 +98,8 @@ class _HomeScreen extends State<HomeScreen> {
                        }
                    )
                  );
-             }).toList(),
-            );
+             }).toList()
+            );*/
           }
       ),
     );

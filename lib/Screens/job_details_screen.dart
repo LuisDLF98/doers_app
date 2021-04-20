@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/conversations_screen.dart';
+import 'package:intl/intl.dart';
 
 class JobDetailScreen extends StatefulWidget {
   JobDetailScreen({Key key, this.title}) : super(key: key);
@@ -42,6 +43,10 @@ class _JobDetailScreen extends State<JobDetailScreen> {
             Map<String, dynamic> data = snapshot.data.data();
             bool ownerView = (arguments['userInfo'][0] == data['ownedBy']);
             bool doerView = (arguments['userInfo'][0] == data['doerAssigned']);
+            Timestamp time = data['date'];
+            DateTime dateTime = time.toDate();
+            Timestamp end = data['timeRange'];
+            DateTime endTime = end.toDate();
 
             return Container(
               color: color[300],
@@ -215,26 +220,16 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                             ),
                                             child: Text('Profile'),
                                             onPressed: () async {
-                                              Map<String, dynamic> arguments =
-                                                  {};
+                                              Map<String, dynamic> arguments = {};
                                               DocumentReference ref =
-                                                  FirebaseFirestore.instance
-                                                      .collection('Users')
-                                                      .doc(data['ownedBy']);
-                                              DocumentSnapshot snap =
-                                                  await ref.get();
+                                                  FirebaseFirestore.instance.collection('Users').doc(data['ownedBy']);
+                                              DocumentSnapshot snap = await ref.get();
 
-                                              Map<String, dynamic> snapData =
-                                                  snap.data();
-                                              arguments['ID'] = data['ownedBy'];
-                                              arguments['name'] =
-                                                  snapData['firstName'] +
-                                                      ' ' +
-                                                      snapData['lastName'];
-                                              arguments['email'] =
-                                                  snapData['email'];
-                                              arguments['image'] =
-                                                  snapData['profileImage'];
+                                              Map<String, dynamic> snapData = snap.data();
+                                              arguments['ID'] = snapData['ownedBy'];
+                                              arguments['name'] = snapData['firstName'] + ' ' + snapData['lastName'];
+                                              arguments['email'] = snapData['email'];
+                                              arguments['image'] = snapData['profileImage'];
 
                                               // Get ratings average
                                               int count = 0;
@@ -260,10 +255,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ProfileScreen(
-                                                              args:
-                                                                  arguments)));
+                                                      builder: (context) => ProfileScreen(args: arguments)));
                                             },
                                           ),
                                           OutlinedButton(
@@ -284,7 +276,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                           ),
                                           Visibility(
                                             visible: (!ownerView &&
-                                                !data['isCompleted']),
+                                                !data['isCompleted'] && data['doerAssigned'] == null),
                                             child: OutlinedButton(
                                               style: OutlinedButton.styleFrom(
                                                 primary: color[200],
@@ -362,7 +354,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                           ),
                                           Visibility(
                                             visible: (ownerView &&
-                                                !data['isCompleted']),
+                                                !data['isCompleted'] && data['doerAssigned'] != null),
                                             child: OutlinedButton(
                                               style: OutlinedButton.styleFrom(
                                                 primary: color[200],
@@ -439,7 +431,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                             ),
                                           ),
                                           Visibility(
-                                            visible: (ownerView || doerView) &&
+                                            visible: ((ownerView && data['doerAssigned'] != null) || doerView) &&
                                                 data['isCompleted'],
                                             child: OutlinedButton(
                                                 style: OutlinedButton.styleFrom(
@@ -473,7 +465,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                         child: Card(
                             child: ListTile(
                   leading: Icon(
-                    Icons.work_off_outlined,
+                    Icons.description,
                     color: color[100],
                   ),
                   title: Text("${data['description']}"),
@@ -483,7 +475,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                         child: Card(
                             child: ListTile(
                   leading: Icon(
-                    Icons.work_off_outlined,
+                    Icons.streetview,
                     color: color[100],
                   ),
                   title: Text("${data['address']}"),
@@ -493,7 +485,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                         child: Card(
                             child: ListTile(
                   leading: Icon(
-                    Icons.work_off_outlined,
+                    Icons.monetization_on,
                     color: color[100],
                   ),
                   title: Text("${data['payment']}"),
@@ -503,10 +495,10 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                         child: Card(
                             child: ListTile(
                   leading: Icon(
-                    Icons.work_off_outlined,
+                    Icons.calendar_today,
                     color: color[100],
                   ),
-                  title: Text("${data['date']}"),
+                  title: Text("${DateFormat.yMMMd().format(dateTime)} from ${DateFormat.jm().format(dateTime)} - ${DateFormat.jm().format(endTime)}"),
                 ))))
               ]),
             );
