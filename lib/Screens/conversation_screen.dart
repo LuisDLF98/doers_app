@@ -30,7 +30,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
       cb = color[600];
       cardC = color[650];
       ct = color[300];
-      ac = color[600];
+      ac = color[300];
     }
     else{
       cb = color[400];

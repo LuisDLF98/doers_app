@@ -33,7 +33,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
       cardC = color[650];
       ct = color[300];
       ac = color[300];
-      sc = color[600];
+      sc = color[100];
     }
     else{
       cb = color[400];
@@ -79,11 +79,8 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                 SliverAppBar(
                   expandedHeight: 150.0,
                   backgroundColor: sc,
-                  leading: BackButton(
-                    color: ct
-                  ),
                   flexibleSpace: FlexibleSpaceBar(
-                    title: Text("${data['jobType']}", style: TextStyle(color: ct)),
+                    title: Text("${data['jobType']}"),
                   ),
                 ),
                 SliverToBoxAdapter(
