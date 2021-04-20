@@ -30,6 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int pageNum = 0;
   List<String> loginInfo;
   var cb;
+  var bb;
   _MyHomePageState(this.loginInfo);
 
   @override
@@ -38,10 +39,11 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     if(nightMode){
       cb = color[600];
+      bb = color[650];
     }
     else{
       cb = color[400];
-
+      bb = color[300];
     }
 
   }
@@ -81,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       backgroundColor: cb,
       bottomNavigationBar: BottomNavigationBar(
-
+        backgroundColor: bb,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             label: 'Home',
