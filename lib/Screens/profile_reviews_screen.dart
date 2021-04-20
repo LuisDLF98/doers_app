@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
-import 'package:doers_app/Screens/profile_screen.dart';
 import 'package:doers_app/Screens/review_details_screen.dart';
 
 class ProfileReviewsScreen extends StatefulWidget {
@@ -22,11 +22,9 @@ class ProfileReviewsScreen extends StatefulWidget {
   _ProfileReviewsScreen createState() => _ProfileReviewsScreen(argmts);
 }
 
-
 class _ProfileReviewsScreen extends State<ProfileReviewsScreen> {
   _ProfileReviewsScreen(this.argmts);
   Map argmts;
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,51 +35,63 @@ class _ProfileReviewsScreen extends State<ProfileReviewsScreen> {
         // the App.build method, and use it to set our appbar title.
         title: Text('Reviews'),
       ),
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('Reviews').snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-            if(!snapshot.hasData){
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
-              mainAxisSize: MainAxisSize.min,
-
-              children: [
-                new Container(
-                  height: 696,
-                  alignment: AlignmentDirectional(20.0,0.0),
-                  child: Expanded(
-                    child: ListView(
-                      children: snapshot.data.docs.map<Widget>((document) {
-                        return Card(
-                            child: ListTile(
-                                leading: Icon(
-                                  Icons.map,
-                                  color: color[100],
-                                ),
-                                title: new Text(document['jobType'] + ' ' + ('\u{2B50}' * document['rating'])),
-                                subtitle: new Text(document['review']),
-                                onTap: (){
-                                  Navigator.pushNamed(context, ReviewDetailsScreen.id, arguments: {'ReviewID': document.id});
-                                }
-                            )
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                )
-
-              ],
-            );
-
-          }
-      ),
+      body: ListView(children: [
+        StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('Reviews')
+                .where('recipient', isEqualTo: argmts['ID'])
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData || snapshot.data.docs.length == 0) {
+                return Center(
+                  child: Text('There are currently no reviews for this user'),
+                );
+              } else {
+                return new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    new Container(
+                      height: 696,
+                      alignment: AlignmentDirectional(20.0, 0.0),
+                      child: Expanded(
+                        child: ListView(
+                          children: snapshot.data.docs.map<Widget>((document) {
+                            return Card(
+                                child: ListTile(
+                                    leading: Icon(
+                                      Icons.article_rounded,
+                                      color: color[100],
+                                    ),
+                                    title: Row(children: <Widget>[
+                                      Text(document['jobType'] + ' '),
+                                      RatingBarIndicator(
+                                        rating: document['rating'].toDouble(),
+                                        itemBuilder: (context, index) => Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        itemCount: 5,
+                                        itemSize: 25.0,
+                                        direction: Axis.horizontal,
+                                      )
+                                    ]),
+                                    subtitle: new Text(document['review']),
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, ReviewDetailsScreen.id,
+                                          arguments: {'ReviewID': document.id});
+                                    }));
+                          }).toList(),
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              }
+            }),
+      ]),
     );
-
   }
-
 }

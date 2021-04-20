@@ -3,7 +3,6 @@ import 'package:doers_app/Screens/conversation_screen.dart';
 import 'package:doers_app/Screens/profile_screen.dart';
 import 'package:doers_app/Screens/reviews_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:doers_app/Components/side_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/conversations_screen.dart';
@@ -227,8 +226,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
 
                                               Map<String, dynamic> snapData =
                                                   snap.data();
-                                              arguments['ID'] =
-                                                  snapData['ownedBy'];
+                                              arguments['ID'] = data['ownedBy'];
                                               arguments['name'] =
                                                   snapData['firstName'] +
                                                       ' ' +
@@ -237,6 +235,27 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                   snapData['email'];
                                               arguments['image'] =
                                                   snapData['profileImage'];
+
+                                              // Get ratings average
+                                              int count = 0;
+                                              int total = 0;
+                                              Query query = FirebaseFirestore.instance
+                                                  .collection('Reviews')
+                                                  .where('recipient', isEqualTo: data['ownedBy']);
+                                              await query.get().then((querySnapshot) => {
+                                                for (DocumentSnapshot doc in querySnapshot.docs)
+                                                  {
+                                                    total = total + doc['rating'].toInt(),
+                                                    count = count + 1
+                                                  }
+                                              });
+                                              double avg = total / count;
+                                              if ((avg == double.nan) || avg.isNaN) {
+                                                arguments['rating'] = 0.0;
+                                              }
+                                              else {
+                                                arguments['rating'] = avg;
+                                              }
 
                                               Navigator.push(
                                                   context,

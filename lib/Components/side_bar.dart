@@ -35,6 +35,27 @@ class NavDrawer extends StatelessWidget {
               arguments['email'] = data['email'];
               arguments['image'] = data['profileImage'];
 
+              // Get ratings average
+              int count = 0;
+              int total = 0;
+              Query query = FirebaseFirestore.instance
+                  .collection('Reviews')
+                  .where('recipient', isEqualTo: userData[0]);
+              await query.get().then((querySnapshot) => {
+                for (DocumentSnapshot doc in querySnapshot.docs)
+                  {
+                    total = total + doc['rating'].toInt(),
+                    count = count + 1
+                  }
+              });
+              double avg = total / count;
+              if ((avg == double.nan) || avg.isNaN) {
+                arguments['rating'] = 0.0;
+              }
+              else {
+                arguments['rating'] = avg;
+              }
+
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) => ProfileScreen(args: arguments)
               ));
