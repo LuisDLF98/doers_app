@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
+import 'package:doers_app/globals.dart';
 
 class ReviewDetailsScreen extends StatefulWidget {
   ReviewDetailsScreen({Key key}) : super(key: key);
@@ -12,6 +13,22 @@ class ReviewDetailsScreen extends StatefulWidget {
 }
 
 class _ReviewDetailsScreen extends State<ReviewDetailsScreen> {
+
+  var cb;
+
+  void initState() {
+    super.initState();
+
+    if(nightMode){
+      cb = color[600];
+    }
+    else{
+      cb = color[400];
+
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;

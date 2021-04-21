@@ -3,7 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doers_app/Components/hex_colors.dart';
 import 'package:doers_app/Screens/review_details_screen.dart';
-
+import 'package:doers_app/globals.dart';
 class ProfileReviewsScreen extends StatefulWidget {
   ProfileReviewsScreen({Key key, this.argmts}) : super(key: key);
   static const String id = 'profile_reviews_screen';
@@ -26,9 +26,34 @@ class _ProfileReviewsScreen extends State<ProfileReviewsScreen> {
   _ProfileReviewsScreen(this.argmts);
   Map argmts;
 
+  var cb;
+  var tc;
+  var ic;
+  var cc;
+
+  void initState() {
+    super.initState();
+
+    if(nightMode){
+      cb = color[600];
+      tc = color[300];
+      ic = color[300];
+      cc = color[650];
+    }
+    else{
+      cb = color[400];
+      tc = color [700];
+      ic = color[200];
+      cc = color[300];
+
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: cb,
       //drawer: NavDrawer(),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -45,7 +70,7 @@ class _ProfileReviewsScreen extends State<ProfileReviewsScreen> {
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData || snapshot.data.docs.length == 0) {
                 return Center(
-                  child: Text('There are currently no reviews for this user'),
+                  child: Text('There are currently no reviews for this user', style: TextStyle(color: tc),),
                 );
               } else {
                 return new Column(
@@ -59,13 +84,14 @@ class _ProfileReviewsScreen extends State<ProfileReviewsScreen> {
                         child: ListView(
                           children: snapshot.data.docs.map<Widget>((document) {
                             return Card(
+                              color: cc,
                                 child: ListTile(
                                     leading: Icon(
                                       Icons.article_rounded,
                                       color: color[100],
                                     ),
                                     title: Row(children: <Widget>[
-                                      Text(document['jobType'] + ' '),
+                                      Text(document['jobType'] + ' ', style: TextStyle(color: tc)),
                                       RatingBarIndicator(
                                         rating: document['rating'].toDouble(),
                                         itemBuilder: (context, index) => Icon(
@@ -77,7 +103,7 @@ class _ProfileReviewsScreen extends State<ProfileReviewsScreen> {
                                         direction: Axis.horizontal,
                                       )
                                     ]),
-                                    subtitle: new Text(document['review']),
+                                    subtitle: new Text(document['review'], style: TextStyle(color: tc)),
                                     onTap: () {
                                       Navigator.pushNamed(
                                           context, ReviewDetailsScreen.id,

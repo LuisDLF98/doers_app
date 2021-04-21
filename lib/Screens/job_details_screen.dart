@@ -385,13 +385,14 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                 primary: color[200],
                                                 backgroundColor: cardC,
                                               ),
-                                              child: Text('Complete', style: TextStyle(color: ct)),
+                                              child: Text('Complete', style: TextStyle(color: color[200])),
                                               onPressed: () {
                                                 showDialog(
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
                                                       return AlertDialog(
+                                                        backgroundColor: cardC,
                                                         title: Text(
                                                             "Are you sure you want to mark this task as completed?", style: TextStyle(color: ct)),
                                                         actions: <Widget>[
@@ -405,7 +406,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                               cardC,
                                                             ),
                                                             child: Text(
-                                                                'Complete', style: TextStyle(color: ct)),
+                                                                'Complete', style: TextStyle(color: color[200])),
                                                             onPressed: () {
                                                               tasks
                                                                   .doc(arguments[
@@ -424,7 +425,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                                   .showSnackBar(
                                                                       SnackBar(
                                                                           content:
-                                                                              Text('Task Completed!', style: TextStyle(color: ct))));
+                                                                              Text('Task Completed!', style: TextStyle(color: color[200]))));
                                                               Navigator.pop(
                                                                   context);
                                                               Navigator.pop(
