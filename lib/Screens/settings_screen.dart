@@ -217,7 +217,7 @@ class _SettingsScreen extends State<SettingsScreen> {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: Text('Submit'))
+                  child: Text('Submit', style:  TextStyle(color: color[200]),))
             ],
           );
         });

@@ -94,61 +94,47 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                     children: <Widget>[
                                       Row(
                                         children: [
-                                          OutlinedButton(
-                                            style: OutlinedButton.styleFrom(
-                                              primary: color[200],
-                                              backgroundColor: cardC,
-                                            ),
-                                            child: Text('Message'),
-                                            onPressed: () async {
-                                              var arr = [
-                                                arguments['userInfo'][0],
-                                                "${data['ownedBy']}"
-                                              ];
-                                              var arr2 = [
-                                                "${data['ownedBy']}",
-                                                arguments['userInfo'][0]
-                                              ];
-                                              var result =
-                                                  await firestoreInstance
-                                                      .collection(
-                                                          "Conversations")
-                                                      .where("users",
-                                                          isEqualTo: arr)
-                                                      .limit(1)
-                                                      .get();
-
-                                              var resultFlipped =
-                                                  await firestoreInstance
-                                                      .collection(
-                                                          "Conversations")
-                                                      .where("users",
-                                                          isEqualTo: arr2)
-                                                      .limit(1)
-                                                      .get();
-
-                                              if (result.size == 1) {
-                                                final List<String> myList =
-                                                    new List<String>.from({
+                                          Visibility(
+                                            visible: (!ownerView),
+                                            child: OutlinedButton(
+                                              style: OutlinedButton.styleFrom(
+                                                primary: color[200],
+                                                backgroundColor: cardC,
+                                              ),
+                                              child: Text('Message'),
+                                              onPressed: () async {
+                                                var arr = [
                                                   arguments['userInfo'][0],
+                                                  "${data['ownedBy']}"
+                                                ];
+                                                var arr2 = [
                                                   "${data['ownedBy']}",
-                                                  result.docs.first.id,
-                                                  arguments['userInfo'][1]
-                                                });
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ConversationDetailPage(
-                                                              data: myList)),
-                                                );
-                                              } else {
-                                                if (resultFlipped.size == 1) {
+                                                  arguments['userInfo'][0]
+                                                ];
+                                                var result =
+                                                await firestoreInstance
+                                                    .collection(
+                                                    "Conversations")
+                                                    .where("users",
+                                                    isEqualTo: arr)
+                                                    .limit(1)
+                                                    .get();
+
+                                                var resultFlipped =
+                                                await firestoreInstance
+                                                    .collection(
+                                                    "Conversations")
+                                                    .where("users",
+                                                    isEqualTo: arr2)
+                                                    .limit(1)
+                                                    .get();
+
+                                                if (result.size == 1) {
                                                   final List<String> myList =
-                                                      new List<String>.from({
+                                                  new List<String>.from({
                                                     arguments['userInfo'][0],
                                                     "${data['ownedBy']}",
-                                                    resultFlipped.docs.first.id,
+                                                    result.docs.first.id,
                                                     arguments['userInfo'][1]
                                                   });
                                                   Navigator.push(
@@ -159,84 +145,101 @@ class _JobDetailScreen extends State<JobDetailScreen> {
                                                                 data: myList)),
                                                   );
                                                 } else {
-                                                  DocumentReference
-                                                      newConversation =
-                                                      await convos.add({
-                                                    "lastMessage": {
-                                                      "content": "",
-                                                      "idFrom": "",
-                                                      "idTo": "",
-                                                      "read": false,
-                                                      "timestamp": DateTime
-                                                              .now()
-                                                          .microsecondsSinceEpoch,
-                                                    },
-                                                    "users":
-                                                        FieldValue.arrayUnion([
+                                                  if (resultFlipped.size == 1) {
+                                                    final List<String> myList =
+                                                    new List<String>.from({
                                                       arguments['userInfo'][0],
-                                                      "${data['ownedBy']}"
-                                                    ])
-                                                  });
-
-                                                  Future.delayed(const Duration(
-                                                      milliseconds: 250));
-
-                                                  DocumentReference
-                                                      firstMessage =
-                                                      await newConversation
-                                                          .collection(
-                                                              "Messages")
-                                                          .add({
-                                                    "content": "hello",
-                                                    "idFrom":
-                                                        arguments['userInfo']
-                                                            [0],
-                                                    "idTo":
-                                                        "${data['ownedBy']}",
-                                                    "read": false,
-                                                    "timestamp": DateTime.now()
-                                                        .microsecondsSinceEpoch
-                                                  });
-
-                                                  firstMessage
-                                                      .get()
-                                                      .then((value) {
-                                                    newConversation.update({
-                                                      "lastMessage": {
-                                                        "content": value
-                                                            .data()["content"],
-                                                        "idFrom": value
-                                                            .data()["idFrom"],
-                                                        "idTo": value
-                                                            .data()["idTo"],
-                                                        "read": value
-                                                            .data()["read"],
-                                                        "timestamp":
-                                                            value.data()[
-                                                                "timestamp"],
-                                                      },
+                                                      "${data['ownedBy']}",
+                                                      resultFlipped.docs.first.id,
+                                                      arguments['userInfo'][1]
                                                     });
-                                                  });
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ConversationDetailPage(
+                                                                  data: myList)),
+                                                    );
+                                                  } else {
+                                                    DocumentReference
+                                                    newConversation =
+                                                    await convos.add({
+                                                      "lastMessage": {
+                                                        "content": "",
+                                                        "idFrom": "",
+                                                        "idTo": "",
+                                                        "read": false,
+                                                        "timestamp": DateTime
+                                                            .now()
+                                                            .microsecondsSinceEpoch,
+                                                      },
+                                                      "users":
+                                                      FieldValue.arrayUnion([
+                                                        arguments['userInfo'][0],
+                                                        "${data['ownedBy']}"
+                                                      ])
+                                                    });
 
-                                                  final List<String> myList =
-                                                      new List<String>.from({
-                                                    arguments['userInfo'][0],
-                                                    "${data['ownedBy']}",
-                                                    newConversation.id,
-                                                    arguments['userInfo'][1]
-                                                  });
+                                                    Future.delayed(const Duration(
+                                                        milliseconds: 250));
 
-                                                  //Navigator.pushNamed(context, MessagingScreen.id);
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ConversationDetailPage(
-                                                                data: myList)),
-                                                  );
+                                                    DocumentReference
+                                                    firstMessage =
+                                                    await newConversation
+                                                        .collection(
+                                                        "Messages")
+                                                        .add({
+                                                      "content": "hello",
+                                                      "idFrom":
+                                                      arguments['userInfo']
+                                                      [0],
+                                                      "idTo":
+                                                      "${data['ownedBy']}",
+                                                      "read": false,
+                                                      "timestamp": DateTime.now()
+                                                          .microsecondsSinceEpoch
+                                                    });
+
+                                                    firstMessage
+                                                        .get()
+                                                        .then((value) {
+                                                      newConversation.update({
+                                                        "lastMessage": {
+                                                          "content": value
+                                                              .data()["content"],
+                                                          "idFrom": value
+                                                              .data()["idFrom"],
+                                                          "idTo": value
+                                                              .data()["idTo"],
+                                                          "read": value
+                                                              .data()["read"],
+                                                          "timestamp":
+                                                          value.data()[
+                                                          "timestamp"],
+                                                        },
+                                                      });
+                                                    });
+
+                                                    final List<String> myList =
+                                                    new List<String>.from({
+                                                      arguments['userInfo'][0],
+                                                      "${data['ownedBy']}",
+                                                      newConversation.id,
+                                                      arguments['userInfo'][1]
+                                                    });
+
+                                                    //Navigator.pushNamed(context, MessagingScreen.id);
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ConversationDetailPage(
+                                                                  data: myList)),
+                                                    );
+                                                  }
                                                 }
-                                              }
-                                            },
+                                              },
+                                            ),
                                           ),
                                           OutlinedButton(
                                             style: OutlinedButton.styleFrom(
